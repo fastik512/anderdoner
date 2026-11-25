@@ -3,49 +3,62 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Андер Донер — шаурма</title>
+<title>Андер Донер — доставка и самовывоз</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
 <header>
-  <div class="logo">АНДЕР ДОНЕР</div>
+  <div class="top-bar">
+    <div class="logo">UNDER DONER</div>
+    <div class="cart-icon" id="cart-btn">
+      🛒 <span id="cart-count">0</span>
+    </div>
+  </div>
   <p class="tagline">Шаурма, которая держит строй</p>
 </header>
 
-<section id="hero">
-  <div class="shaurma-container">
-    <div class="shaurma" id="shaurma">
-      <div class="layer meat"></div>
-      <div class="layer veggie"></div>
-      <div class="layer sauce"></div>
-      <div class="layer pita"></div>
-      <div class="ingredient-label" id="ing-label">Мясо</div>
+<div class="hero">
+  <h2>Лучшая шаурма в городе</h2>
+  <p>Свежие ингредиенты, двойное мясо, фирменные соусы.</p>
+</div>
+
+<div class="category-tabs" id="category-tabs">
+  <!-- Кнопки категорий добавятся скриптом -->
+</div>
+
+<main class="menu-grid" id="menu-grid">
+  <!-- Карточки товаров добавятся скриптом -->
+</main>
+
+<div class="unique-feature">
+  <h2>Собери свою идеальную шаурму</h2>
+  <div class="builder">
+    <div class="builder-step">
+      <span>Мясо:</span>
+      <button class="opt-btn active" onclick="selectOpt(this)">Курица</button>
+      <button class="opt-btn" onclick="selectOpt(this)">Говядина</button>
     </div>
+    <div class="builder-step">
+      <span>Соус:</span>
+      <button class="opt-btn active" onclick="selectOpt(this)">Чесночный</button>
+      <button class="opt-btn" onclick="selectOpt(this)">Острый</button>
+      <button class="opt-btn" onclick="selectOpt(this)">Сырный</button>
+    </div>
+    <div class="builder-step">
+      <span>Добавки:</span>
+      <button class="opt-btn" onclick="toggleOpt(this)">Сыр +2.0</button>
+      <button class="opt-btn" onclick="toggleOpt(this)">Бекон +3.0</button>
+    </div>
+    <button class="add-custom-btn" onclick="addCustomToCart()">Добавить в корзину</button>
   </div>
-  <div class="controls">
-    <button class="ctrl-btn" data-layer="meat" data-label="Сочное мясо">1</button>
-    <button class="ctrl-btn" data-layer="veggie" data-label="Свежие овощи">2</button>
-    <button class="ctrl-btn" data-layer="sauce" data-label="Фирменный соус">3</button>
-    <button class="ctrl-btn" data-layer="pita" data-label="Хрустящий лаваш">4</button>
-  </div>
-</section>
-
-<section id="promo">
-  <h2>Акции</h2>
-  <div id="promo-list"></div>
-</section>
-
-<section id="menu">
-  <h2>Меню</h2>
-  <div id="menu-list"></div>
-</section>
+</div>
 
 <section id="contacts">
   <h2>Контакты</h2>
-  <p>Адрес: [впиши свой]</p>
-  <p>Телефон: <a href="tel:+7XXXXXXXXXX">+7 XXX XXX-XX-XX</a></p>
+  <p>Адрес: г. Минск, ул. Ленина, 1</p>
+  <p>Телефон: <a href="tel:+375XXXXXXXXX">+375 XX XXX-XX-XX</a></p>
   <p>Часы: 10:00 – 23:00</p>
-  <a class="btn" href="https://wa.me/7XXXXXXXXXX">Заказать в WhatsApp</a>
 </section>
 
 <script src="script.js"></script>
