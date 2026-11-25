@@ -8,9 +8,27 @@
 </head>
 <body>
 <header>
-  <h1>АНДЕР ДОНЕР</h1>
+  <div class="logo">АНДЕР ДОНЕР</div>
   <p class="tagline">Шаурма, которая держит строй</p>
 </header>
+
+<section id="hero">
+  <div class="shaurma-container">
+    <div class="shaurma" id="shaurma">
+      <div class="layer meat"></div>
+      <div class="layer veggie"></div>
+      <div class="layer sauce"></div>
+      <div class="layer pita"></div>
+      <div class="ingredient-label" id="ing-label">Мясо</div>
+    </div>
+  </div>
+  <div class="controls">
+    <button class="ctrl-btn" data-layer="meat" data-label="Сочное мясо">1</button>
+    <button class="ctrl-btn" data-layer="veggie" data-label="Свежие овощи">2</button>
+    <button class="ctrl-btn" data-layer="sauce" data-label="Фирменный соус">3</button>
+    <button class="ctrl-btn" data-layer="pita" data-label="Хрустящий лаваш">4</button>
+  </div>
+</section>
 
 <section id="promo">
   <h2>Акции</h2>
