@@ -155,15 +155,14 @@
   import { getFirestore, collection, doc, getDocs, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
   // === ВСТАВЬ СЮДА СВОИ КЛЮЧИ ИЗ FIREBASE ===
-  const firebaseConfig = {
-  apiKey: "AIzaSyCC1Wtjk2-Hs0pXaM0OIeaxY4m744_OE4o",
-  authDomain: "under-doner.firebaseapp.com",
-  projectId: "under-doner",
-  storageBucket: "under-doner.firebasestorage.app",
-  messagingSenderId: "690357228185",
-  appId: "1:690357228185:web:ba4212d19093e673eede08",
-  measurementId: "G-PS55BBSQF5"
-};
+    const firebaseConfig = {
+       apiKey: "AIzaSyCC1Wtjk2-Hs0pXaM0OIeaxY4m744_OE4o",
+       authDomain: "under-doner.firebaseapp.com",
+       projectId: "under-doner",
+       storageBucket: "under-doner.firebasestorage.app",
+       messagingSenderId: "690357228185",
+       appId: "1:690357228185:web:ba4212d19093e673eede08", 
+     };
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
