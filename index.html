@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Андер Донер — Премиальная шаурма</title>
+<style>
+  :root {
+    --bg: #0a0a0c; --card-bg: rgba(26, 26, 30, 0.7); --accent: #ff2a2a;
+    --text: #f0f0f0; --text-muted: #888;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; }
+  body { background: var(--bg); color: var(--text); padding-bottom: 80px; background-image: radial-gradient(circle at 50% -20%, #2a1012 0%, var(--bg) 60%); background-attachment: fixed; }
+
+  header { padding: 20px 16px 10px; position: relative; z-index: 10; }
+  .top-bar { display: flex; justify-content: space-between; align-items: center; max-width: 900px; margin: 0 auto; }
+  .logo { font-size: 1.6rem; font-weight: 900; color: #fff; letter-spacing: 2px; text-shadow: 0 0 15px rgba(255, 42, 42, 0.6); }
+  .header-controls { display: flex; gap: 12px; align-items: center; }
+  .icon-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; padding: 10px 14px; border-radius: 50px; font-weight: bold; backdrop-filter: blur(10px); cursor: pointer; transition: 0.3s; }
+  .icon-btn:hover, .icon-btn.active { border-color: var(--accent); box-shadow: 0 0 15px rgba(255, 42, 42, 0.3); }
+
+  .hero { text-align: center; padding: 20px 16px 40px; display: flex; flex-direction: column; align-items: center; }
+  .hero h1 { font-size: 2.2rem; margin-bottom: 12px; line-height: 1.1; }
+  .hero h1 span { color: var(--accent); }
+  .hero p { color: var(--text-muted); font-size: 1rem; max-width: 400px; margin: 0 auto; }
+  
+  .scene { width: 220px; height: 220px; perspective: 1000px; margin: 30px auto; }
+  .shaurma { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; animation: spin 10s linear infinite; }
+  .layer { position: absolute; top: 15%; left: 15%; width: 70%; height: 70%; border-radius: 50%; transform: rotateX(75deg); box-shadow: 0 0 30px rgba(0,0,0,0.8); }
+  .layer.lavash { background: radial-gradient(circle, #f5deb3, #a0522d); transform: rotateX(75deg) translateZ(-40px); }
+  .layer.sauce { background: radial-gradient(circle, #ffb347, #ff7b00); transform: rotateX(75deg) translateZ(-20px); box-shadow: 0 0 20px rgba(255, 123, 0, 0.4); }
+  .layer.veggies { background: radial-gradient(circle, #32cd32, #006400); transform: rotateX(75deg) translateZ(0px); box-shadow: 0 0 20px rgba(50, 205, 50, 0.4); }
+  .layer.cheese { background: radial-gradient(circle, #ffd700, #b8860b); transform: rotateX(75deg) translateZ(20px); box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); }
+  .layer.meat { background: radial-gradient(circle, #a52a2a, #4a0000); transform: rotateX(75deg) translateZ(40px); box-shadow: 0 0 30px rgba(165, 42, 42, 0.6); }
+  @keyframes spin { 0% { transform: rotateY(0deg) rotateX(20deg); } 100% { transform: rotateY(360deg) rotateX(20deg); } }
+
+  .category-tabs { display: flex; overflow-x: auto; gap: 10px; padding: 0 16px 16px; max-width: 900px; margin: 0 auto; scrollbar-width: none; }
+  .category-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); padding: 10px 22px; border-radius: 30px; font-size: 0.95rem; cursor: pointer; white-space: nowrap; transition: 0.3s; backdrop-filter: blur(10px); }
+  .tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 0 15px rgba(255,42,42,0.4); font-weight: 600; }
+
+  .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; padding: 0 16px; max-width: 900px; margin: 0 auto; }
+  .item-card { background: var(--card-bg); backdrop-filter: blur(12px); border-radius: 20px; padding: 16px; border: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column; justify-content: space-between; position: relative; transition: transform 0.2s; animation: fadeIn 0.4s ease-out; }
+  .item-card:active { transform: scale(0.97); }
+  .item-card .name { font-weight: 700; font-size: 1.1rem; margin-bottom: 6px; padding-right: 20px; }
+  .item-card .desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 10px; flex-grow: 1; }
+  .item-card .weight { font-size: 0.75rem; color: #555; margin-bottom: 12px; }
+  .item-card .bottom { display: flex; justify-content: space-between; align-items: center; }
+  .item-card .price { font-size: 1.1rem; font-weight: 900; color: #fff; }
+  .item-card .buy-btn { background: rgba(255,255,255,0.1); border: none; color: #fff; width: 36px; height: 36px; border-radius: 12px; font-weight: bold; font-size: 1.2rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .admin-badge { position: absolute; top: 12px; right: 12px; display: flex; gap: 6px; }
+  .admin-edit-btn, .admin-del-btn { background: rgba(255,255,255,0.1); color: #fff; border: none; padding: 6px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;}
+  .admin-del-btn { background: rgba(255,42,42,0.8); }
+  .add-item-btn { display: none; width: calc(100% - 32px); max-width: 868px; margin: 0 auto 16px auto; background: var(--accent); color: white; padding: 14px; border: none; border-radius: 16px; font-weight: bold; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 15px rgba(255,42,42,0.3); }
+  .admin-mode .add-item-btn { display: block; }
+
+  /* Модалки */
+  .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+  .modal.active { display: flex; }
+  .modal-content { background: #151518; padding: 24px; border-radius: 24px; width: 90%; max-width: 400px; border: 1px solid rgba(255,255,255,0.1); }
+  .modal-content h3 { margin-bottom: 20px; color: #fff; text-align: center; }
+  .modal-content input, .modal-content select { width: 100%; padding: 14px; margin-bottom: 12px; background: #0a0a0c; border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 12px; font-size: 1rem; }
+  .modal-content button { width: 100%; padding: 16px; background: var(--accent); color: #fff; border: none; border-radius: 12px; font-weight: bold; font-size: 1rem; margin-top: 8px; cursor: pointer; }
+  .modal-content .cancel-btn { background: rgba(255,255,255,0.1); }
+  .google-btn { background: #fff !important; color: #000 !important; display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .auth-switch { text-align: center; margin-top: 16px; font-size: 0.9rem; color: var(--text-muted); cursor: pointer; text-decoration: underline; }
+
+  #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: #333; color: #fff; padding: 12px 24px; border-radius: 30px; font-weight: 600; opacity: 0; transition: 0.3s; z-index: 1000; }
+  #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  #contacts { text-align: center; padding: 40px 16px; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.05); margin-top: 40px; max-width: 600px; margin-left: auto; margin-right: auto; }
+  #contacts h2 { color: #fff; margin-bottom: 16px; }
+  #contacts a { color: var(--accent); text-decoration: none; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="top-bar">
+    <div class="logo">UNDER DONER</div>
+    <div class="header-controls">
+      <button class="icon-btn" id="admin-toggle" onclick="toggleAdmin()" style="display:none;">⚙️</button>
+      <div class="icon-btn" id="auth-btn" onclick="openAuth()">👤 Вход</div>
+      <div class="icon-btn" onclick="showToast('Корзина пуста')">🛒 <span id="cart-count">0</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="hero">
+  <h1>Шаурма, которая <span>держит строй</span></h1>
+  <p>Синтез свежего мяса, хрустящих овощей и фирменного соуса.</p>
+  <div class="scene">
+    <div class="shaurma">
+      <div class="layer lavash"></div>
+      <div class="layer sauce"></div>
+      <div class="layer veggies"></div>
+      <div class="layer cheese"></div>
+      <div class="layer meat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="category-tabs" id="category-tabs"></div>
+<button class="add-item-btn" onclick="openItemModal()">+ Добавить новый товар</button>
+<main class="menu-grid" id="menu-grid"></main>
+
+<section id="contacts">
+  <h2>Контакты</h2>
+  <p>Адрес: г. Минск, ул. Ленина, 1</p>
+  <p>Телефон: <a href="tel:+375XXXXXXXXX">+375 XX XXX-XX-XX</a></p>
+</section>
+
+<!-- Модалка Авторизации -->
+<div class="modal" id="auth-modal">
+  <div class="modal-content">
+    <h3 id="auth-title">Вход в систему</h3>
+    <input type="email" id="auth-email" placeholder="Email">
+    <input type="password" id="auth-pass" placeholder="Пароль">
+    <button onclick="handleAuth()" id="auth-submit-btn">Войти</button>
+    <button class="google-btn" onclick="loginWithGoogle()">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" width="20"> Войти через Google
+    </button>
+    <div class="auth-switch" onclick="toggleAuthMode()" id="auth-switch-text">Нет аккаунта? Зарегистрироваться</div>
+    <button class="cancel-btn" onclick="document.getElementById('auth-modal').classList.remove('active')">Закрыть</button>
+  </div>
+</div>
+
+<!-- Модалка Товара -->
+<div class="modal" id="item-modal">
+  <div class="modal-content">
+    <h3 id="modal-title">Новый товар</h3>
+    <input type="hidden" id="edit-id">
+    <input type="text" id="edit-name" placeholder="Название">
+    <input type="text" id="edit-desc" placeholder="Состав">
+    <input type="text" id="edit-weight" placeholder="Вес">
+    <input type="text" id="edit-price" placeholder="Цена">
+    <select id="edit-cat">
+      <option value="shaurma">Шаурма</option>
+      <option value="snacks">Закуски</option>
+      <option value="drinks">Напитки</option>
+      <option value="sauces">Соусы</option>
+    </select>
+    <button onclick="saveItem()">Сохранить</button>
+    <button class="cancel-btn" onclick="document.getElementById('item-modal').classList.remove('active')">Отмена</button>
+  </div>
+</div>
+
+<div id="toast">Уведомление</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+  import { getFirestore, collection, doc, getDocs, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+  // === ВСТАВЬ СЮДА СВОИ КЛЮЧИ ИЗ FIREBASE ===
+  const firebaseConfig = {
+    apiKey: "ТВОЙ_API_KEY",
+    authDomain: "ТВОЙ_AUTH_DOMAIN",
+    projectId: "ТВОЙ_PROJECT_ID",
+    storageBucket: "ТВОЙ_STORAGE_BUCKET",
+    messagingSenderId: "ТВОЙ_SENDER_ID",
+    appId: "ТВОЙ_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const defaultMenu = {
+    categories: [{ id: "shaurma", name: "Шаурма" }, { id: "snacks", name: "Закуски" }, { id: "drinks", name: "Напитки" }, { id: "sauces", name: "Соусы" }],
+    items: [
+      { id: "1", cat: "shaurma", name: "Андер-Классик", desc: "Лаваш, курица, помидор, огурец, капуста, соус", weight: "350 г", price: "12,50 BYN" },
+      { id: "2", cat: "shaurma", name: "Три Сыра", desc: "Курица, моцарелла, чеддер, фета, помидор, сырный соус", weight: "400 г", price: "15,50 BYN" }
+    ]
+  };
+
+  let menuData = { categories: defaultMenu.categories, items: [] };
+  let isAdmin = false;
+  let activeCat = 'shaurma';
+  let isLoginMode = true;
+  let currentUser = null;
+
+  // === АВТОРИЗАЦИЯ ===
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      currentUser = user;
+      document.getElementById('auth-btn').innerText = "Выйти";
+      document.getElementById('admin-toggle').style.display = "block"; // Показываем шестеренку
+      showToast("Вы вошли как " + user.email);
+    } else {
+      currentUser = null;
+      document.getElementById('auth-btn').innerText = "👤 Вход";
+      document.getElementById('admin-toggle').style.display = "none";
+      isAdmin = false;
+      document.body.classList.remove('admin-mode');
+    }
+    renderMenu();
+  });
+
+  window.openAuth = () => {
+    if (currentUser) { signOut(auth); return; }
+    document.getElementById('auth-modal').classList.add('active');
+  };
+
+  window.toggleAuthMode = () => {
+    isLoginMode = !isLoginMode;
+    document.getElementById('auth-title').innerText = isLoginMode ? "Вход" : "Регистрация";
+    document.getElementById('auth-submit-btn').innerText = isLoginMode ? "Войти" : "Создать аккаунт";
+    document.getElementById('auth-switch-text').innerText = isLoginMode ? "Нет аккаунта? Зарегистрироваться" : "Уже есть аккаунт? Войти";
+  };
+
+  window.handleAuth = async () => {
+    const email = document.getElementById('auth-email').value;
+    const pass = document.getElementById('auth-pass').value;
+    try {
+      if (isLoginMode) {
+        await signInWithEmailAndPassword(auth, email, pass);
+      } else {
+        await createUserWithEmailAndPassword(auth, email, pass);
+      }
+      document.getElementById('auth-modal').classList.remove('active');
+    } catch (e) {
+      showToast("Ошибка: " + e.message);
+    }
+  };
+
+  window.loginWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+      document.getElementById('auth-modal').classList.remove('active');
+    } catch (e) {
+      showToast("Ошибка: " + e.message);
+    }
+  };
+
+  // === БАЗА ДАННЫХ (FIRESTORE) ===
+  async function loadData() {
+    try {
+      const snap = await getDocs(collection(db, "menu"));
+      menuData.items = [];
+      if (snap.empty) {
+        // Если база пустая, загружаем дефолт
+        for (let item of defaultMenu.items) {
+          await setDoc(doc(db, "menu", item.id), item);
+          menuData.items.push(item);
+        }
+      } else {
+        snap.forEach(doc => menuData.items.push(doc.data()));
+      }
+    } catch (e) {
+      console.error("Firebase error:", e);
+      // Если ошибка доступа (например, тестовый режим истек), показываем дефолт
+      menuData.items = defaultMenu.items;
+    }
+    renderTabs();
+    renderMenu();
+  }
+
+  function renderTabs() {
+    const container = document.getElementById('category-tabs');
+    container.innerHTML = '';
+    menuData.categories.forEach(cat => {
+      const btn = document.createElement('button');
+      btn.className = 'tab-btn' + (cat.id === activeCat ? ' active' : '');
+      btn.textContent = cat.name;
+      btn.onclick = () => { activeCat = cat.id; renderTabs(); renderMenu(); };
+      container.appendChild(btn);
+    });
+  }
+
+  function renderMenu() {
+    const grid = document.getElementById('menu-grid');
+    grid.innerHTML = '';
+    const filtered = menuData.items.filter(i => i.cat === activeCat);
+    
+    if (filtered.length === 0) {
+      grid.innerHTML = '<p style="text-align:center; width:100%; color:#888;">Пусто</p>';
+      return;
+    }
+
+    filtered.forEach((item, index) => {
+      const card = document.createElement('div');
+      card.className = 'item-card';
+      card.style.animationDelay = (index * 0.05) + 's';
+      card.innerHTML = `
+        ${isAdmin ? `<div class="admin-badge">
+          <button class="admin-edit-btn" onclick="openItemModal('${item.id}')">✏️</button>
+          <button class="admin-del-btn" onclick="deleteItem('${item.id}')">✖</button>
+        </div>` : ''}
+        <div>
+          <div class="name">${item.name}</div>
+          <div class="desc">${item.desc}</div>
+          <div class="weight">${item.weight}</div>
+        </div>
+        <div class="bottom">
+          <div class="price">${item.price}</div>
+          <button class="buy-btn" onclick="showToast('Добавлено в корзину')">+</button>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  // === АДМИНКА ===
+  window.toggleAdmin = () => {
+    isAdmin = !isAdmin;
+    document.body.classList.toggle('admin-mode', isAdmin);
+    document.getElementById('admin-toggle').classList.toggle('active', isAdmin);
+    renderMenu();
+  };
+
+  window.openItemModal = (id = null) => {
+    document.getElementById('item-modal').classList.add('active');
+    if (id) {
+      document.getElementById('modal-title').textContent = "Редактировать";
+      const item = menuData.items.find(i => i.id === id);
+      document.getElementById('edit-id').value = item.id;
+      document.getElementById('edit-name').value = item.name;
+      document.getElementById('edit-desc').value = item.desc;
+      document.getElementById('edit-weight').value = item.weight;
+      document.getElementById('edit-price').value = item.price;
+      document.getElementById('edit-cat').value = item.cat;
+    } else {
+      document.getElementById('modal-title').textContent = "Новый товар";
+      document.getElementById('edit-id').value = '';
+      document.getElementById('edit-name').value = '';
+      document.getElementById('edit-desc').value = '';
+      document.getElementById('edit-weight').value = '';
+      document.getElementById('edit-price').value = '';
+      document.getElementById('edit-cat').value = activeCat;
+    }
+  };
+
+  window.saveItem = async () => {
+    if (!currentUser) return showToast("Нужно войти!");
+    
+    const id = document.getElementById('edit-id').value || Date.now().toString();
+    const newItem = {
+      id: id,
+      cat: document.getElementById('edit-cat').value,
+      name: document.getElementById('edit-name').value,
+      desc: document.getElementById('edit-desc').value,
+      weight: document.getElementById('edit-weight').value,
+      price: document.getElementById('edit-price').value
+    };
+
+    if (!newItem.name || !newItem.price) return showToast("Заполни имя и цену!");
+
+    try {
+      await setDoc(doc(db, "menu", id), newItem);
+      await loadData(); // Перезагружаем с сервера
+      document.getElementById('item-modal').classList.remove('active');
+      showToast("Сохранено в базу!");
+    } catch (e) {
+      showToast("Ошибка сохранения");
+    }
+  };
+
+  window.deleteItem = async (id) => {
+    if (!currentUser) return showToast("Нужно войти!");
+    if(confirm("Удалить товар?")) {
+      try {
+        await deleteDoc(doc(db, "menu", id));
+        await loadData();
+        showToast("Удалено");
+      } catch (e) {
+        showToast("Ошибка удаления");
+      }
+    }
+  };
+
+  window.showToast = (msg) => {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  };
+
+  // Запуск
+  loadData();
+</script>
+</body>
+</html>
