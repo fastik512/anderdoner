@@ -38,7 +38,7 @@ a { color: var(--accent); text-decoration:none; }
 
 /* HEADER */
 .site-header { position: sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 32px; background: rgba(10,9,8,.82); backdrop-filter: blur(16px) saturate(1.4); border-bottom:1px solid var(--line); }
-.logo { display:flex; align-items:center; gap:12px; cursor:pointer; user-select:none; } /* Добавил cursor и user-select для клика */
+.logo { display:flex; align-items:center; gap:12px; cursor:pointer; user-select:none; }
 .logo-mark { width:46px; height:46px; border-radius:13px; background: linear-gradient(140deg, var(--accent-3), var(--accent), var(--accent-2)); display:grid; place-items:center; font-family: var(--font-display); font-size:1.4rem; color:#1a0f00; box-shadow: 0 8px 22px rgba(255,87,34,.4), inset 0 -2px 0 rgba(0,0,0,.15); }
 .logo-text { display:flex; flex-direction:column; line-height:1.1; }
 .logo-text > span { font-family: var(--font-display); font-size:1.02rem; font-weight:700; letter-spacing:.2px; }
@@ -264,10 +264,22 @@ main { max-width:1240px; margin:0 auto; padding: 0 32px; }
 .toast.on { transform:translate(-50%, 0); }
 
 /* АДМИНКА */
-.admin-list { margin-top: 20px; max-height: 300px; overflow-y: auto; border: 1px solid var(--line-2); border-radius: 12px; background: var(--surface-2); }
+.admin-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--line-2); padding-bottom: 10px; }
+.admin-tabs button { background: transparent; color: var(--muted); font-weight: bold; font-size: 1rem; padding: 8px 12px; border-radius: 8px; transition: 0.2s; }
+.admin-tabs button.active { background: var(--surface-2); color: var(--accent); }
+.admin-tab-content { display: none; }
+.admin-tab-content.active { display: block; }
+
+.admin-list { margin-top: 20px; max-height: 250px; overflow-y: auto; border: 1px solid var(--line-2); border-radius: 12px; background: var(--surface-2); }
 .admin-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--line); font-size: 0.85rem; }
 .admin-item:last-child { border-bottom: none; }
-.admin-item button { background: var(--err); color: white; border: none; padding: 4px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+.admin-item .item-info { flex: 1; }
+.admin-item .item-actions { display: flex; gap: 6px; }
+.admin-item button { background: var(--surface); color: var(--text); border: 1px solid var(--line); padding: 4px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.15s; }
+.admin-item button:hover { background: var(--accent); color: #1a0f00; border-color: transparent; }
+.admin-item button.del:hover { background: var(--err); color: white; }
+
+.review-textarea { width: 100%; min-height: 80px; margin-bottom: 10px; }
 </style>
 </head>
 <body>
@@ -454,27 +466,46 @@ main { max-width:1240px; margin:0 auto; padding: 0 32px; }
     <h3>⚙️ Панель управления</h3>
     <p class="sub">Изменения сохраняются в базу и видны всем пользователям.</p>
     
-    <div class="field">
-      <label>Адрес</label>
-      <input type="text" id="adminAddress" placeholder="Город, улица, дом">
-    </div>
-    <div class="field">
-      <label>Время работы</label>
-      <input type="text" id="adminHours" placeholder="10:00–22:00">
+    <div class="admin-tabs">
+      <button class="active" onclick="switchAdminTab('menu', this)">🍔 Меню и настройки</button>
+      <button onclick="switchAdminTab('reviews', this)">💬 Отзывы</button>
     </div>
 
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px;">
-      <h4 style="font-family:var(--font-display); font-size:1rem;">Список товаров</h4>
-      <button class="btn-primary" style="padding:8px 12px; font-size:0.8rem;" onclick="addAdminItem()">+ Добавить</button>
+    <!-- ВКЛАДКА МЕНЮ -->
+    <div id="tab-menu" class="admin-tab-content active">
+      <div class="field">
+        <label>Адрес</label>
+        <input type="text" id="adminAddress" placeholder="Город, улица, дом">
+      </div>
+      <div class="field">
+        <label>Время работы</label>
+        <input type="text" id="adminHours" placeholder="10:00–22:00">
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px; flex-wrap:wrap; gap:10px;">
+        <h4 style="font-family:var(--font-display); font-size:1rem;">Список товаров</h4>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-primary" style="padding:8px 12px; font-size:0.8rem; background:var(--surface-2); color:var(--text);" onclick="resetAdminMenu()">Сбросить к заводским</button>
+          <button class="btn-primary" style="padding:8px 12px; font-size:0.8rem;" onclick="addAdminItem()">+ Добавить</button>
+        </div>
+      </div>
+      
+      <div class="admin-list" id="adminList">
+        <!-- Товары -->
+      </div>
     </div>
-    
-    <div class="admin-list" id="adminList">
-      <!-- Сюда рендерятся товары для редактирования -->
+
+    <!-- ВКЛАДКА ОТЗЫВОВ -->
+    <div id="tab-reviews" class="admin-tab-content">
+      <p class="sub" style="margin-bottom:10px;">Удаляй спам и нежелательные отзывы. Изменения мгновенные.</p>
+      <div class="admin-list" id="adminReviewsList">
+        <!-- Отзывы -->
+      </div>
     </div>
 
     <div class="modal-actions" style="margin-top:24px;">
       <button type="button" class="back" id="cancelAdmin">Закрыть</button>
-      <button type="button" class="go" id="saveAdmin" style="background:linear-gradient(135deg, #37d67a, #2aa158);">💾 Сохранить всё</button>
+      <button type="button" class="go" id="saveAdmin" style="background:linear-gradient(135deg, #37d67a, #2aa158);">💾 Сохранить меню</button>
     </div>
   </div>
 </div>
@@ -494,11 +525,11 @@ const SUPABASE_ANON_KEY = 'sb_publishable_r5EqpjyBilO_xhNkP2asCQ_j_Olq1XP';
 const TG_BOT_TOKEN = '9231859251:AAE1u5xXxvGbvPEIbCEe9S507Ms755Ig4Hk';
 const TG_CHAT_ID   = '1460289386';
 
-// СЕКРЕТНЫЙ ПАРОЛЬ ДЛЯ ВХОДА В АДМИНКУ (можешь поменять тут)
-const ADMIN_PASSWORD = 'admin123';
+// СЛОЖНЫЙ ПАРОЛЬ ДЛЯ ВХОДА В АДМИНКУ
+const ADMIN_PASSWORD = 'AnderDoner#Admin!2026';
 
 /* ============================================================
-   Данные (дефолтные, если база пустая)
+   Данные по умолчанию
    ============================================================ */
 let PICKUP_ADDRESS = 'агр. Ждановичи, ул. Парковая, 6';
 let PICKUP_TIME = '10:00–22:00';
@@ -508,15 +539,17 @@ const defaultProducts = [
   { id:2, cat:'doner', name:'Донер сырный', desc:'Двойной чеддер, курица, сырный соус, свежий огурец', price:1450, glyph:'🧀', tag:'' },
   { id:3, cat:'doner', name:'Донер с говядиной', desc:'Мраморная говядина, пекинская капуста, барбекю', price:1450, glyph:'🥩', tag:'' },
   { id:4, cat:'doner', name:'Донер с беконом', desc:'Бекон, курица, свежий огурец, чесночный соус', price:1250, glyph:'🥓', tag:'Хит' },
+  { id:5, cat:'doner', name:'Донер с креветками', desc:'Королевские креветки, пекинская капуста, кунжутный соус', price:1450, glyph:'🍤', tag:'' },
+  { id:6, cat:'doner', name:'Донер с фалафелем', desc:'Фалафель, пекинская капуста, хумус, свежий огурец', price:1050, glyph:'🧆', tag:'Веган' },
   { id:7, cat:'stick', name:'Стик с курицей', desc:'Курица, сырный и чесночный соусы', price:490, glyph:'🍢', tag:'' },
+  { id:8, cat:'stick', name:'Стик барбекю', desc:'Курица, барбекю, чесночный соус', price:490, glyph:'🍢', tag:'' },
   { id:12, cat:'box', name:'Ланч-бокс классический', desc:'Курица, картофель фри, овощи, два соуса', price:1690, glyph:'🍱', tag:'' },
   { id:15, cat:'side', name:'Картофель фри', desc:'Порция 110 г, соль', price:490, glyph:'🍟', tag:'' },
   { id:18, cat:'drink', name:'Кола 0.5 л', desc:'Классическая, холодная', price:350, glyph:'🥤', tag:'' },
   { id:21, cat:'sauce', name:'Чесночный соус', desc:'25 г', price:120, glyph:'🧄', tag:'' },
 ];
 
-let products = [...defaultProducts]; // Сюда загрузятся данные из базы
-
+let products = [...defaultProducts];
 const categories = [
   { key:'doner', label:'Донеры', icon:'🌯' },
   { key:'stick', label:'Стики', icon:'🍢' },
@@ -525,31 +558,29 @@ const categories = [
   { key:'drink', label:'Напитки', icon:'🥤' },
   { key:'sauce', label:'Соусы', icon:'🥫' },
 ];
-
 let addresses = [ { name: PICKUP_ADDRESS, time: PICKUP_TIME } ];
 
 /* ============================================================
-   ЗАГРУЗКА ДАННЫХ ИЗ БАЗЫ
+   ЗАГРУЗКА ДАННЫХ
    ============================================================ */
 async function loadSiteSettings() {
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/site_settings?id=eq.1`, {
-      headers: {
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-      }
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
     });
     if (res.ok) {
       const data = await res.json();
       if (data && data.length > 0) {
         const settings = data[0];
-        if (settings.products) products = settings.products;
+        // Если массив товаров пустой, оставляем дефолтный
+        if (settings.products && settings.products.length > 0) {
+          products = settings.products;
+        }
         if (settings.address) PICKUP_ADDRESS = settings.address;
         if (settings.work_hours) PICKUP_TIME = settings.work_hours;
         
         addresses = [ { name: PICKUP_ADDRESS, time: PICKUP_TIME } ];
         
-        // Обновляем текст на странице
         document.getElementById('heroHours').textContent = PICKUP_TIME;
         document.getElementById('promoHours').textContent = PICKUP_TIME;
         document.getElementById('descHours').textContent = PICKUP_TIME;
@@ -558,20 +589,14 @@ async function loadSiteSettings() {
       }
     }
   } catch (err) {
-    console.error('Ошибка загрузки настроек, используем дефолтные:', err);
+    console.error('Ошибка загрузки настроек:', err);
   }
-  
   renderMenu();
   renderAddresses();
 }
 
 async function saveSiteSettings(newProducts, newAddress, newHours) {
-  const payload = {
-    products: newProducts,
-    address: newAddress,
-    work_hours: newHours
-  };
-  
+  const payload = { products: newProducts, address: newAddress, work_hours: newHours };
   const res = await fetch(`${SUPABASE_URL}/rest/v1/site_settings?id=eq.1`, {
     method: 'PATCH',
     headers: {
@@ -582,20 +607,19 @@ async function saveSiteSettings(newProducts, newAddress, newHours) {
     },
     body: JSON.stringify(payload)
   });
-  
   if (!res.ok) throw new Error('Ошибка сохранения в базу');
 }
 
 /* ============================================================
-   АДМИНКА
+   АДМИНКА - ЛОГИКА
    ============================================================ */
 let clickCount = 0;
 let clickTimer;
 document.getElementById('secretAdminTrigger').addEventListener('click', (e) => {
-  e.preventDefault(); // Чтобы не скроллило наверх
+  e.preventDefault();
   clickCount++;
   clearTimeout(clickTimer);
-  clickTimer = setTimeout(() => { clickCount = 0; }, 1000); // Сброс через 1 сек
+  clickTimer = setTimeout(() => { clickCount = 0; }, 1000);
   
   if (clickCount >= 3) {
     clickCount = 0;
@@ -611,9 +635,10 @@ document.getElementById('secretAdminTrigger').addEventListener('click', (e) => {
 let tempProducts = [];
 let tempAddress = '';
 let tempHours = '';
+let adminReviews = [];
 
 function openAdminPanel() {
-  tempProducts = JSON.parse(JSON.stringify(products)); // Глубокая копия
+  tempProducts = JSON.parse(JSON.stringify(products));
   tempAddress = PICKUP_ADDRESS;
   tempHours = PICKUP_TIME;
   
@@ -621,6 +646,8 @@ function openAdminPanel() {
   document.getElementById('adminHours').value = tempHours;
   
   renderAdminList();
+  fetchAdminReviews(); // Загружаем отзывы для вкладки
+  
   document.getElementById('adminModal').classList.add('on');
   document.getElementById('adminModal').setAttribute('aria-hidden','false');
   document.body.style.overflow = 'hidden';
@@ -635,14 +662,34 @@ function closeAdminPanel() {
 document.getElementById('cancelAdmin').onclick = closeAdminPanel;
 document.getElementById('adminModal').onclick = (e) => { if (e.target === document.getElementById('adminModal')) closeAdminPanel(); };
 
+window.switchAdminTab = function(tab, btn) {
+  document.querySelectorAll('.admin-tabs button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById(`tab-${tab}`).classList.add('active');
+  
+  // Меняем кнопку сохранения в зависимости от вкладки
+  const saveBtn = document.getElementById('saveAdmin');
+  if (tab === 'menu') {
+    saveBtn.style.display = 'block';
+    saveBtn.textContent = '💾 Сохранить меню';
+  } else {
+    saveBtn.style.display = 'none'; // Отзывы удаляются мгновенно, сохранять не нужно
+  }
+}
+
+/* --- Вкладка Меню --- */
 function renderAdminList() {
   const list = document.getElementById('adminList');
   list.innerHTML = tempProducts.map((p, index) => `
     <div class="admin-item">
-      <div style="flex:1;">
+      <div class="item-info">
         <b style="color:var(--accent);">${p.name}</b> (${p.cat}) — ${(p.price/100).toFixed(2)} BYN
       </div>
-      <button onclick="deleteAdminItem(${index})">Удалить</button>
+      <div class="item-actions">
+        <button onclick="editAdminItem(${index})">✏️</button>
+        <button class="del" onclick="deleteAdminItem(${index})">✕</button>
+      </div>
     </div>
   `).join('');
 }
@@ -654,59 +701,64 @@ window.deleteAdminItem = function(index) {
   }
 }
 
+window.editAdminItem = function(index) {
+  const p = tempProducts[index];
+  const newName = prompt('Название:', p.name);
+  if (newName === null) return;
+  const newPrice = prompt('Цена в копейках (например: 790):', p.price);
+  if (newPrice === null) return;
+  const newDesc = prompt('Описание:', p.desc);
+  if (newDesc === null) return;
+  
+  p.name = newName.trim() || p.name;
+  p.price = parseInt(newPrice) || p.price;
+  p.desc = newDesc.trim() || p.desc;
+  
+  renderAdminList();
+}
+
 window.addAdminItem = function() {
-  const name = prompt('Название товара (например: Донер с сыром):');
+  const name = prompt('Название товара:');
   if (!name) return;
   
   const catInput = prompt('Категория (doner, stick, box, side, drink, sauce):', 'doner');
   if (!['doner', 'stick', 'box', 'side', 'drink', 'sauce'].includes(catInput)) {
-    alert('Неверная категория! Используй: doner, stick, box, side, drink, sauce');
+    alert('Неверная категория!');
     return;
   }
   
-  const priceInput = prompt('Цена в копейках (например: 790 для 7.90 BYN):', '790');
+  const priceInput = prompt('Цена в копейках (790 = 7.90 BYN):', '790');
   const price = parseInt(priceInput);
-  if (isNaN(price)) {
-    alert('Цена должна быть числом!');
-    return;
-  }
+  if (isNaN(price)) { alert('Цена должна быть числом!'); return; }
   
-  const desc = prompt('Описание (состав):', 'Курица, овощи, соус') || '';
-  const glyph = prompt('Эмодзи для картинки (например: 🌯, 🧀, 🥩):', '🌯') || '🌯';
-  
-  const newId = Date.now(); // Уникальный ID
+  const desc = prompt('Описание:', 'Курица, овощи, соус') || '';
+  const glyph = prompt('Эмодзи (🌯, 🧀, 🥩):', '🌯') || '🌯';
   
   tempProducts.push({
-    id: newId,
-    cat: catInput,
-    name: name,
-    desc: desc,
-    price: price,
-    glyph: glyph,
-    tag: ''
+    id: Date.now(), cat: catInput, name: name, desc: desc, price: price, glyph: glyph, tag: ''
   });
-  
   renderAdminList();
+}
+
+window.resetAdminMenu = function() {
+  if (confirm('Вернуть стандартное меню? Все ваши изменения в меню будут стерты.')) {
+    tempProducts = JSON.parse(JSON.stringify(defaultProducts));
+    renderAdminList();
+  }
 }
 
 document.getElementById('saveAdmin').onclick = async () => {
   const newAddress = document.getElementById('adminAddress').value.trim();
   const newHours = document.getElementById('adminHours').value.trim();
   
-  if (!newAddress || !newHours) {
-    alert('Заполните адрес и часы работы!');
-    return;
-  }
+  if (!newAddress || !newHours) { alert('Заполните адрес и часы работы!'); return; }
   
   const btn = document.getElementById('saveAdmin');
-  const originalText = btn.textContent;
   btn.disabled = true;
   btn.textContent = 'Сохранение...';
   
   try {
     await saveSiteSettings(tempProducts, newAddress, newHours);
-    
-    // Применяем изменения локально, чтобы не перезагружать страницу
     products = tempProducts;
     PICKUP_ADDRESS = newAddress;
     PICKUP_TIME = newHours;
@@ -720,32 +772,77 @@ document.getElementById('saveAdmin').onclick = async () => {
     
     renderMenu();
     renderAddresses();
-    renderCart(); // Пересчитать корзину, если удалили товар
+    renderCart();
     
+    toast('Меню обновлено!');
     closeAdminPanel();
-    toast('Изменения сохранены в базу!');
   } catch (err) {
     alert('Ошибка сохранения: ' + err.message);
-    console.error(err);
   } finally {
     btn.disabled = false;
-    btn.textContent = originalText;
+    btn.textContent = '💾 Сохранить меню';
   }
 };
 
+/* --- Вкладка Отзывы --- */
+async function fetchAdminReviews() {
+  const list = document.getElementById('adminReviewsList');
+  list.innerHTML = '<div style="padding:20px; text-align:center; color:var(--muted);">Загрузка...</div>';
+  
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?select=*&order=created_at.desc`, {
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+    });
+    if (!res.ok) throw new Error('Ошибка загрузки');
+    const data = await res.json();
+    
+    if (data.length === 0) {
+      list.innerHTML = '<div style="padding:20px; text-align:center; color:var(--muted);">Отзывов пока нет.</div>';
+      return;
+    }
+    
+    list.innerHTML = data.map(r => `
+      <div class="admin-item">
+        <div class="item-info">
+          <b>${escapeHtml(r.name)}</b> (${r.rating} ★) <small style="color:var(--muted);">${new Date(r.created_at).toLocaleDateString()}</small><br>
+          <span style="font-size:0.8rem; color:var(--muted);">«${escapeHtml(r.text)}»</span>
+        </div>
+        <div class="item-actions">
+          <button class="del" onclick="deleteAdminReview(${r.id})">Удалить</button>
+        </div>
+      </div>
+    `).join('');
+  } catch (err) {
+    list.innerHTML = `<div style="padding:20px; text-align:center; color:var(--err);">Ошибка: ${err.message}</div>`;
+  }
+}
+
+window.deleteAdminReview = async function(id) {
+  if (!confirm('Удалить этот отзыв?')) return;
+  
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?id=eq.${id}`, {
+      method: 'DELETE',
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+    });
+    if (!res.ok) throw new Error('Не удалось удалить');
+    
+    fetchAdminReviews(); // Обновляем список в админке
+    loadReviews();       // Обновляем список на сайте
+    toast('Отзыв удален');
+  } catch (err) {
+    alert('Ошибка: ' + err.message);
+  }
+}
 
 /* ============================================================
-   ОТЗЫВЫ
+   ОТЗЫВЫ НА САЙТЕ
    ============================================================ */
 const defaultReviews = [
   { name:'Тимофей С.', text:'Лучшая шаурма в округе. Сырный лаваш реально сырный, а не просто так называется.', rating:5, date:'03.06.2026' },
-  { name:'Виталий Т.', text:'Перепробовал много шаурмичных. Остановился на этой — больше всего нравится у них.', rating:5, date:'14.05.2026' },
-  { name:'Станислав П.', text:'Приятное место, отличное соотношение цены и качества. Девушки за стойкой — молодцы.', rating:5, date:'21.04.2026' },
-  { name:'Максим Ж.', text:'Постоянно беру здесь. Делают быстро, вкусно, качественно. Мастера крутят на уровне.', rating:5, date:'25.11.2025' },
 ];
 
 let userReviews = [];
-
 function hasSubmittedReview() { return localStorage.getItem('ad_review_submitted') === '1'; }
 
 function renderReviewsUI(all) {
@@ -763,26 +860,15 @@ function renderReviewsUI(all) {
 
 async function loadReviews() {
   const grid = document.getElementById('reviewsGrid');
-  
-  if (!SUPABASE_URL || SUPABASE_URL === 'ВСТАВЬ_СЮДА_PROJECT_URL') {
-    renderReviewsUI(defaultReviews);
-    return;
-  }
-
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?select=*&order=created_at.desc`, {
-      headers: {
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-      }
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
     });
     if (!res.ok) throw new Error('Ошибка загрузки отзывов');
     const data = await res.json();
     
     userReviews = data.map(r => ({
-      name: r.name,
-      text: r.text,
-      rating: r.rating,
+      name: r.name, text: r.text, rating: r.rating,
       date: new Date(r.created_at).toLocaleDateString('ru-RU', { day:'2-digit', month:'2-digit', year:'numeric' }),
       isUser: true
     }));
@@ -799,11 +885,9 @@ function updateReviewBtn() {
   const btn = document.getElementById('reviewBtn');
   if (!btn) return;
   if (hasSubmittedReview()) {
-    btn.disabled = true;
-    btn.innerHTML = '✓ Отзыв оставлен';
+    btn.disabled = true; btn.innerHTML = '✓ Отзыв оставлен';
   } else {
-    btn.disabled = false;
-    btn.innerHTML = 'Оставить отзыв <span class="arrow">→</span>';
+    btn.disabled = false; btn.innerHTML = 'Оставить отзыв <span class="arrow">→</span>';
   }
 }
 
@@ -820,9 +904,7 @@ const reviewModal = document.getElementById('reviewModal');
 const reviewForm = document.getElementById('reviewForm');
 function openReviewModal() {
   if (hasSubmittedReview()) return;
-  selectedRating = 0;
-  reviewForm.reset();
-  paintStars(0);
+  selectedRating = 0; reviewForm.reset(); paintStars(0);
   reviewModal.querySelectorAll('.field').forEach(f => f.classList.remove('invalid'));
   reviewModal.classList.add('on');
   reviewModal.setAttribute('aria-hidden','false');
@@ -839,8 +921,7 @@ reviewModal.onclick = (e) => { if (e.target === reviewModal) closeReviewModal();
 
 reviewForm.onsubmit = async (e) => {
   e.preventDefault();
-  const form = e.target;
-  let ok = true;
+  const form = e.target; let ok = true;
   const nameField = document.getElementById('rf-name');
   if (!form.name.value.trim()) { nameField.classList.add('invalid'); ok=false; } else nameField.classList.remove('invalid');
   const starsField = document.getElementById('rf-stars');
@@ -851,8 +932,7 @@ reviewForm.onsubmit = async (e) => {
 
   const btn = document.getElementById('submitReviewBtn');
   const originalText = btn.textContent;
-  btn.disabled = true;
-  btn.textContent = 'Отправка...';
+  btn.disabled = true; btn.textContent = 'Отправка...';
 
   const reviewData = {
     name: form.name.value.trim().slice(0, 40),
@@ -864,29 +944,18 @@ reviewForm.onsubmit = async (e) => {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews`, {
       method: 'POST',
       headers: {
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=minimal'
+        'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json', 'Prefer': 'return=minimal'
       },
       body: JSON.stringify(reviewData)
     });
-    
-    if (!res.ok) {
-      const errText = await res.text();
-      throw new Error(errText);
-    }
+    if (!res.ok) { const errText = await res.text(); throw new Error(errText); }
     
     localStorage.setItem('ad_review_submitted', '1');
-    closeReviewModal();
-    await loadReviews();
-    updateReviewBtn();
-    toast('Спасибо за отзыв!');
+    closeReviewModal(); await loadReviews(); updateReviewBtn(); toast('Спасибо за отзыв!');
   } catch (err) {
-    console.error('Supabase error:', err);
     alert('Ошибка: ' + err.message);
-    btn.disabled = false;
-    btn.textContent = originalText;
+    btn.disabled = false; btn.textContent = originalText;
   }
 };
 
@@ -904,16 +973,13 @@ window.toggleAccordion = function(id) {
 
 function renderMenu() {
   const container = document.getElementById('menuContainer');
-  
   container.innerHTML = categories.map(cat => {
     const items = products.filter(p => p.cat === cat.key);
     if (items.length === 0) return '';
-    
     const cardsHTML = items.map(p => {
       const badgeCls = p.tag==='Хит' ? 'hot' : (p.tag==='Веган' ? 'veg' : '');
       return `<div class="card"><div class="card-img">${p.tag ? `<span class="badge ${badgeCls}">${p.tag}</span>` : ''}<span class="glyph">${p.glyph}</span></div><div class="card-body"><h3>${p.name}</h3><p class="desc">${p.desc}</p><div class="card-foot"><div class="price">${money(p.price)}</div><button class="add" data-add="${p.id}">В корзину</button></div></div></div>`;
     }).join('');
-    
     return `
       <div class="accordion-item" id="cat-${cat.key}">
         <div class="accordion-head" onclick="toggleAccordion('cat-${cat.key}')">
@@ -928,7 +994,6 @@ function renderMenu() {
       </div>
     `;
   }).join('');
-  
   document.querySelectorAll('[data-add]').forEach(b => { b.onclick = () => addToCart(+b.dataset.add); });
 }
 
@@ -949,7 +1014,7 @@ function changeQty(id, delta) {
   saveCart(); renderCart();
 }
 function cartCount() { return cart.reduce((s,i)=>s+i.qty,0); }
-function cartSum() { return cart.reduce((s,i)=>s + findP(i.id).price * i.qty,0); }
+function cartSum() { return cart.reduce((s,i)=>s + (findP(i.id)?.price||0) * i.qty,0); }
 function renderCart() {
   document.getElementById('cartCount').textContent = cartCount();
   const box = document.getElementById('cartItems');
@@ -958,7 +1023,7 @@ function renderCart() {
   } else {
     box.innerHTML = cart.map(i => {
       const p = findP(i.id);
-      if(!p) return ''; // Если товар удалили из базы
+      if(!p) return '';
       return `<div class="ci"><div class="ci-img">${p.glyph}</div><div class="ci-info"><b>${p.name}</b><small>${money(p.price)}</small></div><div class="qty"><button data-dec="${i.id}">−</button><span>${i.qty}</span><button data-inc="${i.id}">+</button></div><div class="ci-sum">${money(p.price*i.qty)}</div></div>`;
     }).join('');
     box.querySelectorAll('[data-inc]').forEach(b => b.onclick = () => changeQty(+b.dataset.inc, 1));
@@ -1017,23 +1082,18 @@ function openCheckoutForm() {
 
     const submitBtn = form.querySelector('button[type="submit"]');
     const originalText = submitBtn.textContent;
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Отправка...';
+    submitBtn.disabled = true; submitBtn.textContent = 'Отправка...';
 
     try {
       if (TG_BOT_TOKEN && TG_BOT_TOKEN !== 'ВСТАВЬ_СЮДА_ТОКЕН_БОТА') {
         await sendOrderToTelegram(order);
       }
       localStorage.setItem('ad_lastOrder', JSON.stringify(order));
-      cart = [];
-      saveCart();
-      renderCart();
-      showSuccess(order);
+      cart = []; saveCart(); renderCart(); showSuccess(order);
     } catch (err) {
       alert('Не удалось отправить заказ в Telegram. Проверьте интернет или повторите позже.');
       console.error('Telegram error:', err);
-      submitBtn.disabled = false;
-      submitBtn.textContent = originalText;
+      submitBtn.disabled = false; submitBtn.textContent = originalText;
     }
   };
   checkoutModal.classList.add('on'); checkoutModal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
@@ -1091,8 +1151,8 @@ function toast(msg) {
 }
 
 /* ---------- INIT ---------- */
-loadSiteSettings(); // Сначала грузим меню из базы
-loadReviews();      // Грузим отзывы
+loadSiteSettings();
+loadReviews();
 updateReviewBtn();
 renderCart();
 </script>
