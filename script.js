@@ -1,38 +1,32 @@
 /* ============================================================
-   Андер Донер — логика сайта
+   Андер Донер — логика
    Цены в копейках BYN: 790 = 7.90 BYN
    ============================================================ */
 
-const DELIVERY_FREE_FROM = 5000;   // 50 BYN — бесплатная доставка
+const DELIVERY_FREE_FROM = 5000;   // 50 BYN
 const DELIVERY_FEE       = 500;    // 5 BYN
 
 const products = [
-  // Донеры
   { id:1,  cat:'doner', name:'Донер классический', desc:'Лепёшка, курица, капуста, огурец, помидор, чесночный соус', price:790,  glyph:'🌯', tag:'Хит' },
   { id:2,  cat:'doner', name:'Донер сырный', desc:'Двойной чеддер, курица, сырный соус, свежий огурец', price:1450, glyph:'🧀', tag:'' },
   { id:3,  cat:'doner', name:'Донер с говядиной', desc:'Мраморная говядина, пекинская капуста, барбекю', price:1450, glyph:'🥩', tag:'' },
   { id:4,  cat:'doner', name:'Донер с беконом', desc:'Бекон, курица, свежий огурец, чесночный соус', price:1250, glyph:'🥓', tag:'Хит' },
   { id:5,  cat:'doner', name:'Донер с креветками', desc:'Королевские креветки, пекинская капуста, кунжутный соус', price:1450, glyph:'🍤', tag:'' },
   { id:6,  cat:'doner', name:'Донер с фалафелем', desc:'Фалафель, пекинская капуста, хумус, свежий огурец', price:1050, glyph:'🧆', tag:'Веган' },
-  // Стики
   { id:7,  cat:'stick', name:'Стик с курицей', desc:'Курица, сырный и чесночный соусы', price:490,  glyph:'🌯', tag:'' },
   { id:8,  cat:'stick', name:'Стик барбекю', desc:'Курица, барбекю, чесночный соус', price:490,  glyph:'🌯', tag:'' },
   { id:9,  cat:'stick', name:'Стик с сухариками', desc:'Курица, сухарики, соус цезарь', price:490,  glyph:'🌯', tag:'' },
   { id:10, cat:'stick', name:'Стик терияки', desc:'Курица, терияки, чесночный соус', price:490,  glyph:'🌯', tag:'' },
   { id:11, cat:'stick', name:'Стик с сыром', desc:'Сливочный сыр, курица, чесночный соус', price:490,  glyph:'🌯', tag:'' },
-  // Боксы
   { id:12, cat:'box', name:'Ланч-бокс классический', desc:'Курица, картофель фри, овощи, два соуса', price:1690, glyph:'🍱', tag:'' },
   { id:13, cat:'box', name:'Ланч-бокс сырный', desc:'Курица, фри, жидкий чеддер, овощи', price:1890, glyph:'🍱', tag:'' },
   { id:14, cat:'box', name:'Наггетсы 6 шт.', desc:'Куриные наггетсы, соус на выбор', price:710,  glyph:'🍗', tag:'' },
-  // Картошка
   { id:15, cat:'side', name:'Картофель фри', desc:'Порция 110 г, соль', price:490,  glyph:'🍟', tag:'' },
   { id:16, cat:'side', name:'Картофель по-деревенски', desc:'Порция 110 г, специи', price:550,  glyph:'🍟', tag:'' },
   { id:17, cat:'side', name:'Фритос с беконом', desc:'Картофель фри, бекон, плавленый сыр', price:890, glyph:'🥔', tag:'Хит' },
-  // Напитки
   { id:18, cat:'drink', name:'Кола 0.5 л', desc:'Классическая, холодная', price:350,  glyph:'🥤', tag:'' },
   { id:19, cat:'drink', name:'Вода 0.5 л', desc:'Негазированная', price:160,  glyph:'💧', tag:'' },
   { id:20, cat:'drink', name:'Лимонад 0.5 л', desc:'Цитрус, охлаждённый', price:350,  glyph:'🍋', tag:'' },
-  // Соусы
   { id:21, cat:'sauce', name:'Чесночный соус', desc:'25 г', price:120,  glyph:'🧄', tag:'' },
   { id:22, cat:'sauce', name:'Барбекю', desc:'25 г', price:120,  glyph:'🍯', tag:'' },
   { id:23, cat:'sauce', name:'Сырный соус', desc:'25 г', price:120,  glyph:'🧀', tag:'' },
@@ -63,7 +57,6 @@ const addresses = [
   { name:'ТРЦ Червенский', time:'10:00–22:00', metro:'М2' },
 ];
 
-/* ---------- State ---------- */
 let cart = JSON.parse(localStorage.getItem('ad_cart') || '[]');
 let activeCat = 'all';
 
@@ -109,7 +102,7 @@ function renderAddresses() {
   document.getElementById('addrGrid').innerHTML = addresses.map(a =>
     `<div class="addr">
        <strong>${a.name}${a.metro?`<span class="metro">${a.metro}</span>`:''}</strong>
-       <span>${a.time}</span>
+       <span>🕐 ${a.time}</span>
      </div>`
   ).join('');
 }
@@ -179,8 +172,8 @@ function renderCart() {
 /* ---------- Drawer ---------- */
 const drawer  = document.getElementById('drawer');
 const overlay = document.getElementById('overlay');
-function openDrawer()  { drawer.classList.add('on');  overlay.classList.add('on'); }
-function closeDrawer() { drawer.classList.remove('on'); overlay.classList.remove('on'); }
+function openDrawer()  { drawer.classList.add('on');  overlay.classList.add('on'); document.body.style.overflow='hidden'; }
+function closeDrawer() { drawer.classList.remove('on'); overlay.classList.remove('on'); document.body.style.overflow=''; }
 
 document.getElementById('cartBtn').onclick    = openDrawer;
 document.getElementById('closeDrawer').onclick = closeDrawer;
@@ -202,8 +195,8 @@ function openCheckoutForm() {
     <p class="sub">Заполните данные — и мы приступим к готовке.</p>
 
     <div class="toggle" id="typeToggle">
-      <button data-type="delivery" class="active">Доставка</button>
-      <button data-type="pickup">Самовывоз</button>
+      <button data-type="delivery" class="active">🚚 Доставка</button>
+      <button data-type="pickup">🏃 Самовывоз</button>
     </div>
 
     <form id="orderForm" novalidate>
@@ -239,13 +232,13 @@ function openCheckoutForm() {
       <div class="field">
         <label>Способ оплаты</label>
         <div class="radio-row">
-          <label><input type="radio" name="pay" value="card" checked> Картой онлайн</label>
-          <label><input type="radio" name="pay" value="cash"> Наличными</label>
+          <label><input type="radio" name="pay" value="card" checked> 💳 Картой онлайн</label>
+          <label><input type="radio" name="pay" value="cash"> 💵 Наличными</label>
         </div>
       </div>
 
       <div class="field">
-        <label>Комментарий к заказу (необязательно)</label>
+        <label>Комментарий (необязательно)</label>
         <textarea name="comment" rows="2" placeholder="Без лука, соус отдельно..."></textarea>
       </div>
 
@@ -256,7 +249,7 @@ function openCheckoutForm() {
       </div>
 
       <div class="modal-actions">
-        <button type="button" class="back" id="backBtn">Назад</button>
+        <button type="button" class="back" id="backBtn">← Назад</button>
         <button type="submit" class="go">Подтвердить заказ</button>
       </div>
     </form>
@@ -331,9 +324,15 @@ function openCheckoutForm() {
   };
 
   checkoutModal.classList.add('on');
+  checkoutModal.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
 }
 
-function closeCheckout() { checkoutModal.classList.remove('on'); }
+function closeCheckout() {
+  checkoutModal.classList.remove('on');
+  checkoutModal.setAttribute('aria-hidden','true');
+  document.body.style.overflow='';
+}
 
 function showSuccess(order) {
   checkoutCard.innerHTML = `
@@ -366,7 +365,7 @@ function toast(msg) {
   t.textContent = msg;
   t.classList.add('on');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>t.classList.remove('on'), 1600);
+  toastTimer = setTimeout(()=>t.classList.remove('on'), 1800);
 }
 
 /* ---------- Init ---------- */
