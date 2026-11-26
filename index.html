@@ -71,6 +71,7 @@ a { color: var(--accent); text-decoration:none; }
 .btn-primary:hover { transform: translateY(-2px); box-shadow:0 20px 44px rgba(255,87,34,.5); }
 .btn-primary .arrow { transition:.2s; }
 .btn-primary:hover .arrow { transform: translateX(4px); }
+.btn-primary:disabled { opacity:.45; cursor:not-allowed; transform:none; box-shadow:none; }
 .btn-ghost { display:inline-flex; align-items:center; background: transparent; color:var(--text); font-weight:800; padding:16px 26px; border-radius:14px; border:1px solid var(--line-2); transition:.2s; font-size:1rem; }
 .btn-ghost:hover { border-color: var(--accent); color: var(--accent); background:rgba(255,176,32,.05); }
 .hero-stats { display:flex; gap:36px; flex-wrap:wrap; }
@@ -149,11 +150,21 @@ main { max-width:1240px; margin:0 auto; padding: 0 32px; }
 .review { background: var(--surface); border:1px solid var(--line); border-radius:18px; padding:22px; transition:.2s; position:relative; }
 .review::before { content:'"'; position:absolute; top:-10px; right:18px; font-family: Georgia, serif; font-size:5rem; line-height:1; color: rgba(255,176,32,.12); font-weight:900; }
 .review:hover { border-color: var(--line-2); transform: translateY(-3px); }
-.rv-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
-.rv-top b { font-size:.95rem; }
+.rv-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; gap:10px; flex-wrap:wrap; }
+.rv-top b { font-size:.95rem; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
 .stars { color: var(--accent); font-size:.9rem; letter-spacing:1px; }
-.review p { color: var(--text); font-size:.92rem; line-height:1.55; margin-bottom:10px; }
+.review p { color: var(--text); font-size:.92rem; line-height:1.55; margin-bottom:10px; word-wrap:break-word; }
 .review small { color: var(--muted); font-size:.78rem; }
+
+/* user review highlight */
+.review.user-review { border-color: rgba(255,176,32,.6); background: linear-gradient(160deg, rgba(255,176,32,.06), var(--surface)); box-shadow: 0 0 0 1px rgba(255,176,32,.25); }
+.your-badge { display:inline-block; padding:2px 8px; border-radius:5px; font-size:.62rem; background: linear-gradient(135deg, var(--accent-3), var(--accent-2)); color:#1a0f00; font-weight:900; letter-spacing:.5px; text-transform:uppercase; }
+
+/* star picker */
+.star-picker { display:flex; gap:4px; margin:4px 0 2px; }
+.star-picker button { background:transparent; font-size:2.1rem; line-height:1; color: var(--line-2); padding:2px 4px; transition: color .15s, transform .15s; }
+.star-picker button:hover { transform: scale(1.15); }
+.star-picker button.active { color: var(--accent); }
 
 /* FEATURES */
 .features { display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:16px; }
@@ -213,9 +224,9 @@ main { max-width:1240px; margin:0 auto; padding: 0 32px; }
 .modal-card .sub { color:var(--muted); font-size:.9rem; margin-bottom:22px; }
 .field { margin-bottom:16px; }
 .field label { display:block; font-size:.82rem; font-weight:800; color:var(--muted); margin-bottom:7px; letter-spacing:.3px; }
-.field input, .field select, .field textarea { width:100%; padding:13px 15px; border-radius:11px; background:var(--surface-2); border:1px solid var(--line-2); color:var(--text); font-size:.95rem; outline:none; transition:.15s; }
+.field input, .field select, .field textarea { width:100%; padding:13px 15px; border-radius:11px; background:var(--surface-2); border:1px solid var(--line-2); color:var(--text); font-size:.95rem; outline:none; transition:.15s; resize:vertical; }
 .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(255,176,32,.12); }
-.field.invalid input, .field.invalid select { border-color: var(--err); }
+.field.invalid input, .field.invalid select, .field.invalid textarea { border-color: var(--err); }
 .field .err { color:var(--err); font-size:.78rem; margin-top:5px; display:none; }
 .field.invalid .err { display:block; }
 .pickup-note { padding:14px 16px; border-radius:11px; background: rgba(255,176,32,.08); border:1px solid rgba(255,176,32,.3); font-size:.9rem; margin-bottom:18px; }
@@ -336,13 +347,9 @@ main { max-width:1240px; margin:0 auto; padding: 0 32px; }
   <section id="reviews" class="section">
     <div class="section-head">
       <div><span class="eyebrow">Отзывы</span><h2>Что <span class="grad">говорят</span></h2></div>
+      <button class="btn-primary" id="reviewBtn">Оставить отзыв <span class="arrow">→</span></button>
     </div>
-    <div class="reviews">
-      <div class="review"><div class="rv-top"><b>Тимофей С.</b><span class="stars">★★★★★</span></div><p>«Лучшая шаурма в округе. Сырный лаваш реально сырный, а не просто так называется».</p><small>03.06.2026</small></div>
-      <div class="review"><div class="rv-top"><b>Виталий Т.</b><span class="stars">★★★★★</span></div><p>«Перепробовал много шаурмичных. Остановился на этой — больше всего нравится у них».</p><small>14.05.2026</small></div>
-      <div class="review"><div class="rv-top"><b>Станислав П.</b><span class="stars">★★★★★</span></div><p>«Приятное место, отличное соотношение цены и качества. Девушки за стойкой — молодцы».</p><small>21.04.2026</small></div>
-      <div class="review"><div class="rv-top"><b>Максим Ж.</b><span class="stars">★★★★★</span></div><p>«Постоянно беру здесь. Делают быстро, вкусно, качественно. Мастера крутят на уровне».</p><small>25.11.2025</small></div>
-    </div>
+    <div class="reviews" id="reviewsGrid"></div>
   </section>
 
   <section id="why" class="section">
@@ -375,9 +382,48 @@ main { max-width:1240px; margin:0 auto; padding: 0 32px; }
   <div class="drawer-foot"><div class="totals" id="totals"></div><button class="btn-checkout" id="checkoutBtn" disabled>Оформить заказ</button></div>
 </aside>
 <div class="modal" id="checkoutModal" aria-hidden="true"><div class="modal-card" id="checkoutCard"></div></div>
+
+<!-- МОДАЛ ОТЗЫВА -->
+<div class="modal" id="reviewModal" aria-hidden="true">
+  <div class="modal-card">
+    <h3>Оставить отзыв</h3>
+    <p class="sub">Поделитесь впечатлением о нашем донере</p>
+    <form id="reviewForm" novalidate>
+      <div class="field" id="rf-name">
+        <label>Имя</label>
+        <input name="name" type="text" placeholder="Как вас представить" maxlength="40" autocomplete="name">
+        <div class="err">Укажите имя</div>
+      </div>
+      <div class="field" id="rf-stars">
+        <label>Оценка</label>
+        <div class="star-picker" id="starPicker">
+          <button type="button" data-star="1" aria-label="1 звезда">★</button>
+          <button type="button" data-star="2" aria-label="2 звезды">★</button>
+          <button type="button" data-star="3" aria-label="3 звезды">★</button>
+          <button type="button" data-star="4" aria-label="4 звезды">★</button>
+          <button type="button" data-star="5" aria-label="5 звёзд">★</button>
+        </div>
+        <div class="err">Выберите оценку</div>
+      </div>
+      <div class="field" id="rf-text">
+        <label>Отзыв</label>
+        <textarea name="text" rows="4" placeholder="Что понравилось? (минимум 10 символов)" maxlength="500"></textarea>
+        <div class="err">Напишите минимум 10 символов</div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="back" id="cancelReview">Отмена</button>
+        <button type="submit" class="go">Отправить отзыв</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
+/* ============================================================
+   Андер Донер — логика
+   ============================================================ */
 const PICKUP_ADDRESS = 'агр. Ждановичи, ул. Парковая, 6';
 const PICKUP_TIME = '10:00–22:00';
 
@@ -410,9 +456,130 @@ const categories = [
   { key:'all', label:'Всё' }, { key:'doner', label:'Донеры' }, { key:'stick', label:'Стики' },
   { key:'box', label:'Боксы' }, { key:'side', label:'Картошка' }, { key:'drink', label:'Напитки' }, { key:'sauce', label:'Соусы' },
 ];
-const addresses = [
-  { name: PICKUP_ADDRESS, time: PICKUP_TIME },
+const addresses = [ { name: PICKUP_ADDRESS, time: PICKUP_TIME } ];
+
+/* ---------- СТАРЫЕ ОТЗЫВЫ (дефолтные) ---------- */
+const defaultReviews = [
+  { name:'Тимофей С.', text:'Лучшая шаурма в округе. Сырный лаваш реально сырный, а не просто так называется.', rating:5, date:'03.06.2026' },
+  { name:'Виталий Т.', text:'Перепробовал много шаурмичных. Остановился на этой — больше всего нравится у них.', rating:5, date:'14.05.2026' },
+  { name:'Станислав П.', text:'Приятное место, отличное соотношение цены и качества. Девушки за стойкой — молодцы.', rating:5, date:'21.04.2026' },
+  { name:'Максим Ж.', text:'Постоянно беру здесь. Делают быстро, вкусно, качественно. Мастера крутят на уровне.', rating:5, date:'25.11.2025' },
 ];
+
+/* ---------- USER REVIEWS (localStorage) ---------- */
+let userReviews = JSON.parse(localStorage.getItem('ad_reviews') || '[]');
+
+function hasSubmittedReview() {
+  return localStorage.getItem('ad_review_submitted') === '1';
+}
+
+function renderReviews() {
+  const all = [
+    ...userReviews.map(r => ({...r, isUser:true})),
+    ...defaultReviews
+  ];
+  document.getElementById('reviewsGrid').innerHTML = all.map(r => `
+    <div class="review ${r.isUser?'user-review':''}">
+      <div class="rv-top">
+        <b>${escapeHtml(r.name)}${r.isUser?' <span class="your-badge">Ваш отзыв</span>':''}</b>
+        <span class="stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span>
+      </div>
+      <p>«${escapeHtml(r.text)}»</p>
+      <small>${r.date}</small>
+    </div>
+  `).join('');
+}
+
+function updateReviewBtn() {
+  const btn = document.getElementById('reviewBtn');
+  if (!btn) return;
+  if (hasSubmittedReview()) {
+    btn.disabled = true;
+    btn.innerHTML = '✓ Отзыв оставлен';
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = 'Оставить отзыв <span class="arrow">→</span>';
+  }
+}
+
+/* ---------- STAR PICKER ---------- */
+let selectedRating = 0;
+const starBtns = document.querySelectorAll('#starPicker button');
+
+function paintStars(n) {
+  starBtns.forEach(b => b.classList.toggle('active', +b.dataset.star <= n));
+}
+
+starBtns.forEach(btn => {
+  btn.addEventListener('mouseenter', () => paintStars(+btn.dataset.star));
+  btn.addEventListener('click', () => {
+    selectedRating = +btn.dataset.star;
+    paintStars(selectedRating);
+  });
+});
+document.getElementById('starPicker').addEventListener('mouseleave', () => paintStars(selectedRating));
+
+/* ---------- OPEN / CLOSE REVIEW MODAL ---------- */
+const reviewModal = document.getElementById('reviewModal');
+const reviewForm = document.getElementById('reviewForm');
+
+function openReviewModal() {
+  if (hasSubmittedReview()) return;
+  selectedRating = 0;
+  reviewForm.reset();
+  paintStars(0);
+  reviewModal.querySelectorAll('.field').forEach(f => f.classList.remove('invalid'));
+  reviewModal.classList.add('on');
+  reviewModal.setAttribute('aria-hidden','false');
+  document.body.style.overflow = 'hidden';
+}
+function closeReviewModal() {
+  reviewModal.classList.remove('on');
+  reviewModal.setAttribute('aria-hidden','true');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('reviewBtn').onclick = openReviewModal;
+document.getElementById('cancelReview').onclick = closeReviewModal;
+reviewModal.onclick = (e) => { if (e.target === reviewModal) closeReviewModal(); };
+
+/* ---------- SUBMIT REVIEW ---------- */
+reviewForm.onsubmit = (e) => {
+  e.preventDefault();
+  const form = e.target;
+  let ok = true;
+
+  const nameField = document.getElementById('rf-name');
+  if (!form.name.value.trim()) { nameField.classList.add('invalid'); ok=false; } else nameField.classList.remove('invalid');
+
+  const starsField = document.getElementById('rf-stars');
+  if (selectedRating === 0) { starsField.classList.add('invalid'); ok=false; } else starsField.classList.remove('invalid');
+
+  const textField = document.getElementById('rf-text');
+  if (form.text.value.trim().length < 10) { textField.classList.add('invalid'); ok=false; } else textField.classList.remove('invalid');
+
+  if (!ok) return;
+
+  const review = {
+    name: form.name.value.trim().slice(0, 40),
+    text: form.text.value.trim().slice(0, 500),
+    rating: selectedRating,
+    date: new Date().toLocaleDateString('ru-RU', { day:'2-digit', month:'2-digit', year:'numeric' }),
+  };
+
+  userReviews.unshift(review);
+  localStorage.setItem('ad_reviews', JSON.stringify(userReviews));
+  localStorage.setItem('ad_review_submitted', '1');
+
+  closeReviewModal();
+  renderReviews();
+  updateReviewBtn();
+  toast('Спасибо за отзыв!');
+};
+
+/* ============================================================
+   КОРЗИНА / МЕНЮ / ОФОРМЛЕНИЕ
+   ============================================================ */
 let cart = JSON.parse(localStorage.getItem('ad_cart') || '[]');
 let activeCat = 'all';
 const money = v => (v/100).toFixed(2) + ' BYN';
@@ -516,7 +683,14 @@ function toast(msg) {
   const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('on');
   clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove('on'), 1800);
 }
-renderCats(); renderMenu(); renderAddresses(); renderCart();
+
+/* ---------- INIT ---------- */
+renderCats();
+renderMenu();
+renderAddresses();
+renderReviews();
+updateReviewBtn();
+renderCart();
 </script>
 </body>
 </html>
