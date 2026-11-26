@@ -770,8 +770,6 @@ function showSuccess(order) {
   checkoutCard.innerHTML = `<div class="success"><div class="check">✓</div><h3>Заказ принят</h3><p>Спасибо, ${escapeHtml(order.name)}. Уже начали готовить.</p><div class="order-no">№ ${order.no}</div><p>Самовывоз: ${escapeHtml(order.address)}</p><p>К оплате: <b style="color:var(--accent)">${money(order.total)}</b> (${order.pay==='card'?'картой онлайн':'наличными'})</p><div class="modal-actions" style="justify-content:center"><button class="go" id="doneBtn">Готово</button></div></div>`;
   checkoutCard.querySelector('#doneBtn').onclick = () => { closeCheckout(); setTimeout(()=>{ checkoutCard.innerHTML=''; }, 300); };
 }
-checkoutModal.onclick = (e) => { if (e.target === checkoutModal) closeCheckout(); };
-
 /* ---------- ОТПРАВКА В TELEGRAM ---------- */
 async function sendOrderToTelegram(order) {
   const itemsText = order.items.map(i => {
