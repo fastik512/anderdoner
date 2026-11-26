@@ -4,83 +4,236 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Андер Донер — шаурма и донеры в Минске. Доставка по городу, 15+ точек у метро.">
-  <meta name="theme-color" content="#0d0b0a">
+  <meta name="theme-color" content="#0a0908">
   <title>Андер Донер — шаурма и донеры в Минске</title>
   <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800;900&family=Unbounded:wght@700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
+<!-- HEADER -->
 <header class="site-header">
   <a href="#" class="logo">
     <span class="logo-mark">Д</span>
     <span class="logo-text">
       <span>Андер<b> Донер</b></span>
-      <i>шаурма и донеры · Минск</i>
+      <i>Минск · с 2018</i>
     </span>
   </a>
   <nav class="site-nav">
     <a href="#menu">Меню</a>
     <a href="#addresses">Адреса</a>
+    <a href="#reviews">Отзывы</a>
     <a href="#why">О нас</a>
   </nav>
   <button class="cart-btn" id="cartBtn" aria-label="Открыть корзину">
-    🛒 Корзина <span class="cart-count" id="cartCount">0</span>
+    <span class="cart-ico">🛒</span>
+    <span class="cart-label">Корзина</span>
+    <span class="cart-count" id="cartCount">0</span>
   </button>
 </header>
 
+<!-- HERO -->
 <section class="hero">
+  <div class="hero-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="grid-lines"></div>
+  </div>
+
   <div class="hero-inner">
     <div class="hero-text">
-      <span class="tagline">Работаем с 2018 · по всему Минску</span>
-      <h1>Донер, от которого <span>не оторваться</span></h1>
-      <p>Минск — это не только драники. Сочный донер, свежая лепёшка, собственные соусы. Готовим за 7 минут, привозим горячим.</p>
+      <span class="tagline">🔥 Открыто до 23:00 · доставка 30–40 мин</span>
+      <h1>Донер, который<br><span class="grad">хочется</span> ещё</h1>
+      <p>Сочная курица, свежая лепёшка, свои соусы. 15+ точек у метро и доставка по всему Минску.</p>
       <div class="hero-actions">
-        <a href="#menu" class="btn-primary">Заказать сейчас</a>
+        <a href="#menu" class="btn-primary">
+          Заказать сейчас
+          <span class="arrow">→</span>
+        </a>
         <a href="#addresses" class="btn-ghost">Найти точку</a>
       </div>
       <div class="hero-stats">
-        <div class="stat"><b>7 мин</b><span>среднее время готовки</span></div>
-        <div class="stat"><b>15+</b><span>точек по Минску</span></div>
-        <div class="stat"><b>4.9</b><span>рейтинг на картах</span></div>
+        <div class="stat"><b>7 <small>мин</small></b><span>готовим</span></div>
+        <div class="stat"><b>15+</b><span>точек в Минске</span></div>
+        <div class="stat"><b>4.9 <small>★</small></b><span>рейтинг</span></div>
       </div>
     </div>
-    <div class="hero-art" aria-hidden="true">
-      <div class="plate"><div class="wrap">🌯</div></div>
+
+    <div class="hero-visual">
+      <div class="float-card fc-1">
+        <span class="fc-emoji">🌯</span>
+        <div><b>Донер классический</b><small>7.90 BYN</small></div>
+      </div>
+      <div class="float-card fc-2">
+        <span class="fc-emoji">⭐</span>
+        <div><b>4.9 из 5</b><small>2 340 отзывов</small></div>
+      </div>
+      <div class="hero-plate">
+        <div class="plate-ring"></div>
+        <div class="plate-wrap">🌯</div>
+        <div class="plate-shadow"></div>
+      </div>
     </div>
   </div>
 </section>
 
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span>СВЕЖИЕ ПРОДУКТЫ</span><span>•</span>
+    <span>ДОСТАВКА ПО МИНСКУ</span><span>•</span>
+    <span>СВОИ СОУСЫ</span><span>•</span>
+    <span>ГОТОВИМ ЗА 7 МИНУТ</span><span>•</span>
+    <span>15+ ТОЧЕК У МЕТРО</span><span>•</span>
+    <span>СВЕЖИЕ ПРОДУКТЫ</span><span>•</span>
+    <span>ДОСТАВКА ПО МИНСКУ</span><span>•</span>
+    <span>СВОИ СОУСЫ</span><span>•</span>
+    <span>ГОТОВИМ ЗА 7 МИНУТ</span><span>•</span>
+    <span>15+ ТОЧЕК У МЕТРО</span><span>•</span>
+  </div>
+</div>
+
 <main>
-  <section id="menu">
-    <div class="section-head"><h2>Меню <em>— выбери своё</em></h2></div>
+  <!-- MENU -->
+  <section id="menu" class="section">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Наше меню</span>
+        <h2>Выбери <span class="grad">своё</span></h2>
+      </div>
+    </div>
     <div class="cats" id="cats"></div>
     <div class="grid" id="menuGrid"></div>
   </section>
 
-  <section id="addresses">
-    <div class="section-head"><h2>Наши <em>точки в Минске</em></h2></div>
+  <!-- PROMO -->
+  <section class="promo-band">
+    <div class="promo-inner">
+      <div class="promo-text">
+        <span class="eyebrow">Промо</span>
+        <h3>Заказ от <span class="grad">50 BYN</span> — доставка бесплатно</h3>
+        <p>По всему Минску. Каждый день с 10:00 до 22:00.</p>
+      </div>
+      <a href="#menu" class="btn-primary">Собрать заказ <span class="arrow">→</span></a>
+    </div>
+  </section>
+
+  <!-- ADDRESSES -->
+  <section id="addresses" class="section">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Где нас найти</span>
+        <h2>Точки <span class="grad">по Минску</span></h2>
+      </div>
+      <p class="section-desc">Все точки работают до 23:00 · оплата картой и наличными</p>
+    </div>
     <div class="addr-grid" id="addrGrid"></div>
   </section>
 
-  <section id="why">
-    <div class="section-head"><h2>Почему <em>Андер Донер</em></h2></div>
+  <!-- REVIEWS -->
+  <section id="reviews" class="section">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Отзывы</span>
+        <h2>Что <span class="grad">говорят</span></h2>
+      </div>
+    </div>
+    <div class="reviews">
+      <div class="review">
+        <div class="rv-top"><b>Тимофей С.</b><span class="stars">★★★★★</span></div>
+        <p>«Лучшая сетевая шаурма в Минске. Сырный лаваш реально сырный, а не просто так называется».</p>
+        <small>03.06.2026</small>
+      </div>
+      <div class="review">
+        <div class="rv-top"><b>Виталий Т.</b><span class="stars">★★★★★</span></div>
+        <p>«Перепробовал много шаурмичных. Остановился на этой — больше всего нравится на Автозаводской».</p>
+        <small>14.05.2026</small>
+      </div>
+      <div class="review">
+        <div class="rv-top"><b>Станислав П.</b><span class="stars">★★★★★</span></div>
+        <p>«Приятное место, отличное соотношение цены и качества. Девушки за стойкой — молодцы».</p>
+        <small>21.04.2026</small>
+      </div>
+      <div class="review">
+        <div class="rv-top"><b>Максим Ж.</b><span class="stars">★★★★★</span></div>
+        <p>«Постоянно беру на Могилёвской. Делают быстро, вкусно, качественно. Мастера крутят на уровне».</p>
+        <small>25.11.2025</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section id="why" class="section">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Почему мы</span>
+        <h2>Андер Донер — <span class="grad">это</span></h2>
+      </div>
+    </div>
     <div class="features">
-      <div class="feature"><div class="ic">⚡</div><h4>Быстро</h4><p>Готовим за 7 минут. Доставка по Минску — 30–40 мин.</p></div>
-      <div class="feature"><div class="ic">🥬</div><h4>Свежие продукты</h4><p>Курица и овощи — от местных поставщиков. Закупки каждый день.</p></div>
-      <div class="feature"><div class="ic">🔥</div><h4>Свои соусы</h4><p>Чесночный, барбекю, терияки, сырный — всё готовим сами.</p></div>
-      <div class="feature"><div class="ic">🚚</div><h4>Доставка</h4><p>Привозим горячим. От 50 BYN — бесплатно по Минску.</p></div>
+      <div class="feature">
+        <div class="ft-ico">⚡</div>
+        <h4>Быстро</h4>
+        <p>Готовим за 7 минут. Доставка по Минску — 30–40 мин.</p>
+      </div>
+      <div class="feature">
+        <div class="ft-ico">🥬</div>
+        <h4>Свежие продукты</h4>
+        <p>Курица и овощи от местных поставщиков. Закупки каждый день.</p>
+      </div>
+      <div class="feature">
+        <div class="ft-ico">🔥</div>
+        <h4>Свои соусы</h4>
+        <p>Чесночный, барбекю, терияки, сырный — всё готовим сами.</p>
+      </div>
+      <div class="feature">
+        <div class="ft-ico">🚚</div>
+        <h4>Доставка</h4>
+        <p>Привозим горячим. От 50 BYN — бесплатно по Минску.</p>
+      </div>
     </div>
   </section>
 </main>
 
+<!-- FOOTER -->
 <footer class="site-footer">
   <div class="foot-inner">
-    <div><b>Андер Донер</b> © 2026 · Минск</div>
-    <div>Служба поддержки: <b>7927</b> · пн–вс 9:00–23:00</div>
+    <div class="foot-col">
+      <div class="logo">
+        <span class="logo-mark">Д</span>
+        <span class="logo-text">
+          <span>Андер<b> Донер</b></span>
+          <i>Минск · с 2018</i>
+        </span>
+      </div>
+      <p>Шаурма и донеры в Минске. Готовим быстро, привозим горячим.</p>
+    </div>
+    <div class="foot-col">
+      <h5>Разделы</h5>
+      <a href="#menu">Меню</a>
+      <a href="#addresses">Адреса</a>
+      <a href="#reviews">Отзывы</a>
+      <a href="#why">О нас</a>
+    </div>
+    <div class="foot-col">
+      <h5>Контакты</h5>
+      <p>Служба поддержки: <b>7927</b></p>
+      <p>пн–вс · 9:00–23:00</p>
+      <p>Минск, Беларусь</p>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 Андер Донер. Все права защищены.</span>
+    <span>Сделано с 🔥 в Минске</span>
   </div>
 </footer>
 
+<!-- OVERLAY + CART -->
 <div class="overlay" id="overlay"></div>
 
 <aside class="drawer" id="drawer" aria-label="Корзина">
@@ -95,6 +248,7 @@
   </div>
 </aside>
 
+<!-- CHECKOUT MODAL -->
 <div class="modal" id="checkoutModal" aria-hidden="true">
   <div class="modal-card" id="checkoutCard"></div>
 </div>
