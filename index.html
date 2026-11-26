@@ -108,11 +108,13 @@ main { max-width:1240px; margin:0 auto; padding: 0 32px; }
 .section-head h2 { font-family: var(--font-display); font-size: clamp(1.9rem, 3.5vw, 2.8rem); font-weight:900; letter-spacing:-1px; line-height:1.06; }
 .section-desc { color:var(--muted); font-size:.95rem; }
 
-/* CATEGORIES & GRID */
-.cats { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:32px; }
-.cat { padding:11px 20px; border-radius:999px; background:var(--surface); color:var(--muted); font-weight:800; font-size:.9rem; border:1px solid var(--line); transition:.2s; }
-.cat:hover { color:var(--text); border-color: var(--line-2); }
-.cat.active { background: linear-gradient(135deg, var(--accent-3), var(--accent), var(--accent-2)); color:#1a0f00; border-color:transparent; box-shadow: 0 8px 22px rgba(255,87,34,.3); }
+/* MENU CATEGORIES */
+.menu-category { margin-bottom: 60px; }
+.menu-category:last-child { margin-bottom: 0; }
+.menu-category-head { display:flex; align-items:center; gap:12px; margin-bottom:24px; padding-bottom:12px; border-bottom:2px solid rgba(255,176,32,.2); }
+.menu-category-head .cat-icon { font-size: 2rem; }
+.menu-category-head h3 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 900; color: var(--accent); letter-spacing: -.5px; }
+
 .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:22px; }
 .card { position:relative; background: var(--surface); border:1px solid var(--line); border-radius: var(--radius); overflow:hidden; display:flex; flex-direction:column; transition: transform .22s, border-color .22s, box-shadow .22s; }
 .card:hover { transform: translateY(-6px); border-color: var(--line-2); box-shadow:0 24px 48px rgba(0,0,0,.55); }
@@ -319,8 +321,7 @@ main { max-width:1240px; margin:0 auto; padding: 0 32px; }
     <div class="section-head">
       <div><span class="eyebrow">Наше меню</span><h2>Выбери <span class="grad">своё</span></h2></div>
     </div>
-    <div class="cats" id="cats"></div>
-    <div class="grid" id="menuGrid"></div>
+    <div id="menuContainer"></div>
   </section>
 
   <section class="promo-band">
@@ -422,13 +423,13 @@ main { max-width:1240px; margin:0 auto; padding: 0 32px; }
 
 <script>
 /* ============================================================
-   НАСТРОЙКИ SUPABASE (ВСТАВЬ СВОИ ЗНАЧЕНИЯ)
+   НАСТРОЙКИ SUPABASE
    ============================================================ */
 const SUPABASE_URL = 'https://scpquwjjnqlgpgavfxnr.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_r5EqpjyBilO_xhNkP2asCQ_j_Olq1XP';
 
 /* ============================================================
-   НАСТРОЙКИ TELEGRAM-БОТА (ВСТАВЬ СВОИ ЗНАЧЕНИЯ)
+   НАСТРОЙКИ TELEGRAM-БОТА
    ============================================================ */
 const TG_BOT_TOKEN = '9231859251:AAE1u5xXxvGbvPEIbCEe9S507Ms755Ig4Hk';
 const TG_CHAT_ID   = '1460289386';
@@ -440,42 +441,73 @@ const PICKUP_ADDRESS = 'агр. Ждановичи, ул. Парковая, 6';
 const PICKUP_TIME = '10:00–22:00';
 
 const products = [
+  // --- ДОНЕРЫ ---
   { id:1, cat:'doner', name:'Донер классический', desc:'Лепёшка, курица, капуста, огурец, помидор, чесночный соус', price:790, glyph:'🌯', tag:'Хит' },
   { id:2, cat:'doner', name:'Донер сырный', desc:'Двойной чеддер, курица, сырный соус, свежий огурец', price:1450, glyph:'🧀', tag:'' },
   { id:3, cat:'doner', name:'Донер с говядиной', desc:'Мраморная говядина, пекинская капуста, барбекю', price:1450, glyph:'🥩', tag:'' },
   { id:4, cat:'doner', name:'Донер с беконом', desc:'Бекон, курица, свежий огурец, чесночный соус', price:1250, glyph:'🥓', tag:'Хит' },
   { id:5, cat:'doner', name:'Донер с креветками', desc:'Королевские креветки, пекинская капуста, кунжутный соус', price:1450, glyph:'🍤', tag:'' },
   { id:6, cat:'doner', name:'Донер с фалафелем', desc:'Фалафель, пекинская капуста, хумус, свежий огурец', price:1050, glyph:'🧆', tag:'Веган' },
-  { id:7, cat:'stick', name:'Стик с курицей', desc:'Курица, сырный и чесночный соусы', price:490, glyph:'🌯', tag:'' },
-  { id:8, cat:'stick', name:'Стик барбекю', desc:'Курица, барбекю, чесночный соус', price:490, glyph:'🌯', tag:'' },
-  { id:9, cat:'stick', name:'Стик с сухариками', desc:'Курица, сухарики, соус цезарь', price:490, glyph:'🌯', tag:'' },
-  { id:10, cat:'stick', name:'Стик терияки', desc:'Курица, терияки, чесночный соус', price:490, glyph:'🌯', tag:'' },
-  { id:11, cat:'stick', name:'Стик с сыром', desc:'Сливочный сыр, курица, чесночный соус', price:490, glyph:'🌯', tag:'' },
+  { id:24, cat:'doner', name:'Донер острый', desc:'Курица, халапеньо, чили соус, лук, помидор', price:1150, glyph:'🌶️', tag:'Острый' },
+  { id:25, cat:'doner', name:'Донер терияки', desc:'Курица, пекинская капуста, соус терияки, кунжут', price:1250, glyph:'🌯', tag:'' },
+  { id:26, cat:'doner', name:'Донер двойной', desc:'Двойная порция курицы, бекон, двойной сыр', price:1690, glyph:'🌯', tag:'Хит' },
+  { id:27, cat:'doner', name:'Донер овощной', desc:'Пекинская капуста, помидор, огурец, перец, хумус', price:890, glyph:'🥗', tag:'Веган' },
+
+  // --- СТИКИ ---
+  { id:7, cat:'stick', name:'Стик с курицей', desc:'Курица, сырный и чесночный соусы', price:490, glyph:'🍢', tag:'' },
+  { id:8, cat:'stick', name:'Стик барбекю', desc:'Курица, барбекю, чесночный соус', price:490, glyph:'🍢', tag:'' },
+  { id:9, cat:'stick', name:'Стик с сухариками', desc:'Курица, сухарики, соус цезарь', price:490, glyph:'🍢', tag:'' },
+  { id:10, cat:'stick', name:'Стик терияки', desc:'Курица, терияки, чесночный соус', price:490, glyph:'🍢', tag:'' },
+  { id:11, cat:'stick', name:'Стик с сыром', desc:'Сливочный сыр, курица, чесночный соус', price:490, glyph:'🍢', tag:'' },
+  { id:28, cat:'stick', name:'Стик острый', desc:'Курица, чили соус, халапеньо', price:490, glyph:'🍢', tag:'Острый' },
+  { id:29, cat:'stick', name:'Стик с беконом', desc:'Курица, бекон, сырный соус', price:590, glyph:'🍢', tag:'' },
+
+  // --- БОКСЫ ---
   { id:12, cat:'box', name:'Ланч-бокс классический', desc:'Курица, картофель фри, овощи, два соуса', price:1690, glyph:'🍱', tag:'' },
   { id:13, cat:'box', name:'Ланч-бокс сырный', desc:'Курица, фри, жидкий чеддер, овощи', price:1890, glyph:'🍱', tag:'' },
   { id:14, cat:'box', name:'Наггетсы 6 шт.', desc:'Куриные наггетсы, соус на выбор', price:710, glyph:'🍗', tag:'' },
+  { id:30, cat:'box', name:'Наггетсы 9 шт.', desc:'Куриные наггетсы, два соуса на выбор', price:990, glyph:'🍗', tag:'' },
+  { id:31, cat:'box', name:'Бокс с крылышками', desc:'Куриные крылья, картофель фри, соус', price:1790, glyph:'🍗', tag:'Хит' },
+
+  // --- КАРТОШКА ---
   { id:15, cat:'side', name:'Картофель фри', desc:'Порция 110 г, соль', price:490, glyph:'🍟', tag:'' },
   { id:16, cat:'side', name:'Картофель по-деревенски', desc:'Порция 110 г, специи', price:550, glyph:'🍟', tag:'' },
   { id:17, cat:'side', name:'Фритос с беконом', desc:'Картофель фри, бекон, плавленый сыр', price:890, glyph:'🥔', tag:'Хит' },
+  { id:32, cat:'side', name:'Фритос с сыром', desc:'Картофель фри, жидкий чеддер', price:790, glyph:'🥔', tag:'' },
+  { id:33, cat:'side', name:'Луковые кольца', desc:'6 шт., соус на выбор', price:590, glyph:'🧅', tag:'' },
+
+  // --- НАПИТКИ ---
   { id:18, cat:'drink', name:'Кола 0.5 л', desc:'Классическая, холодная', price:350, glyph:'🥤', tag:'' },
   { id:19, cat:'drink', name:'Вода 0.5 л', desc:'Негазированная', price:160, glyph:'💧', tag:'' },
   { id:20, cat:'drink', name:'Лимонад 0.5 л', desc:'Цитрус, охлаждённый', price:350, glyph:'🍋', tag:'' },
+  { id:34, cat:'drink', name:'Сок 0.3 л', desc:'Яблочный или апельсиновый', price:250, glyph:'🧃', tag:'' },
+  { id:35, cat:'drink', name:'Молочный коктейль', desc:'Ваниль, шоколад или клубника', price:490, glyph:'🥛', tag:'Хит' },
+
+  // --- СОУСЫ ---
   { id:21, cat:'sauce', name:'Чесночный соус', desc:'25 г', price:120, glyph:'🧄', tag:'' },
   { id:22, cat:'sauce', name:'Барбекю', desc:'25 г', price:120, glyph:'🍯', tag:'' },
   { id:23, cat:'sauce', name:'Сырный соус', desc:'25 г', price:120, glyph:'🧀', tag:'' },
+  { id:36, cat:'sauce', name:'Терияки', desc:'25 г', price:120, glyph:'🥫', tag:'' },
+  { id:37, cat:'sauce', name:'Чили острый', desc:'25 г', price:120, glyph:'🌶️', tag:'' },
 ];
+
 const categories = [
-  { key:'all', label:'Всё' }, { key:'doner', label:'Донеры' }, { key:'stick', label:'Стики' },
-  { key:'box', label:'Боксы' }, { key:'side', label:'Картошка' }, { key:'drink', label:'Напитки' }, { key:'sauce', label:'Соусы' },
+  { key:'doner', label:'Донеры', icon:'🌯' },
+  { key:'stick', label:'Стики', icon:'🍢' },
+  { key:'box',   label:'Боксы и Наггетсы', icon:'🍱' },
+  { key:'side',  label:'Картошка и Закуски', icon:'🍟' },
+  { key:'drink', label:'Напитки', icon:'🥤' },
+  { key:'sauce', label:'Соусы', icon:'🥫' },
 ];
+
 const addresses = [ { name: PICKUP_ADDRESS, time: PICKUP_TIME } ];
 
 /* ---------- ОТЗЫВЫ ---------- */
 const defaultReviews = [
-  { name:'Тимофей', text:'Лучшая шаурма в округе. Сырный лаваш реально сырный, а не просто так называется.', rating:5, date:'03.06.2026' },
-  { name:'Виталий', text:'Перепробовал много шаурмичных. Остановился на этой — больше всего нравится у них.', rating:5, date:'14.05.2026' },
-  { name:'Станислав', text:'Приятное место, отличное соотношение цены и качества. Девушки за стойкой — молодцы.', rating:5, date:'21.04.2026' },
-  { name:'Максим', text:'Постоянно беру здесь. Делают быстро, вкусно, качественно. Мастера крутят на уровне.', rating:5, date:'25.11.2025' },
+  { name:'Тимофей С.', text:'Лучшая шаурма в округе. Сырный лаваш реально сырный, а не просто так называется.', rating:5, date:'03.06.2026' },
+  { name:'Виталий Т.', text:'Перепробовал много шаурмичных. Остановился на этой — больше всего нравится у них.', rating:5, date:'14.05.2026' },
+  { name:'Станислав П.', text:'Приятное место, отличное соотношение цены и качества. Девушки за стойкой — молодцы.', rating:5, date:'21.04.2026' },
+  { name:'Максим Ж.', text:'Постоянно беру здесь. Делают быстро, вкусно, качественно. Мастера крутят на уровне.', rating:5, date:'25.11.2025' },
 ];
 
 let userReviews = [];
@@ -498,7 +530,7 @@ function renderReviewsUI(all) {
 async function loadReviews() {
   const grid = document.getElementById('reviewsGrid');
   
-  if (!SUPABASE_URL || SUPABASE_URL === 'https://scpquwjjnqlgpgavfxnr.supabase.co') {
+  if (!SUPABASE_URL || SUPABASE_URL === 'ВСТАВЬ_СЮДА_PROJECT_URL') {
     renderReviewsUI(defaultReviews);
     return;
   }
@@ -594,7 +626,7 @@ reviewForm.onsubmit = async (e) => {
     rating: selectedRating
   };
 
-  if (!SUPABASE_URL || SUPABASE_URL === 'https://scpquwjjnqlgpgavfxnr.supabase.co') {
+  if (!SUPABASE_URL || SUPABASE_URL === 'ВСТАВЬ_СЮДА_PROJECT_URL') {
     reviewData.date = new Date().toLocaleDateString('ru-RU', { day:'2-digit', month:'2-digit', year:'numeric' });
     userReviews.unshift(reviewData);
     localStorage.setItem('ad_review_submitted', '1');
@@ -619,7 +651,6 @@ reviewForm.onsubmit = async (e) => {
       body: JSON.stringify(reviewData)
     });
     
-    // ВОТ ЗДЕСЬ ТЕПЕРЬ ВЫВОДИТСЯ РЕАЛЬНАЯ ОШИБКА
     if (!res.ok) {
       const errText = await res.text();
       throw new Error(errText);
@@ -632,7 +663,7 @@ reviewForm.onsubmit = async (e) => {
     toast('Спасибо за отзыв!');
   } catch (err) {
     console.error('Supabase error:', err);
-    alert('Ошибка: ' + err.message); // <--- ТЕПЕРЬ ПОКАЖЕТ ПРИЧИНУ
+    alert('Ошибка: ' + err.message);
     btn.disabled = false;
     btn.textContent = originalText;
   }
@@ -642,22 +673,35 @@ reviewForm.onsubmit = async (e) => {
    КОРЗИНА И ЗАКАЗЫ
    ============================================================ */
 let cart = JSON.parse(localStorage.getItem('ad_cart') || '[]');
-let activeCat = 'all';
 const money = v => (v/100).toFixed(2) + ' BYN';
 const findP = id => products.find(p => p.id === id);
 
-function renderCats() {
-  document.getElementById('cats').innerHTML = categories.map(c => `<button class="cat ${c.key===activeCat?'active':''}" data-cat="${c.key}">${c.label}</button>`).join('');
-  document.querySelectorAll('.cat').forEach(b => { b.onclick = () => { activeCat = b.dataset.cat; renderCats(); renderMenu(); }; });
-}
 function renderMenu() {
-  const list = activeCat==='all' ? products : products.filter(p => p.cat===activeCat);
-  document.getElementById('menuGrid').innerHTML = list.map(p => {
-    const badgeCls = p.tag==='Хит' ? 'hot' : (p.tag==='Веган' ? 'veg' : '');
-    return `<div class="card"><div class="card-img">${p.tag ? `<span class="badge ${badgeCls}">${p.tag}</span>` : ''}<span class="glyph">${p.glyph}</span></div><div class="card-body"><h3>${p.name}</h3><p class="desc">${p.desc}</p><div class="card-foot"><div class="price">${money(p.price)}</div><button class="add" data-add="${p.id}">В корзину</button></div></div></div>`;
+  const container = document.getElementById('menuContainer');
+  
+  container.innerHTML = categories.map(cat => {
+    const items = products.filter(p => p.cat === cat.key);
+    if (items.length === 0) return '';
+    
+    const cardsHTML = items.map(p => {
+      const badgeCls = p.tag==='Хит' ? 'hot' : (p.tag==='Веган' ? 'veg' : '');
+      return `<div class="card"><div class="card-img">${p.tag ? `<span class="badge ${badgeCls}">${p.tag}</span>` : ''}<span class="glyph">${p.glyph}</span></div><div class="card-body"><h3>${p.name}</h3><p class="desc">${p.desc}</p><div class="card-foot"><div class="price">${money(p.price)}</div><button class="add" data-add="${p.id}">В корзину</button></div></div></div>`;
+    }).join('');
+    
+    return `
+      <div class="menu-category">
+        <div class="menu-category-head">
+          <span class="cat-icon">${cat.icon}</span>
+          <h3>${cat.label}</h3>
+        </div>
+        <div class="grid">${cardsHTML}</div>
+      </div>
+    `;
   }).join('');
+  
   document.querySelectorAll('[data-add]').forEach(b => { b.onclick = () => addToCart(+b.dataset.add); });
 }
+
 function renderAddresses() {
   document.getElementById('addrGrid').innerHTML = addresses.map(a => `<div class="addr"><strong>${a.name}</strong><span>🕐 ${a.time}</span></div>`).join('');
 }
@@ -816,7 +860,6 @@ function toast(msg) {
 }
 
 /* ---------- INIT ---------- */
-renderCats();
 renderMenu();
 renderAddresses();
 loadReviews();
