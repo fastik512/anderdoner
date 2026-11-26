@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru"
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -472,10 +472,10 @@ const addresses = [ { name: PICKUP_ADDRESS, time: PICKUP_TIME } ];
 
 /* ---------- ОТЗЫВЫ ---------- */
 const defaultReviews = [
-  { name:'Тимофей С.', text:'Лучшая шаурма в округе. Сырный лаваш реально сырный, а не просто так называется.', rating:5, date:'03.06.2026' },
-  { name:'Виталий Т.', text:'Перепробовал много шаурмичных. Остановился на этой — больше всего нравится у них.', rating:5, date:'14.05.2026' },
-  { name:'Станислав П.', text:'Приятное место, отличное соотношение цены и качества. Девушки за стойкой — молодцы.', rating:5, date:'21.04.2026' },
-  { name:'Максим Ж.', text:'Постоянно беру здесь. Делают быстро, вкусно, качественно. Мастера крутят на уровне.', rating:5, date:'25.11.2025' },
+  { name:'Тимофей', text:'Лучшая шаурма в округе. Сырный лаваш реально сырный, а не просто так называется.', rating:5, date:'03.06.2026' },
+  { name:'Виталий', text:'Перепробовал много шаурмичных. Остановился на этой — больше всего нравится у них.', rating:5, date:'14.05.2026' },
+  { name:'Станислав', text:'Приятное место, отличное соотношение цены и качества. Девушки за стойкой — молодцы.', rating:5, date:'21.04.2026' },
+  { name:'Максим', text:'Постоянно беру здесь. Делают быстро, вкусно, качественно. Мастера крутят на уровне.', rating:5, date:'25.11.2025' },
 ];
 
 let userReviews = [];
@@ -498,7 +498,7 @@ function renderReviewsUI(all) {
 async function loadReviews() {
   const grid = document.getElementById('reviewsGrid');
   
-  if (!SUPABASE_URL || SUPABASE_URL === 'ВСТАВЬ_СЮДА_PROJECT_URL') {
+  if (!SUPABASE_URL || SUPABASE_URL === 'https://scpquwjjnqlgpgavfxnr.supabase.co') {
     renderReviewsUI(defaultReviews);
     return;
   }
