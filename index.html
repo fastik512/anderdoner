@@ -627,7 +627,7 @@ reviewForm.onsubmit = async (e) => {
     toast('Спасибо за отзыв!');
   } catch (err) {
     console.error('Supabase error:', err);
-    alert('Не удалось отправить отзыв. Попробуйте позже.');
+    alert(err.message);
     btn.disabled = false;
     btn.textContent = originalText;
   }
