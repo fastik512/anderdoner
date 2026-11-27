@@ -1,1251 +1,1308 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0a0908">
-<title>Андер Донер — шаурма и донеры в Ждановичах</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800;900&family=Unbounded:wght@700;900&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg: #0a0908;
-  --bg-soft: #12100d;
-  --surface: #17130f;
-  --surface-2: #221b14;
-  --line: #2e261e;
-  --line-2: #3f3328;
-  --accent: #ffb020;
-  --accent-2: #ff5722;
-  --accent-3: #ffce3c;
-  --text: #f7f1ea;
-  --muted: #a3907d;
-  --ok: #37d67a;
-  --err: #ff5a5a;
-  --radius: 18px;
-  --font-body: 'Manrope', 'Segoe UI', system-ui, sans-serif;
-  --font-display: 'Unbounded', 'Manrope', sans-serif;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; }
-body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height:1.55; -webkit-font-smoothing: antialiased; overflow-x:hidden; }
-button { font-family: inherit; cursor:pointer; border:none; }
-input, select, textarea { font-family: inherit; }
-a { color: var(--accent); text-decoration:none; }
-.grad { background: linear-gradient(115deg, var(--accent-3) 0%, var(--accent) 45%, var(--accent-2) 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
-.eyebrow { display:inline-block; font-size:.78rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; color: var(--accent); margin-bottom:10px; padding:5px 12px; border-radius:999px; border:1px solid rgba(255,176,32,.3); background: rgba(255,176,32,.08); }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AnderDoner — Крафтовый донер в Ждановичах | Самовывоз</title>
+  <meta name="description" content="AnderDoner — сочный крафтовый донер с мясом на углях, хрустящим лавашом и авторскими соусами в аг. Ждановичи, ул. Парковая, 6. Самовывоз без очереди по коду заказа." />
 
-/* HEADER */
-.site-header { position: sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 32px; background: rgba(10,9,8,.82); backdrop-filter: blur(16px) saturate(1.4); border-bottom:1px solid var(--line); }
-.logo { display:flex; align-items:center; gap:12px; cursor:pointer; user-select:none; }
-.logo-mark { width:46px; height:46px; border-radius:13px; background: linear-gradient(140deg, var(--accent-3), var(--accent), var(--accent-2)); display:grid; place-items:center; font-family: var(--font-display); font-size:1.4rem; color:#1a0f00; box-shadow: 0 8px 22px rgba(255,87,34,.4), inset 0 -2px 0 rgba(0,0,0,.15); }
-.logo-text { display:flex; flex-direction:column; line-height:1.1; }
-.logo-text > span { font-family: var(--font-display); font-size:1.02rem; font-weight:700; letter-spacing:.2px; }
-.logo-text b { color: var(--accent); }
-.logo-text i { font-style:normal; color: var(--muted); font-weight:700; font-size:.62rem; letter-spacing:1.4px; text-transform:uppercase; margin-top:2px; }
-.site-nav { display:flex; gap:26px; }
-.site-nav a { color: var(--muted); font-weight:700; font-size:.92rem; transition:.2s; position:relative; }
-.site-nav a:hover { color: var(--text); }
-.site-nav a::after { content:''; position:absolute; left:0; bottom:-6px; width:0; height:2px; background: var(--accent); transition:width .22s; }
-.site-nav a:hover::after { width:100%; }
-.cart-btn { display:flex; align-items:center; gap:10px; background: linear-gradient(135deg, var(--accent-3), var(--accent), var(--accent-2)); color:#1a0f00; font-weight:900; padding:11px 20px; border-radius:999px; transition: transform .15s, box-shadow .15s; box-shadow: 0 8px 24px rgba(255,87,34,.35); }
-.cart-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(255,87,34,.5); }
-.cart-count { min-width:24px; height:24px; padding:0 7px; border-radius:999px; background:#1a0f00; color: var(--accent); display:grid; place-items:center; font-size:.78rem; }
-@media(max-width:900px){ .site-nav{display:none;} .site-header{padding:12px 16px;} .logo-text i{display:none;} .cart-label{display:none;} }
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Unbounded:wght@600;700;800;900&display=swap" rel="stylesheet">
 
-/* HERO */
-.hero { position:relative; overflow:hidden; padding: 80px 32px 100px; }
-.hero-bg { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
-.hero-bg .orb { position:absolute; border-radius:50%; filter: blur(70px); opacity:.55; }
-.orb-1 { width:520px; height:520px; top:-180px; left:-140px; background: radial-gradient(circle, rgba(255,176,32,.9), rgba(255,87,34,0) 65%); }
-.orb-2 { width:480px; height:480px; top:-80px; right:-120px; background: radial-gradient(circle, rgba(255,87,34,.75), rgba(255,176,32,0) 65%); }
-.orb-3 { width:600px; height:600px; bottom:-300px; left:35%; background: radial-gradient(circle, rgba(255,206,60,.5), rgba(255,87,34,0) 70%); }
-.grid-lines { position:absolute; inset:0; background-image: linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse at 50% 40%, #000 30%, transparent 80%); -webkit-mask-image: radial-gradient(ellipse at 50% 40%, #000 30%, transparent 80%); }
-.hero-inner { position:relative; max-width:1240px; margin:0 auto; display:grid; grid-template-columns: 1.1fr .9fr; gap:50px; align-items:center; }
-.tagline { display:inline-block; padding:7px 15px; border-radius:999px; background: rgba(255,176,32,.12); color: var(--accent); border:1px solid rgba(255,176,32,.32); font-size:.8rem; font-weight:800; letter-spacing:.4px; margin-bottom:22px; }
-.hero h1 { font-family: var(--font-display); font-size: clamp(2.4rem, 5.4vw, 4.4rem); line-height:1.02; font-weight:900; letter-spacing:-1.8px; margin-bottom:22px; }
-.hero p { color: var(--muted); font-size:1.12rem; max-width:520px; margin-bottom:32px; }
-.hero-actions { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:44px; }
-.btn-primary { display:inline-flex; align-items:center; gap:10px; background: linear-gradient(135deg, var(--accent-3), var(--accent), var(--accent-2)); color:#1a0f00; font-weight:900; padding:16px 28px; border-radius:14px; font-size:1rem; letter-spacing:.2px; box-shadow:0 14px 32px rgba(255,87,34,.35); transition:.2s; }
-.btn-primary:hover { transform: translateY(-2px); box-shadow:0 20px 44px rgba(255,87,34,.5); }
-.btn-primary .arrow { transition:.2s; }
-.btn-primary:hover .arrow { transform: translateX(4px); }
-.btn-primary:disabled { opacity:.45; cursor:not-allowed; transform:none; box-shadow:none; }
-.btn-ghost { display:inline-flex; align-items:center; background: transparent; color:var(--text); font-weight:800; padding:16px 26px; border-radius:14px; border:1px solid var(--line-2); transition:.2s; font-size:1rem; }
-.btn-ghost:hover { border-color: var(--accent); color: var(--accent); background:rgba(255,176,32,.05); }
-.hero-stats { display:flex; gap:36px; flex-wrap:wrap; }
-.stat b { display:block; font-family: var(--font-display); font-size:1.8rem; color: var(--accent); line-height:1; margin-bottom:6px; }
-.stat b small { font-size:.9rem; color: var(--muted); font-weight:700; }
-.stat span { color:var(--muted); font-size:.82rem; font-weight:600; letter-spacing:.3px; }
-.hero-visual { position:relative; aspect-ratio:1/1; display:grid; place-items:center; }
-.hero-plate { position:relative; width:78%; aspect-ratio:1/1; border-radius:50%; display:grid; place-items:center; animation: floaty 6s ease-in-out infinite; }
-.plate-ring { position:absolute; inset:-6%; border-radius:50%; background: conic-gradient(from 210deg, var(--accent-3), var(--accent-2), var(--accent), var(--accent-3)); filter: blur(2px); animation: spin 22s linear infinite; }
-.hero-plate .plate-wrap { position:relative; width:100%; aspect-ratio:1/1; border-radius:50%; background: radial-gradient(circle at 35% 30%, #2a1f12, #110d0a 75%); display:grid; place-items:center; font-size: clamp(6rem, 10vw, 9rem); box-shadow: inset 0 0 80px rgba(0,0,0,.8), inset 0 -30px 60px rgba(255,87,34,.12), 0 30px 70px rgba(0,0,0,.7); }
-.plate-shadow { position:absolute; bottom:-8%; left:15%; right:15%; height:10%; background: radial-gradient(ellipse, rgba(255,87,34,.5), transparent 65%); filter: blur(18px); }
-@keyframes spin { to { transform: rotate(360deg); } }
-@keyframes floaty { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-14px); } }
-.float-card { position:absolute; display:flex; align-items:center; gap:12px; background: rgba(23,19,15,.85); backdrop-filter: blur(12px); border:1px solid var(--line-2); border-radius:14px; padding:12px 16px; font-size:.85rem; box-shadow: 0 20px 40px rgba(0,0,0,.5); z-index:2; animation: floaty 6s ease-in-out infinite; }
-.fc-emoji { font-size:1.6rem; }
-.float-card b { display:block; font-size:.9rem; }
-.float-card small { color: var(--accent); font-weight:800; font-size:.78rem; }
-.fc-1 { top:8%; left:-4%; animation-delay: 0s; }
-.fc-2 { bottom:14%; right:-6%; animation-delay: 1.5s; }
-@media(max-width:900px){ .hero-inner{ grid-template-columns:1fr; gap:60px; } .hero-visual{ max-width:420px; margin:0 auto; width:100%; } .fc-1{ left:0; } .fc-2{ right:0; } }
-
-/* MARQUEE */
-.marquee { border-top:1px solid var(--line); border-bottom:1px solid var(--line); background: var(--bg-soft); overflow:hidden; padding: 18px 0; }
-.marquee-track { display:flex; gap:48px; white-space:nowrap; animation: marquee 30s linear infinite; font-family: var(--font-display); font-weight:700; font-size:1rem; letter-spacing:2px; color: var(--muted); }
-.marquee-track span:nth-child(odd) { color: var(--accent); }
-.marquee-track span:nth-child(even) { opacity:.35; }
-@keyframes marquee { from{transform:translateX(0);} to{transform:translateX(-50%);} }
-
-/* SECTIONS */
-main { max-width:1240px; margin:0 auto; padding: 0 32px; }
-.section { padding: 64px 0; scroll-margin-top: 90px; }
-@media(max-width:820px){ main{padding:0 16px;} .section{padding:48px 0;} }
-.section-head { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:24px; flex-wrap:wrap; }
-.section-head h2 { font-family: var(--font-display); font-size: clamp(1.9rem, 3.5vw, 2.8rem); font-weight:900; letter-spacing:-1px; line-height:1.06; }
-.section-desc { color:var(--muted); font-size:.95rem; }
-
-/* АККОРДЕОН */
-.accordion-head { display: flex; align-items: center; justify-content: space-between; cursor: pointer; padding: 16px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 12px; transition: background 0.2s, border-color 0.2s; user-select: none; }
-.accordion-head:hover { background: var(--surface-2); border-color: var(--line-2); }
-.accordion-head h3 { font-family: var(--font-display); font-size: 1.2rem; font-weight: 900; color: var(--text); margin: 0; display: flex; align-items: center; gap: 12px; }
-.accordion-head h3 span.icon { font-size: 1.5rem; }
-.accordion-arrow { width: 24px; height: 24px; display: grid; place-items: center; color: var(--accent); transition: transform 0.3s ease; }
-.accordion-item.open .accordion-arrow { transform: rotate(180deg); }
-.accordion-item.open .accordion-head { border-bottom-left-radius: 0; border-bottom-right-radius: 0; margin-bottom: 0; border-bottom-color: transparent; }
-.accordion-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease-out; margin-bottom: 12px; }
-.accordion-item.open .accordion-body { grid-template-rows: 1fr; }
-.accordion-inner { overflow: hidden; padding: 0 4px; }
-.accordion-inner > .grid, .accordion-inner > .reviews { padding-top: 16px; padding-bottom: 8px; }
-
-/* МЕНЮ */
-.grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:22px; }
-.card { position:relative; background: var(--surface); border:1px solid var(--line); border-radius: var(--radius); overflow:hidden; display:flex; flex-direction:column; transition: transform .22s, border-color .22s, box-shadow .22s; }
-.card:hover { transform: translateY(-6px); border-color: var(--line-2); box-shadow:0 24px 48px rgba(0,0,0,.55); }
-.card-img { height:170px; position:relative; display:grid; place-items:center; overflow:hidden; background: radial-gradient(circle at 50% 55%, rgba(255,176,32,.35), transparent 65%), linear-gradient(150deg, #2b2014, #16110c); }
-.card-img::before { content:''; position:absolute; inset:0; background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px); background-size: 30px 30px; mask-image: radial-gradient(circle at 50% 50%, #000, transparent 75%); -webkit-mask-image: radial-gradient(circle at 50% 50%, #000, transparent 75%); }
-.card-img .glyph { position:relative; font-size:4rem; z-index:1; filter: drop-shadow(0 12px 20px rgba(0,0,0,.6)); transition: transform .3s; }
-.card:hover .card-img .glyph { transform: scale(1.12) rotate(-4deg); }
-.card-img .badge { position:absolute; top:12px; left:12px; z-index:2; padding:5px 11px; border-radius:999px; font-size:.7rem; font-weight:900; letter-spacing:.6px; text-transform:uppercase; background: rgba(255,176,32,.2); color: var(--accent); border:1px solid rgba(255,176,32,.45); backdrop-filter: blur(8px); }
-.card-img .badge.hot { background: rgba(255,87,34,.22); color:#ff9066; border-color:rgba(255,87,34,.55); }
-.card-img .badge.veg { background: rgba(55,214,122,.15); color:#6ee79a; border-color:rgba(55,214,122,.45); }
-.card-body { padding:18px 18px 20px; display:flex; flex-direction:column; gap:8px; flex:1; }
-.card-body h3 { font-size:1.08rem; font-weight:800; letter-spacing:-.2px; }
-.card-body .desc { font-size:.86rem; color:var(--muted); flex:1; line-height:1.5; }
-.card-foot { display:flex; align-items:center; justify-content:space-between; margin-top:14px; gap:10px; }
-.price { font-family: var(--font-display); font-size:1.18rem; font-weight:700; color: var(--accent); letter-spacing:-.4px; }
-.add { background: var(--surface-2); color: var(--text); border:1px solid var(--line-2); padding:10px 16px; border-radius:11px; font-weight:800; font-size:.86rem; transition:.18s; white-space:nowrap; }
-.add:hover { background: linear-gradient(135deg, var(--accent-3), var(--accent-2)); color:#1a0f00; border-color:transparent; transform: scale(1.04); }
-
-/* PROMO */
-.promo-band { margin: 20px 0 0; padding: 40px 32px; border-radius: 24px; background: radial-gradient(700px 300px at 15% 20%, rgba(255,176,32,.35), transparent 60%), radial-gradient(600px 320px at 100% 100%, rgba(255,87,34,.4), transparent 60%), linear-gradient(140deg, #1a130b, #0d0b09); border: 1px solid var(--line-2); position: relative; overflow: hidden; }
-.promo-band::before { content:''; position:absolute; top:-100px; right:-100px; width:300px; height:300px; border-radius:50%; background: radial-gradient(circle, rgba(255,206,60,.5), transparent 65%); filter: blur(40px); }
-.promo-inner { position:relative; display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap; }
-.promo-text h3 { font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 2rem); font-weight:900; letter-spacing:-.8px; line-height:1.1; margin-bottom:8px; }
-.promo-text p { color: var(--muted); font-size:.95rem; }
-
-/* АДРЕСА */
-.addr-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(250px,1fr)); gap:14px; }
-.addr { position:relative; overflow:hidden; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:20px 22px; transition:.2s; }
-.addr::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background: linear-gradient(180deg, var(--accent-3), var(--accent-2)); transition:.2s; }
-.addr:hover { background: var(--surface-2); transform: translateY(-3px); border-color: var(--line-2); }
-.addr:hover::before { width:5px; }
-.addr strong { display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:1rem; font-weight:800; }
-.addr span { color:var(--muted); font-size:.88rem; display:flex; align-items:center; gap:6px; }
-
-/* ОТЗЫВЫ */
-.reviews { display: flex; overflow-x: auto; gap: 16px; padding-bottom: 12px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
-.reviews::-webkit-scrollbar { height: 6px; }
-.reviews::-webkit-scrollbar-track { background: var(--surface-2); border-radius: 10px; }
-.reviews::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
-.review { background: var(--surface); border:1px solid var(--line); border-radius:16px; padding:16px; transition:.2s; position:relative; flex: 0 0 280px; scroll-snap-align: start; display: flex; flex-direction: column; }
-.review::before { content:'"'; position:absolute; top:-5px; right:12px; font-family: Georgia, serif; font-size:4rem; line-height:1; color: rgba(255,176,32,.12); font-weight:900; }
-.review:hover { border-color: var(--line-2); transform: translateY(-2px); }
-.rv-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:8px; flex-wrap:wrap; }
-.rv-top b { font-size:.85rem; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
-.stars { color: var(--accent); font-size:.8rem; letter-spacing:1px; }
-.review p { color: var(--text); font-size:.82rem; line-height:1.4; margin-bottom:12px; word-wrap:break-word; flex:1; }
-.review small { color: var(--muted); font-size:.7rem; display:block; margin-top:auto; }
-.review.user-review { border-color: rgba(255,176,32,.6); background: linear-gradient(160deg, rgba(255,176,32,.06), var(--surface)); box-shadow: 0 0 0 1px rgba(255,176,32,.25); }
-.your-badge { display:inline-block; padding:2px 6px; border-radius:5px; font-size:.55rem; background: linear-gradient(135deg, var(--accent-3), var(--accent-2)); color:#1a0f00; font-weight:900; letter-spacing:.5px; text-transform:uppercase; }
-
-/* star picker */
-.star-picker { display:flex; gap:4px; margin:4px 0 2px; }
-.star-picker button { background:transparent; font-size:2.1rem; line-height:1; color: var(--line-2); padding:2px 4px; transition: color .15s, transform .15s; }
-.star-picker button:hover { transform: scale(1.15); }
-.star-picker button.active { color: var(--accent); }
-
-/* ПРЕИМУЩЕСТВА */
-.features { display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:16px; }
-.feature { background: var(--surface); border:1px solid var(--line); border-radius:18px; padding:26px; transition:.2s; }
-.feature:hover { border-color: var(--line-2); transform: translateY(-3px); }
-.ft-ico { width:52px; height:52px; border-radius:14px; display:grid; place-items:center; font-size:1.6rem; background: linear-gradient(140deg, rgba(255,176,32,.22), rgba(255,87,34,.14)); border: 1px solid rgba(255,176,32,.28); margin-bottom:16px; }
-.feature h4 { font-size:1.05rem; margin-bottom:8px; font-weight:800; }
-.feature p { color:var(--muted); font-size:.88rem; }
-
-/* FOOTER */
-.site-footer { border-top:1px solid var(--line); background: var(--bg-soft); padding: 56px 32px 24px; }
-.foot-inner { max-width:1240px; margin:0 auto; display:grid; grid-template-columns: 1.4fr 1fr 1fr; gap:40px; padding-bottom: 40px; border-bottom:1px solid var(--line); }
-.foot-col p { color:var(--muted); font-size:.9rem; margin-top:8px; line-height:1.6; }
-.foot-col h5 { font-family: var(--font-display); font-size:.85rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color: var(--accent); margin-bottom:16px; }
-.foot-col a { display:block; color: var(--muted); font-size:.92rem; margin-bottom:8px; transition:.2s; }
-.foot-col a:hover { color: var(--text); }
-.foot-col b { color: var(--accent); }
-.foot-bottom { max-width:1240px; margin: 24px auto 0; display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; color: var(--muted); font-size:.82rem; }
-@media(max-width:820px){ .site-footer{padding:40px 16px 20px;} .foot-inner{grid-template-columns:1fr; gap:28px;} }
-
-/* КОРЗИНА & МОДАЛКИ */
-.overlay { position:fixed; inset:0; background:rgba(0,0,0,.7); backdrop-filter:blur(4px); opacity:0; pointer-events:none; transition:.22s; z-index:60; }
-.overlay.on { opacity:1; pointer-events:auto; }
-.drawer { position:fixed; top:0; right:0; height:100%; width:min(480px,100%); background: var(--surface); border-left:1px solid var(--line-2); transform: translateX(100%); transition: transform .3s cubic-bezier(.4,0,.2,1); z-index:70; display:flex; flex-direction:column; box-shadow: -30px 0 80px rgba(0,0,0,.6); }
-.drawer.on { transform: translateX(0); }
-.drawer-head { display:flex; align-items:center; justify-content:space-between; padding:22px 24px; border-bottom:1px solid var(--line); }
-.drawer-head h3 { font-family: var(--font-display); font-size:1.3rem; font-weight:900; }
-.x { background:transparent; color:var(--muted); font-size:1.5rem; line-height:1; padding:6px 10px; border-radius:10px; transition:.15s; }
-.x:hover { color:var(--text); background:var(--surface-2); }
-.drawer-body { flex:1; overflow-y:auto; padding:12px 24px; }
-.drawer-foot { border-top:1px solid var(--line); padding:20px 24px 24px; background: var(--bg-soft); }
-.ci { display:flex; gap:12px; padding:16px 0; border-bottom:1px solid var(--line); align-items:center; }
-.ci-img { width:56px; height:56px; border-radius:12px; background: linear-gradient(150deg,#2b2014,#171310); display:grid; place-items:center; font-size:1.5rem; flex-shrink:0; border:1px solid var(--line); }
-.ci-info { flex:1; min-width:0; }
-.ci-info b { display:block; font-size:.94rem; font-weight:800; }
-.ci-info small { color:var(--muted); font-size:.82rem; }
-.qty { display:flex; align-items:center; gap:8px; }
-.qty button { width:30px; height:30px; border-radius:9px; background:var(--surface-2); color:var(--text); border:1px solid var(--line-2); font-weight:900; font-size:1rem; line-height:1; transition:.15s; }
-.qty button:hover { border-color:var(--accent); color:var(--accent); }
-.qty span { min-width:22px; text-align:center; font-weight:800; }
-.ci-sum { font-family: var(--font-display); font-weight:700; color:var(--accent); min-width:82px; text-align:right; font-size:.92rem; }
-.empty { text-align:center; padding:40px 10px; color:var(--muted); width:100%; }
-.empty .big { font-size:3.2rem; margin-bottom:14px; }
-.empty p { font-size:.95rem; }
-.totals { margin-bottom:16px; }
-.row { display:flex; justify-content:space-between; padding:6px 0; color:var(--muted); font-size:.9rem; }
-.row.grand { color:var(--text); font-size:1.15rem; font-weight:900; padding-top:12px; margin-top:8px; border-top:1px solid var(--line); font-family: var(--font-display); }
-.row.grand span:last-child { color:var(--accent); }
-.btn-checkout { width:100%; padding:17px; border-radius:14px; font-weight:900; font-size:1rem; background: linear-gradient(135deg, var(--accent-3), var(--accent), var(--accent-2)); color:#1a0f00; transition:.18s; box-shadow:0 12px 30px rgba(255,87,34,.35); letter-spacing:.3px; }
-.btn-checkout:hover { transform: translateY(-2px); box-shadow:0 18px 40px rgba(255,87,34,.5); }
-.btn-checkout:disabled { opacity:.4; cursor:not-allowed; transform:none; box-shadow:none; }
-.modal { position:fixed; inset:0; display:grid; place-items:center; padding:20px; background:rgba(0,0,0,.78); backdrop-filter:blur(6px); opacity:0; pointer-events:none; transition:.22s; z-index:90; overflow-y:auto; }
-.modal.on { opacity:1; pointer-events:auto; }
-.modal-card { width:min(580px,100%); background: var(--surface); border:1px solid var(--line-2); border-radius:22px; padding:32px; transform: translateY(16px) scale(.98); transition:.3s; max-height: calc(100vh - 40px); overflow-y:auto; box-shadow: 0 40px 100px rgba(0,0,0,.7); }
-.modal.on .modal-card { transform:translateY(0) scale(1); }
-.modal-card h3 { font-family: var(--font-display); font-size:1.5rem; font-weight:900; margin-bottom:6px; letter-spacing:-.4px; }
-.modal-card .sub { color:var(--muted); font-size:.9rem; margin-bottom:22px; }
-.field { margin-bottom:16px; }
-.field label { display:block; font-size:.82rem; font-weight:800; color:var(--muted); margin-bottom:7px; letter-spacing:.3px; }
-.field input, .field select, .field textarea { width:100%; padding:13px 15px; border-radius:11px; background:var(--surface-2); border:1px solid var(--line-2); color:var(--text); font-size:.95rem; outline:none; transition:.15s; resize:vertical; }
-.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(255,176,32,.12); }
-.field.invalid input, .field.invalid select, .field.invalid textarea { border-color: var(--err); }
-.field .err { color:var(--err); font-size:.78rem; margin-top:5px; display:none; }
-.field.invalid .err { display:block; }
-.pickup-note { padding:14px 16px; border-radius:11px; background: rgba(255,176,32,.08); border:1px solid rgba(255,176,32,.3); font-size:.9rem; margin-bottom:18px; }
-.pickup-note b { color: var(--accent); display:block; margin-bottom:4px; }
-.pickup-note span { color: var(--muted); }
-.radio-row { display:flex; gap:8px; flex-wrap:wrap; }
-.radio-row label { flex:1; min-width:130px; display:flex; align-items:center; gap:9px; padding:12px 14px; border-radius:11px; background:var(--surface-2); border:1px solid var(--line-2); font-size:.88rem; font-weight:700; cursor:pointer; color:var(--muted); transition:.15s; }
-.radio-row input { accent-color: var(--accent); }
-.radio-row label:has(input:checked) { border-color: var(--accent); color: var(--text); background: rgba(255,176,32,.08); }
-.modal-actions { display:flex; gap:12px; margin-top:24px; }
-.modal-actions .back { background:transparent; border:1px solid var(--line-2); color:var(--text); padding:15px 22px; border-radius:12px; font-weight:800; font-size:.95rem; }
-.modal-actions .back:hover { border-color: var(--accent); color: var(--accent); }
-.modal-actions .go { flex:1; padding:15px; border-radius:12px; font-weight:900; background: linear-gradient(135deg, var(--accent-3), var(--accent-2)); color:#1a0f00; font-size:1rem; box-shadow: 0 10px 26px rgba(255,87,34,.35); transition:.15s; }
-.modal-actions .go:hover { transform: translateY(-1px); }
-.success { text-align:center; padding:20px 0; }
-.success .check { width:84px; height:84px; border-radius:50%; margin:0 auto 22px; background: rgba(55,214,122,.14); border:2px solid var(--ok); display:grid; place-items:center; font-size:2.2rem; color:var(--ok); animation: pop .4s cubic-bezier(.4,0,.2,1); }
-@keyframes pop { 0%{transform:scale(.4);opacity:0;} 100%{transform:scale(1);opacity:1;} }
-.success h3 { font-family: var(--font-display); font-size:1.5rem; margin-bottom:10px; }
-.success p { color:var(--muted); margin-bottom:6px; }
-.order-no { font-family: var(--font-display); font-size:1.4rem; font-weight:900; color: var(--accent); margin:16px 0; letter-spacing:1px; }
-.toast { position:fixed; bottom:26px; left:50%; transform:translate(-50%, 140%); background: var(--surface-2); border:1px solid var(--accent); color: var(--text); padding:14px 24px; border-radius:13px; font-weight:700; font-size:.92rem; z-index:120; transition: transform .32s cubic-bezier(.4,0,.2,1); box-shadow:0 14px 40px rgba(0,0,0,.6); display:flex; align-items:center; gap:8px; }
-.toast::before { content:'✓'; color: var(--ok); font-weight:900; }
-.toast.on { transform:translate(-50%, 0); }
-
-/* АДМИНКА */
-.admin-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--line-2); padding-bottom: 10px; overflow-x: auto; }
-.admin-tabs button { background: transparent; color: var(--muted); font-weight: bold; font-size: 0.95rem; padding: 8px 12px; border-radius: 8px; transition: 0.2s; white-space: nowrap; }
-.admin-tabs button.active { background: var(--surface-2); color: var(--accent); }
-.admin-tab-content { display: none; }
-.admin-tab-content.active { display: block; }
-
-.admin-section { margin-bottom: 24px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
-.admin-section h4 { font-family: var(--font-display); font-size: 1rem; margin-bottom: 12px; color: var(--accent); display: flex; justify-content: space-between; align-items: center; }
-.admin-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 0.85rem; }
-.admin-item:last-child { border-bottom: none; padding-bottom: 0; }
-.admin-item .item-info { flex: 1; margin-right: 10px; word-break: break-word; }
-.admin-item .item-actions { display: flex; gap: 6px; flex-shrink: 0; }
-.admin-item button { background: var(--surface); color: var(--text); border: 1px solid var(--line); padding: 6px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.15s; font-size: 0.8rem; }
-.admin-item button:hover { background: var(--accent); color: #1a0f00; border-color: transparent; }
-.admin-item button.del { color: var(--err); border-color: rgba(255,90,90,0.3); }
-.admin-item button.del:hover { background: var(--err); color: white; border-color: transparent; }
-
-/* Форма добавления/редактирования */
-.admin-form { display: none; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--line-2); }
-.admin-form.active { display: block; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-@media(max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
-.admin-form input, .admin-form select { width: 100%; padding: 10px; border-radius: 8px; background: var(--surface); border: 1px solid var(--line-2); color: var(--text); font-size: 0.9rem; }
-.form-actions { display: flex; gap: 8px; margin-top: 12px; }
-.form-actions button { flex: 1; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-.form-actions .save-btn { background: var(--ok); color: #0a0908; border: none; }
-.form-actions .cancel-btn { background: transparent; border: 1px solid var(--line-2); color: var(--text); }
-</style>
-</head>
-<body>
-
-<header class="site-header">
-  <a href="#" class="logo" id="secretAdminTrigger">
-    <span class="logo-mark">Д</span>
-    <span class="logo-text">
-      <span>Андер<b> Донер</b></span>
-      <i>Ждановичи · с 2018</i>
-    </span>
-  </a>
-  <nav class="site-nav">
-    <a href="#menu">Меню</a>
-    <a href="#addresses">Адрес</a>
-    <a href="#reviews">Отзывы</a>
-    <a href="#why">О нас</a>
-  </nav>
-  <button class="cart-btn" id="cartBtn" aria-label="Открыть корзину">
-    <span class="cart-ico">🛒</span>
-    <span class="cart-label">Корзина</span>
-    <span class="cart-count" id="cartCount">0</span>
-  </button>
-</header>
-
-<section class="hero">
-  <div class="hero-bg">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-    <div class="grid-lines"></div>
-  </div>
-  <div class="hero-inner">
-    <div class="hero-text">
-      <span class="tagline">🔥 Работаем <span id="heroHours">10:00–22:00</span> · Ждановичи</span>
-      <h1>Донер, который<br><span class="grad">хочется</span> ещё</h1>
-      <p>Сочная курица, свежая лепёшка, свои соусы. Готовим за 7 минут — забирайте сами.</p>
-      <div class="hero-actions">
-        <a href="#menu" class="btn-primary">Заказать сейчас <span class="arrow">→</span></a>
-        <a href="#addresses" class="btn-ghost">Наш адрес</a>
-      </div>
-      <div class="hero-stats">
-        <div class="stat"><b>7 <small>мин</small></b><span>готовим</span></div>
-        <div class="stat"><b>1</b><span>точка в Ждановичах</span></div>
-        <div class="stat"><b>4.9 <small>★</small></b><span>рейтинг</span></div>
-      </div>
-    </div>
-    <div class="hero-visual">
-      <div class="float-card fc-1"><span class="fc-emoji">🌯</span><div><b>Донер классический</b><small id="heroPrice">7.90 BYN</small></div></div>
-      <div class="float-card fc-2"><span class="fc-emoji">⭐</span><div><b>4.9 из 5</b><small>2 340 отзывов</small></div></div>
-      <div class="hero-plate">
-        <div class="plate-ring"></div>
-        <div class="plate-wrap">🌯</div>
-        <div class="plate-shadow"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="marquee">
-  <div class="marquee-track">
-    <span>СВЕЖИЕ ПРОДУКТЫ</span><span>•</span><span>СВОИ СОУСЫ</span><span>•</span><span>ГОТОВИМ ЗА 7 МИНУТ</span><span>•</span><span>ТОЧКА В ЖДАНОВИЧАХ</span><span>•</span><span>САМОВЫВОЗ</span><span>•</span>
-    <span>СВЕЖИЕ ПРОДУКТЫ</span><span>•</span><span>СВОИ СОУСЫ</span><span>•</span><span>ГОТОВИМ ЗА 7 МИНУТ</span><span>•</span><span>ТОЧКА В ЖДАНОВИЧАХ</span><span>•</span><span>САМОВЫВОЗ</span><span>•</span>
-  </div>
-</div>
-
-<main>
-  <section id="menu" class="section">
-    <div class="section-head">
-      <div><span class="eyebrow">Наше меню</span><h2>Выбери <span class="grad">своё</span></h2></div>
-    </div>
-    <div id="menuContainer"></div>
-  </section>
-
-  <section class="promo-band">
-    <div class="promo-inner">
-      <div class="promo-text">
-        <span class="eyebrow">Как заказать</span>
-        <h3>Собери заказ <span class="grad">онлайн</span> — забери на точке</h3>
-        <p>Готовим к вашему приходу. Работаем ежедневно <span id="promoHours">10:00–22:00</span>.</p>
-      </div>
-      <a href="#menu" class="btn-primary">Открыть меню <span class="arrow">→</span></a>
-    </div>
-  </section>
-
-  <section id="addresses" class="section">
-    <div class="section-head">
-      <div><span class="eyebrow">Где нас найти</span><h2>Наш <span class="grad">адрес</span></h2></div>
-      <p class="section-desc">Работаем ежедневно <span id="descHours">10:00–22:00</span> · оплата картой и наличными</p>
-    </div>
-    <div class="addr-grid" id="addrGrid"></div>
-  </section>
-
-  <section id="reviews" class="section">
-    <div class="section-head" style="margin-bottom: 0;">
-      <div><span class="eyebrow">Отзывы</span><h2>Что <span class="grad">говорят</span></h2></div>
-      <button class="btn-primary" id="reviewBtn">Оставить отзыв <span class="arrow">→</span></button>
-    </div>
-    
-    <div class="accordion-item" id="reviewsAccordion" style="margin-top: 24px;">
-      <div class="accordion-head" onclick="toggleAccordion('reviewsAccordion')">
-        <h3><span class="icon">💬</span> Читать отзывы</h3>
-        <div class="accordion-arrow">▼</div>
-      </div>
-      <div class="accordion-body">
-        <div class="accordion-inner">
-          <div class="reviews" id="reviewsGrid">
-            <div class="empty" style="grid-column:1/-1"><div class="big">⭐</div><p>Загружаем отзывы...</p></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="why" class="section">
-    <div class="section-head"><div><span class="eyebrow">Почему мы</span><h2>Андер Донер — <span class="grad">это</span></h2></div></div>
-    <div class="features">
-      <div class="feature"><div class="ft-ico">⚡</div><h4>Быстро</h4><p>Готовим за 7 минут. Заказ собирается заранее — пришли и забрали.</p></div>
-      <div class="feature"><div class="ft-ico">🥬</div><h4>Свежие продукты</h4><p>Курица и овощи от местных поставщиков. Закупки каждый день.</p></div>
-      <div class="feature"><div class="ft-ico">🔥</div><h4>Свои соусы</h4><p>Чесночный, барбекю, терияки, сырный — всё готовим сами.</p></div>
-      <div class="feature"><div class="ft-ico">🏃</div><h4>Самовывоз</h4><p>Забирайте заказ сами. Точка в Ждановичах.</p></div>
-    </div>
-  </section>
-</main>
-
-<footer class="site-footer">
-  <div class="foot-inner">
-    <div class="foot-col">
-      <div class="logo"><span class="logo-mark">Д</span><span class="logo-text"><span>Андер<b> Донер</b></span><i>Ждановичи · с 2018</i></span></div>
-      <p>Шаурма и донеры в Ждановичах. Готовим быстро, отдаём горячим.</p>
-    </div>
-    <div class="foot-col"><h5>Разделы</h5><a href="#menu">Меню</a><a href="#addresses">Адрес</a><a href="#reviews">Отзывы</a><a href="#why">О нас</a></div>
-    <div class="foot-col"><h5>Контакты</h5><p>Служба поддержки: <b>7927</b></p><p>пн–вс · <span id="footHours">10:00–22:00</span></p><p id="footAddress">агр. Ждановичи, ул. Парковая, 6</p></div>
-  </div>
-  <div class="foot-bottom"><span>© 2026 Андер Донер. Все права защищены.</span><span>Сделано с 🔥 в Ждановичах</span></div>
-</footer>
-
-<div class="overlay" id="overlay"></div>
-<aside class="drawer" id="drawer" aria-label="Корзина">
-  <div class="drawer-head"><h3>Корзина</h3><button class="x" id="closeDrawer" aria-label="Закрыть">✕</button></div>
-  <div class="drawer-body" id="cartItems"></div>
-  <div class="drawer-foot"><div class="totals" id="totals"></div><button class="btn-checkout" id="checkoutBtn" disabled>Оформить заказ</button></div>
-</aside>
-<div class="modal" id="checkoutModal" aria-hidden="true"><div class="modal-card" id="checkoutCard"></div></div>
-
-<!-- МОДАЛ ОТЗЫВА -->
-<div class="modal" id="reviewModal" aria-hidden="true">
-  <div class="modal-card">
-    <h3>Оставить отзыв</h3>
-    <p class="sub">Поделитесь впечатлением о нашем донере</p>
-    <form id="reviewForm" novalidate>
-      <div class="field" id="rf-name">
-        <label>Имя</label>
-        <input name="name" type="text" placeholder="Как вас представить" maxlength="40" autocomplete="name">
-        <div class="err">Укажите имя</div>
-      </div>
-      <div class="field" id="rf-stars">
-        <label>Оценка</label>
-        <div class="star-picker" id="starPicker">
-          <button type="button" data-star="1" aria-label="1 звезда">★</button>
-          <button type="button" data-star="2" aria-label="2 звезды">★</button>
-          <button type="button" data-star="3" aria-label="3 звезды">★</button>
-          <button type="button" data-star="4" aria-label="4 звезды">★</button>
-          <button type="button" data-star="5" aria-label="5 звёзд">★</button>
-        </div>
-        <div class="err">Выберите оценку</div>
-      </div>
-      <div class="field" id="rf-text">
-        <label>Отзыв</label>
-        <textarea name="text" rows="4" placeholder="Что понравилось? (минимум 10 символов)" maxlength="500"></textarea>
-        <div class="err">Напишите минимум 10 символов</div>
-      </div>
-      <div class="modal-actions">
-        <button type="button" class="back" id="cancelReview">Отмена</button>
-        <button type="submit" class="go" id="submitReviewBtn">Отправить отзыв</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<!-- МОДАЛ АДМИНКИ -->
-<div class="modal" id="adminModal" aria-hidden="true">
-  <div class="modal-card" style="width: min(800px, 100%);">
-    <h3>⚙️ Панель управления</h3>
-    <p class="sub">Изменения сохраняются в базу и видны всем пользователям.</p>
-    
-    <div class="admin-tabs">
-      <button class="active" onclick="switchAdminTab('menu', this)">🍔 Меню</button>
-      <button onclick="switchAdminTab('reviews', this)">💬 Отзывы</button>
-    </div>
-
-    <!-- ВКЛАДКА МЕНЮ -->
-    <div id="tab-menu" class="admin-tab-content active">
-      <div class="admin-section">
-        <h4>Настройки точки</h4>
-        <div class="form-row">
-          <div class="field" style="margin:0;"><label>Адрес</label><input type="text" id="adminAddress"></div>
-          <div class="field" style="margin:0;"><label>Время</label><input type="text" id="adminHours"></div>
-        </div>
-      </div>
-
-      <div class="admin-section">
-        <h4>Категории <button onclick="showCatForm()" style="padding:4px 8px; font-size:0.7rem; background:var(--accent); border-radius:6px; cursor:pointer; color:#000;">+ Добавить</button></h4>
-        <div id="adminCategoriesList"></div>
-        
-        <!-- Форма категории -->
-        <div id="catForm" class="admin-form">
-          <div class="form-row">
-            <div class="field" style="margin:0;"><label>Название</label><input type="text" id="catName" placeholder="Например: Комбо"></div>
-            <div class="field" style="margin:0;"><label>Эмодзи</label><input type="text" id="catIcon" placeholder="🎁" maxlength="2"></div>
-          </div>
-          <div class="form-actions">
-            <button class="save-btn" onclick="saveCategory()">Сохранить</button>
-            <button class="cancel-btn" onclick="document.getElementById('catForm').classList.remove('active')">Отмена</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="admin-section">
-        <h4>Товары <button onclick="showItemForm()" style="padding:4px 8px; font-size:0.7rem; background:var(--accent); border-radius:6px; cursor:pointer; color:#000;">+ Добавить</button></h4>
-        <div id="adminProductsList"></div>
-        
-        <!-- Форма товара -->
-        <div id="itemForm" class="admin-form">
-          <div class="form-row">
-            <div class="field" style="margin:0;"><label>Название</label><input type="text" id="itemName"></div>
-            <div class="field" style="margin:0;"><label>Цена (коп.)</label><input type="number" id="itemPrice" placeholder="790"></div>
-          </div>
-          <div class="form-row">
-            <div class="field" style="margin:0;">
-              <label>Категория</label>
-              <select id="itemCat"></select>
-            </div>
-            <div class="field" style="margin:0;"><label>Эмодзи</label><input type="text" id="itemGlyph" placeholder="🌯" maxlength="2"></div>
-          </div>
-          <div class="field" style="margin-top:10px; margin-bottom:0;"><label>Описание</label><input type="text" id="itemDesc" placeholder="Курица, овощи, соус"></div>
-          <div class="form-actions">
-            <button class="save-btn" onclick="saveItem()">Сохранить</button>
-            <button class="cancel-btn" onclick="document.getElementById('itemForm').classList.remove('active')">Отмена</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ВКЛАДКА ОТЗЫВОВ -->
-    <div id="tab-reviews" class="admin-tab-content">
-      <div class="admin-list" id="adminReviewsList" style="max-height: 400px;">
-        <!-- Отзывы -->
-      </div>
-    </div>
-
-    <div class="modal-actions" style="margin-top:24px;">
-      <button type="button" class="back" id="cancelAdmin">Закрыть</button>
-      <button type="button" class="go" id="saveAdmin" style="background:linear-gradient(135deg, #37d67a, #2aa158);">💾 Сохранить всё</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
-/* ============================================================
-   НАСТРОЙКИ SUPABASE
-   ============================================================ */
-const SUPABASE_URL = 'https://scpquwjjnqlgpgavfxnr.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_r5EqpjyBilO_xhNkP2asCQ_j_Olq1XP';
-const TG_BOT_TOKEN = '9231859251:AAE1u5xXxvGbvPEIbCEe9S507Ms755Ig4Hk';
-const TG_CHAT_ID   = '1460289386';
-const ADMIN_PASSWORD = 'AnderDoner#Admin!2026';
-
-/* ============================================================
-   Данные по умолчанию
-   ============================================================ */
-let PICKUP_ADDRESS = 'агр. Ждановичи, ул. Парковая, 6';
-let PICKUP_TIME = '10:00–22:00';
-
-const defaultCategories = [
-  { key:'doner', label:'Донеры', icon:'🌯' },
-  { key:'stick', label:'Стики', icon:'🍢' },
-  { key:'box',   label:'Боксы и Наггетсы', icon:'🍱' },
-  { key:'side',  label:'Картошка и Закуски', icon:'🍟' },
-  { key:'drink', label:'Напитки', icon:'🥤' },
-  { key:'sauce', label:'Соусы', icon:'🥫' },
-];
-
-const defaultProducts = [
-  { id:1, cat:'doner', name:'Донер классический', desc:'Лепёшка, курица, капуста, огурец, помидор, чесночный соус', price:790, glyph:'🌯', tag:'Хит' },
-  { id:2, cat:'doner', name:'Донер сырный', desc:'Двойной чеддер, курица, сырный соус, свежий огурец', price:1450, glyph:'🧀', tag:'' },
-  { id:3, cat:'doner', name:'Донер с говядиной', desc:'Мраморная говядина, пекинская капуста, барбекю', price:1450, glyph:'🥩', tag:'' },
-  { id:4, cat:'doner', name:'Донер с беконом', desc:'Бекон, курица, свежий огурец, чесночный соус', price:1250, glyph:'🥓', tag:'Хит' },
-  { id:5, cat:'doner', name:'Донер с креветками', desc:'Королевские креветки, пекинская капуста, кунжутный соус', price:1450, glyph:'🍤', tag:'' },
-  { id:6, cat:'doner', name:'Донер с фалафелем', desc:'Фалафель, пекинская капуста, хумус, свежий огурец', price:1050, glyph:'🧆', tag:'Веган' },
-  { id:7, cat:'stick', name:'Стик с курицей', desc:'Курица, сырный и чесночный соусы', price:490, glyph:'🍢', tag:'' },
-  { id:8, cat:'stick', name:'Стик барбекю', desc:'Курица, барбекю, чесночный соус', price:490, glyph:'🍢', tag:'' },
-  { id:12, cat:'box', name:'Ланч-бокс классический', desc:'Курица, картофель фри, овощи, два соуса', price:1690, glyph:'🍱', tag:'' },
-  { id:15, cat:'side', name:'Картофель фри', desc:'Порция 110 г, соль', price:490, glyph:'🍟', tag:'' },
-  { id:18, cat:'drink', name:'Кола 0.5 л', desc:'Классическая, холодная', price:350, glyph:'🥤', tag:'' },
-  { id:21, cat:'sauce', name:'Чесночный соус', desc:'25 г', price:120, glyph:'🧄', tag:'' },
-];
-
-let products = [...defaultProducts];
-let categories = [...defaultCategories];
-let addresses = [ { name: PICKUP_ADDRESS, time: PICKUP_TIME } ];
-
-/* ============================================================
-   ЗАГРУЗКА ДАННЫХ
-   ============================================================ */
-async function loadSiteSettings() {
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/site_settings?id=eq.1`, {
-      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
-    });
-    if (res.ok) {
-      const data = await res.json();
-      if (data && data.length > 0) {
-        const settings = data[0];
-        if (settings.products && settings.products.length > 0) products = settings.products;
-        if (settings.categories && settings.categories.length > 0) categories = settings.categories;
-        if (settings.address) PICKUP_ADDRESS = settings.address;
-        if (settings.work_hours) PICKUP_TIME = settings.work_hours;
-        
-        addresses = [ { name: PICKUP_ADDRESS, time: PICKUP_TIME } ];
-        
-        document.getElementById('heroHours').textContent = PICKUP_TIME;
-        document.getElementById('promoHours').textContent = PICKUP_TIME;
-        document.getElementById('descHours').textContent = PICKUP_TIME;
-        document.getElementById('footHours').textContent = PICKUP_TIME;
-        document.getElementById('footAddress').textContent = PICKUP_ADDRESS;
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Unbounded', 'sans-serif'],
+          },
+          colors: {
+            coal: {
+              950: '#0D0D0D',
+              900: '#121212',
+              850: '#171717',
+              800: '#1E1E1E',
+              700: '#2A2A2A',
+            },
+            fire: {
+              500: '#FF5722',
+              600: '#F4511E',
+              400: '#FF7043',
+            },
+            amber: {
+              400: '#FFCA28',
+              500: '#FFB300',
+            }
+          }
+        }
       }
     }
-  } catch (err) {
-    console.error('Ошибка загрузки настроек:', err);
-  }
-  renderMenu();
-  renderAddresses();
-}
+  </script>
 
-async function saveSiteSettings(newProducts, newCategories, newAddress, newHours) {
-  const payload = { products: newProducts, categories: newCategories, address: newAddress, work_hours: newHours };
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/site_settings?id=eq.1`, {
-    method: 'PATCH',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=minimal'
-    },
-    body: JSON.stringify(payload)
-  });
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(err);
-  }
-}
-
-/* ============================================================
-   АДМИНКА
-   ============================================================ */
-let clickCount = 0;
-let clickTimer;
-document.getElementById('secretAdminTrigger').addEventListener('click', (e) => {
-  e.preventDefault();
-  clickCount++;
-  clearTimeout(clickTimer);
-  clickTimer = setTimeout(() => { clickCount = 0; }, 1000);
-  
-  if (clickCount >= 3) {
-    clickCount = 0;
-    const pass = prompt('Введите пароль администратора:');
-    if (pass === ADMIN_PASSWORD) {
-      openAdminPanel();
-    } else if (pass !== null) {
-      alert('Неверный пароль!');
+  <style>
+    body {
+      background-color: #121212;
+      color: #F8F7F4;
+      overflow-x: hidden;
     }
-  }
-});
 
-let tempProducts = [];
-let tempCategories = [];
-let tempAddress = '';
-let tempHours = '';
-let editingItemIndex = -1;
-
-function openAdminPanel() {
-  tempProducts = JSON.parse(JSON.stringify(products));
-  tempCategories = JSON.parse(JSON.stringify(categories));
-  tempAddress = PICKUP_ADDRESS;
-  tempHours = PICKUP_TIME;
-  
-  document.getElementById('adminAddress').value = tempAddress;
-  document.getElementById('adminHours').value = tempHours;
-  
-  renderAdminCategories();
-  renderAdminProducts();
-  fetchAdminReviews();
-  
-  document.getElementById('adminModal').classList.add('on');
-  document.getElementById('adminModal').setAttribute('aria-hidden','false');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeAdminPanel() {
-  document.getElementById('adminModal').classList.remove('on');
-  document.getElementById('adminModal').setAttribute('aria-hidden','true');
-  document.body.style.overflow = '';
-}
-
-document.getElementById('cancelAdmin').onclick = closeAdminPanel;
-document.getElementById('adminModal').onclick = (e) => { if (e.target === document.getElementById('adminModal')) closeAdminPanel(); };
-
-window.switchAdminTab = function(tab, btn) {
-  document.querySelectorAll('.admin-tabs button').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.remove('active'));
-  document.getElementById(`tab-${tab}`).classList.add('active');
-  
-  const saveBtn = document.getElementById('saveAdmin');
-  if (tab === 'menu') {
-    saveBtn.style.display = 'block';
-  } else {
-    saveBtn.style.display = 'none';
-  }
-}
-
-/* --- Категории --- */
-function renderAdminCategories() {
-  const list = document.getElementById('adminCategoriesList');
-  list.innerHTML = tempCategories.map((c, i) => `
-    <div class="admin-item">
-      <div class="item-info"><b style="color:var(--accent);">${c.icon} ${c.label}</b> <span style="font-size:0.7rem; color:var(--muted);">(${c.key})</span></div>
-      <div class="item-actions">
-        <button class="del" onclick="deleteCategory(${i})">✕</button>
-      </div>
-    </div>
-  `).join('');
-}
-
-window.showCatForm = function() {
-  document.getElementById('catName').value = '';
-  document.getElementById('catIcon').value = '';
-  document.getElementById('catForm').classList.add('active');
-}
-
-window.saveCategory = function() {
-  const name = document.getElementById('catName').value.trim();
-  const icon = document.getElementById('catIcon').value.trim() || '📦';
-  if (!name) { alert('Введите название категории!'); return; }
-  
-  const key = 'cat_' + Date.now();
-  tempCategories.push({ key, label: name, icon });
-  
-  document.getElementById('catForm').classList.remove('active');
-  renderAdminCategories();
-}
-
-window.deleteCategory = function(index) {
-  if (!confirm('Удалить категорию? Все товары в ней тоже удалятся!')) return;
-  const catKey = tempCategories[index].key;
-  tempCategories.splice(index, 1);
-  // Удаляем товары этой категории
-  tempProducts = tempProducts.filter(p => p.cat !== catKey);
-  renderAdminCategories();
-  renderAdminProducts();
-}
-
-/* --- Товары --- */
-function renderAdminProducts() {
-  const list = document.getElementById('adminProductsList');
-  
-  // Обновляем выпадающий список категорий в форме
-  const select = document.getElementById('itemCat');
-  select.innerHTML = tempCategories.map(c => `<option value="${c.key}">${c.label}</option>`).join('');
-  
-  if (tempProducts.length === 0) {
-    list.innerHTML = '<div style="padding:10px 0; color:var(--muted); font-size:0.9rem;">Товаров нет</div>';
-    return;
-  }
-  
-  list.innerHTML = tempProducts.map((p, index) => {
-    const catName = tempCategories.find(c => c.key === p.cat)?.label || p.cat;
-    return `
-    <div class="admin-item">
-      <div class="item-info">
-        <b>${p.name}</b> <br>
-        <span style="font-size:0.75rem; color:var(--muted);">${catName} · ${(p.price/100).toFixed(2)} BYN</span>
-      </div>
-      <div class="item-actions">
-        <button onclick="editItem(${index})">✏️</button>
-        <button class="del" onclick="deleteItem(${index})">✕</button>
-      </div>
-    </div>
-    `;
-  }).join('');
-}
-
-window.showItemForm = function() {
-  editingItemIndex = -1;
-  document.getElementById('itemName').value = '';
-  document.getElementById('itemPrice').value = '';
-  document.getElementById('itemGlyph').value = '🌯';
-  document.getElementById('itemDesc').value = '';
-  document.getElementById('itemForm').classList.add('active');
-}
-
-window.editItem = function(index) {
-  editingItemIndex = index;
-  const p = tempProducts[index];
-  document.getElementById('itemName').value = p.name;
-  document.getElementById('itemPrice').value = p.price;
-  document.getElementById('itemGlyph').value = p.glyph;
-  document.getElementById('itemDesc').value = p.desc || '';
-  document.getElementById('itemCat').value = p.cat;
-  document.getElementById('itemForm').classList.add('active');
-  document.getElementById('itemForm').scrollIntoView({ behavior: 'smooth' });
-}
-
-window.deleteItem = function(index) {
-  if (confirm('Удалить товар?')) {
-    tempProducts.splice(index, 1);
-    renderAdminProducts();
-  }
-}
-
-window.saveItem = function() {
-  const name = document.getElementById('itemName').value.trim();
-  const price = parseInt(document.getElementById('itemPrice').value);
-  const cat = document.getElementById('itemCat').value;
-  const glyph = document.getElementById('itemGlyph').value.trim() || '🌯';
-  const desc = document.getElementById('itemDesc').value.trim();
-  
-  if (!name || isNaN(price)) { alert('Заполните название и цену!'); return; }
-  
-  if (editingItemIndex === -1) {
-    tempProducts.push({ id: Date.now(), cat, name, desc, price, glyph, tag: '' });
-  } else {
-    const p = tempProducts[editingItemIndex];
-    p.name = name; p.price = price; p.cat = cat; p.glyph = glyph; p.desc = desc;
-  }
-  
-  document.getElementById('itemForm').classList.remove('active');
-  renderAdminProducts();
-}
-
-document.getElementById('saveAdmin').onclick = async () => {
-  const newAddress = document.getElementById('adminAddress').value.trim();
-  const newHours = document.getElementById('adminHours').value.trim();
-  
-  if (!newAddress || !newHours) { alert('Заполните адрес и часы работы!'); return; }
-  if (tempCategories.length === 0) { alert('Должна быть хотя бы одна категория!'); return; }
-  
-  const btn = document.getElementById('saveAdmin');
-  btn.disabled = true;
-  btn.textContent = 'Сохранение...';
-  
-  try {
-    await saveSiteSettings(tempProducts, tempCategories, newAddress, newHours);
-    
-    products = tempProducts;
-    categories = tempCategories;
-    PICKUP_ADDRESS = newAddress;
-    PICKUP_TIME = newHours;
-    addresses = [ { name: PICKUP_ADDRESS, time: PICKUP_TIME } ];
-    
-    document.getElementById('heroHours').textContent = PICKUP_TIME;
-    document.getElementById('promoHours').textContent = PICKUP_TIME;
-    document.getElementById('descHours').textContent = PICKUP_TIME;
-    document.getElementById('footHours').textContent = PICKUP_TIME;
-    document.getElementById('footAddress').textContent = PICKUP_ADDRESS;
-    
-    renderMenu();
-    renderAddresses();
-    renderCart();
-    
-    toast('Все изменения сохранены!');
-    closeAdminPanel();
-  } catch (err) {
-    alert('Ошибка сохранения: ' + err.message);
-    console.error(err);
-  } finally {
-    btn.disabled = false;
-    btn.textContent = '💾 Сохранить всё';
-  }
-};
-
-/* --- Отзывы --- */
-async function fetchAdminReviews() {
-  const list = document.getElementById('adminReviewsList');
-  list.innerHTML = '<div style="padding:20px; text-align:center; color:var(--muted);">Загрузка...</div>';
-  
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?select=*&order=created_at.desc`, {
-      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
-    });
-    if (!res.ok) throw new Error('Ошибка загрузки');
-    const data = await res.json();
-    
-    if (data.length === 0) {
-      list.innerHTML = '<div style="padding:20px; text-align:center; color:var(--muted);">Отзывов пока нет.</div>';
-      return;
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
     }
-    
-    list.innerHTML = data.map(r => `
-      <div class="admin-item" style="align-items:flex-start;">
-        <div class="item-info">
-          <b>${escapeHtml(r.name)}</b> (${r.rating} ★) <small style="color:var(--muted);">${new Date(r.created_at).toLocaleDateString()}</small><br>
-          <span style="font-size:0.8rem; color:var(--muted);">«${escapeHtml(r.text)}»</span>
-        </div>
-        <div class="item-actions" style="margin-top:5px;">
-          <button class="del" onclick="deleteAdminReview(${r.id})">Удалить</button>
-        </div>
-      </div>
-    `).join('');
-  } catch (err) {
-    list.innerHTML = `<div style="padding:20px; text-align:center; color:var(--err);">Ошибка: ${err.message}</div>`;
-  }
-}
+    ::-webkit-scrollbar-track {
+      background: #121212;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2A2A2A;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #FF5722;
+    }
 
-window.deleteAdminReview = async function(id) {
-  if (!confirm('Удалить этот отзыв?')) return;
-  
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?id=eq.${id}`, {
-      method: 'DELETE',
-      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
-    });
-    if (!res.ok) throw new Error('Не удалось удалить');
-    
-    fetchAdminReviews();
-    loadReviews();
-    toast('Отзыв удален');
-  } catch (err) {
-    alert('Ошибка: ' + err.message);
-  }
-}
+    .glass {
+      background: rgba(24, 24, 24, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
 
-/* ============================================================
-   ОТЗЫВЫ НА САЙТЕ
-   ============================================================ */
-const defaultReviews = [
-  { name:'Тимофей С.', text:'Лучшая шаурма в округе. Сырный лаваш реально сырный, а не просто так называется.', rating:5, date:'03.06.2026' },
-];
+    .glass-card {
+      background: linear-gradient(145deg, rgba(32, 32, 32, 0.92) 0%, rgba(20, 20, 20, 0.96) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      transition: all 0.25s ease;
+    }
 
-let userReviews = [];
-function hasSubmittedReview() { return localStorage.getItem('ad_review_submitted') === '1'; }
+    .glass-card:hover {
+      border-color: rgba(255, 87, 34, 0.45);
+      transform: translateY(-3px);
+      box-shadow: 0 18px 36px -15px rgba(255, 87, 34, 0.2);
+    }
 
-function renderReviewsUI(all) {
-  document.getElementById('reviewsGrid').innerHTML = all.map(r => `
-    <div class="review ${r.isUser?'user-review':''}">
-      <div class="rv-top">
-        <b>${escapeHtml(r.name)}${r.isUser?' <span class="your-badge">Ваш отзыв</span>':''}</b>
-        <span class="stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span>
-      </div>
-      <p>«${escapeHtml(r.text)}»</p>
-      <small>${r.date}</small>
-    </div>
-  `).join('');
-}
+    .text-gradient-fire {
+      background: linear-gradient(135deg, #FF7043 0%, #FF5722 45%, #FFB300 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-async function loadReviews() {
-  const grid = document.getElementById('reviewsGrid');
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?select=*&order=created_at.desc`, {
-      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
-    });
-    if (!res.ok) throw new Error('Ошибка загрузки отзывов');
-    const data = await res.json();
-    
-    userReviews = data.map(r => ({
-      name: r.name, text: r.text, rating: r.rating,
-      date: new Date(r.created_at).toLocaleDateString('ru-RU', { day:'2-digit', month:'2-digit', year:'numeric' }),
-      isUser: true
-    }));
-    
-    const all = [ ...userReviews, ...defaultReviews ];
-    renderReviewsUI(all);
-  } catch (err) {
-    console.error('Supabase error:', err);
-    renderReviewsUI(defaultReviews);
-  }
-}
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-fire-500 selection:text-white">
 
-function updateReviewBtn() {
-  const btn = document.getElementById('reviewBtn');
-  if (!btn) return;
-  if (hasSubmittedReview()) {
-    btn.disabled = true; btn.innerHTML = '✓ Отзыв оставлен';
-  } else {
-    btn.disabled = false; btn.innerHTML = 'Оставить отзыв <span class="arrow">→</span>';
-  }
-}
-
-let selectedRating = 0;
-const starBtns = document.querySelectorAll('#starPicker button');
-function paintStars(n) { starBtns.forEach(b => b.classList.toggle('active', +b.dataset.star <= n)); }
-starBtns.forEach(btn => {
-  btn.addEventListener('mouseenter', () => paintStars(+btn.dataset.star));
-  btn.addEventListener('click', () => { selectedRating = +btn.dataset.star; paintStars(selectedRating); });
-});
-document.getElementById('starPicker').addEventListener('mouseleave', () => paintStars(selectedRating));
-
-const reviewModal = document.getElementById('reviewModal');
-const reviewForm = document.getElementById('reviewForm');
-function openReviewModal() {
-  if (hasSubmittedReview()) return;
-  selectedRating = 0; reviewForm.reset(); paintStars(0);
-  reviewModal.querySelectorAll('.field').forEach(f => f.classList.remove('invalid'));
-  reviewModal.classList.add('on');
-  reviewModal.setAttribute('aria-hidden','false');
-  document.body.style.overflow = 'hidden';
-}
-function closeReviewModal() {
-  reviewModal.classList.remove('on');
-  reviewModal.setAttribute('aria-hidden','true');
-  document.body.style.overflow = '';
-}
-document.getElementById('reviewBtn').onclick = openReviewModal;
-document.getElementById('cancelReview').onclick = closeReviewModal;
-reviewModal.onclick = (e) => { if (e.target === reviewModal) closeReviewModal(); };
-
-reviewForm.onsubmit = async (e) => {
-  e.preventDefault();
-  const form = e.target; let ok = true;
-  const nameField = document.getElementById('rf-name');
-  if (!form.name.value.trim()) { nameField.classList.add('invalid'); ok=false; } else nameField.classList.remove('invalid');
-  const starsField = document.getElementById('rf-stars');
-  if (selectedRating === 0) { starsField.classList.add('invalid'); ok=false; } else starsField.classList.remove('invalid');
-  const textField = document.getElementById('rf-text');
-  if (form.text.value.trim().length < 10) { textField.classList.add('invalid'); ok=false; } else textField.classList.remove('invalid');
-  if (!ok) return;
-
-  const btn = document.getElementById('submitReviewBtn');
-  const originalText = btn.textContent;
-  btn.disabled = true; btn.textContent = 'Отправка...';
-
-  const reviewData = {
-    name: form.name.value.trim().slice(0, 40),
-    text: form.text.value.trim().slice(0, 500),
-    rating: selectedRating
-  };
-
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews`, {
-      method: 'POST',
-      headers: {
-        'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Content-Type': 'application/json', 'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify(reviewData)
-    });
-    if (!res.ok) { const errText = await res.text(); throw new Error(errText); }
-    
-    localStorage.setItem('ad_review_submitted', '1');
-    closeReviewModal(); await loadReviews(); updateReviewBtn(); toast('Спасибо за отзыв!');
-  } catch (err) {
-    alert('Ошибка: ' + err.message);
-    btn.disabled = false; btn.textContent = originalText;
-  }
-};
-
-/* ============================================================
-   КОРЗИНА И ЗАКАЗЫ
-   ============================================================ */
-let cart = JSON.parse(localStorage.getItem('ad_cart') || '[]');
-const money = v => (v/100).toFixed(2) + ' BYN';
-const findP = id => products.find(p => p.id === id);
-
-window.toggleAccordion = function(id) {
-  const el = document.getElementById(id);
-  if (el) el.classList.toggle('open');
-}
-
-function renderMenu() {
-  const container = document.getElementById('menuContainer');
-  container.innerHTML = categories.map(cat => {
-    const items = products.filter(p => p.cat === cat.key);
-    if (items.length === 0) return '';
-    const cardsHTML = items.map(p => {
-      const badgeCls = p.tag==='Хит' ? 'hot' : (p.tag==='Веган' ? 'veg' : '');
-      return `<div class="card"><div class="card-img">${p.tag ? `<span class="badge ${badgeCls}">${p.tag}</span>` : ''}<span class="glyph">${p.glyph}</span></div><div class="card-body"><h3>${p.name}</h3><p class="desc">${p.desc}</p><div class="card-foot"><div class="price">${money(p.price)}</div><button class="add" data-add="${p.id}">В корзину</button></div></div></div>`;
-    }).join('');
-    return `
-      <div class="accordion-item" id="cat-${cat.key}">
-        <div class="accordion-head" onclick="toggleAccordion('cat-${cat.key}')">
-          <h3><span class="icon">${cat.icon}</span> ${cat.label}</h3>
-          <div class="accordion-arrow">▼</div>
-        </div>
-        <div class="accordion-body">
-          <div class="accordion-inner">
-            <div class="grid">${cardsHTML}</div>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
-  document.querySelectorAll('[data-add]').forEach(b => { b.onclick = () => addToCart(+b.dataset.add); });
-}
-
-function renderAddresses() {
-  document.getElementById('addrGrid').innerHTML = addresses.map(a => `<div class="addr"><strong>${a.name}</strong><span>🕐 ${a.time}</span></div>`).join('');
-}
-function saveCart() { localStorage.setItem('ad_cart', JSON.stringify(cart)); }
-function addToCart(id) {
-  const it = cart.find(i => i.id === id);
-  if (it) it.qty++; else cart.push({ id, qty:1 });
-  saveCart(); renderCart(); toast('Добавлено в корзину');
-}
-function changeQty(id, delta) {
-  const it = cart.find(i => i.id === id);
-  if (!it) return;
-  it.qty += delta;
-  if (it.qty <= 0) cart = cart.filter(i => i.id !== id);
-  saveCart(); renderCart();
-}
-function cartCount() { return cart.reduce((s,i)=>s+i.qty,0); }
-function cartSum() { return cart.reduce((s,i)=>s + (findP(i.id)?.price||0) * i.qty,0); }
-function renderCart() {
-  document.getElementById('cartCount').textContent = cartCount();
-  const box = document.getElementById('cartItems');
-  if (!cart.length) {
-    box.innerHTML = `<div class="empty"><div class="big">🌯</div><p>Корзина пуста</p><p style="font-size:.85rem;margin-top:6px">Добавьте что-нибудь из меню</p></div>`;
-  } else {
-    box.innerHTML = cart.map(i => {
-      const p = findP(i.id);
-      if(!p) return '';
-      return `<div class="ci"><div class="ci-img">${p.glyph}</div><div class="ci-info"><b>${p.name}</b><small>${money(p.price)}</small></div><div class="qty"><button data-dec="${i.id}">−</button><span>${i.qty}</span><button data-inc="${i.id}">+</button></div><div class="ci-sum">${money(p.price*i.qty)}</div></div>`;
-    }).join('');
-    box.querySelectorAll('[data-inc]').forEach(b => b.onclick = () => changeQty(+b.dataset.inc, 1));
-    box.querySelectorAll('[data-dec]').forEach(b => b.onclick = () => changeQty(+b.dataset.dec, -1));
-  }
-  const sum = cartSum();
-  const totals = document.getElementById('totals');
-  if (!cart.length) totals.innerHTML = '';
-  else totals.innerHTML = `<div class="row"><span>Товары (${cartCount()})</span><span>${money(sum)}</span></div><div class="row grand"><span>Итого</span><span>${money(sum)}</span></div>`;
-  document.getElementById('checkoutBtn').disabled = !cart.length;
-}
-const drawer = document.getElementById('drawer'), overlay = document.getElementById('overlay');
-function openDrawer() { drawer.classList.add('on'); overlay.classList.add('on'); document.body.style.overflow='hidden'; }
-function closeDrawer() { drawer.classList.remove('on'); overlay.classList.remove('on'); document.body.style.overflow=''; }
-document.getElementById('cartBtn').onclick = openDrawer;
-document.getElementById('closeDrawer').onclick = closeDrawer;
-overlay.onclick = closeDrawer;
-
-const checkoutModal = document.getElementById('checkoutModal'), checkoutCard = document.getElementById('checkoutCard');
-document.getElementById('checkoutBtn').onclick = () => { closeDrawer(); openCheckoutForm(); };
-
-function openCheckoutForm() {
-  const sum = cartSum();
-  checkoutCard.innerHTML = `
-    <h3>Оформление заказа</h3><p class="sub">Заполните данные — и мы начнём готовить.</p>
-    <div class="pickup-note"><b>🏃 Самовывоз</b><span>${PICKUP_ADDRESS} · ${PICKUP_TIME}</span></div>
-    <form id="orderForm" novalidate>
-      <div class="field" id="f-name"><label>Имя</label><input name="name" type="text" placeholder="Как к вам обращаться" autocomplete="name"><div class="err">Укажите имя</div></div>
-      <div class="field" id="f-phone"><label>Телефон</label><input name="phone" type="tel" placeholder="+375 (__) ___-__-__" autocomplete="tel"><div class="err">Введите корректный номер (+375 …)</div></div>
-      <div class="field"><label>Способ оплаты</label><div class="radio-row"><label><input type="radio" name="pay" value="card" checked> 💳 Картой онлайн</label><label><input type="radio" name="pay" value="cash"> 💵 Наличными</label></div></div>
-      <div class="field"><label>Комментарий (необязательно)</label><textarea name="comment" rows="2" placeholder="Без лука, соус отдельно..."></textarea></div>
-      <div class="totals"><div class="row"><span>Товары</span><span>${money(sum)}</span></div><div class="row grand"><span>К оплате</span><span>${money(sum)}</span></div></div>
-      <div class="modal-actions"><button type="button" class="back" id="backBtn">← Назад</button><button type="submit" class="go">Подтвердить заказ</button></div>
-    </form>`;
-  checkoutCard.querySelector('#backBtn').onclick = () => { closeCheckout(); openDrawer(); };
-  checkoutCard.querySelector('#orderForm').onsubmit = async (e) => {
-    e.preventDefault();
-    const form = e.target; let ok = true;
-    const nameF = checkoutCard.querySelector('#f-name');
-    if (!form.name.value.trim()) { nameF.classList.add('invalid'); ok=false; } else nameF.classList.remove('invalid');
-    const phoneF = checkoutCard.querySelector('#f-phone');
-    if (form.phone.value.replace(/\D/g,'').length < 11) { phoneF.classList.add('invalid'); ok=false; } else phoneF.classList.remove('invalid');
-    if (!ok) return;
-
-    const order = {
-      no: 'AD-' + Date.now().toString().slice(-6),
-      items: cart.slice(),
-      total: sum,
-      name: form.name.value.trim(),
-      phone: form.phone.value.trim(),
-      address: PICKUP_ADDRESS,
-      pay: form.pay.value,
-      comment: form.comment.value.trim(),
-      createdAt: new Date().toISOString()
+  <!-- ==================== КОНФИГУРАЦИЯ БИЗНЕСА И FIREBASE ==================== -->
+  <script>
+    const BUSINESS_CONFIG = {
+      name: "AnderDoner",
+      yandexMapsUrl: "https://yandex.ru/maps/org/anderdoner/168975024236?si=pd3g265k3cw7mgbwygg1v86v40",
+      address: "аг. Ждановичи, ул. Парковая, 6",
+      phoneDisplay: "+375 (29) 123-45-67",
+      phoneRaw: "+375291234567",
+      workingHours: "Ежедневно: 10:00 – 23:00",
+      currency: "BYN",
+      telegramBotToken: "9231859251:AAE1u5xXxvGbvPEIbCEe9S507Ms755Ig4Hk",
+      telegramChatId: "1460289386",
+      defaultAdminPin: "2026"
     };
 
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const originalText = submitBtn.textContent;
-    submitBtn.disabled = true; submitBtn.textContent = 'Отправка...';
+    // Вставьте сюда ваши реальные ключи из Firebase Console -> Project settings -> Your apps
+    const FIREBASE_CONFIG = {
+      apiKey: "ВАШ_API_KEY",
+      authDomain: "ВАШ_PROJECT_ID.firebaseapp.com",
+      projectId: "ВАШ_PROJECT_ID",
+      storageBucket: "ВАШ_PROJECT_ID.firebasestorage.app",
+      messagingSenderId: "ВАШ_SENDER_ID",
+      appId: "ВАШ_APP_ID"
+    };
 
-    try {
-      if (TG_BOT_TOKEN && TG_BOT_TOKEN !== 'ВСТАВЬ_СЮДА_ТОКЕН_БОТА') {
-        await sendOrderToTelegram(order);
-      }
-      localStorage.setItem('ad_lastOrder', JSON.stringify(order));
-      cart = []; saveCart(); renderCart(); showSuccess(order);
-    } catch (err) {
-      alert('Не удалось отправить заказ в Telegram. Проверьте интернет или повторите позже.');
-      console.error('Telegram error:', err);
-      submitBtn.disabled = false; submitBtn.textContent = originalText;
+    function isFirebaseConfigured() {
+      return Boolean(
+        FIREBASE_CONFIG.apiKey &&
+        !FIREBASE_CONFIG.apiKey.startsWith("ВАШ_") &&
+        FIREBASE_CONFIG.projectId &&
+        !FIREBASE_CONFIG.projectId.startsWith("ВАШ_")
+      );
     }
-  };
-  checkoutModal.classList.add('on'); checkoutModal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
-}
 
-function closeCheckout() { checkoutModal.classList.remove('on'); checkoutModal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+    function readLocalCache(collectionName, fallback) {
+      try {
+        const raw = localStorage.getItem(`anderdoner_cache_${collectionName}`);
+        if (!raw) return fallback;
+        const parsed = JSON.parse(raw);
+        return parsed && parsed.data !== undefined ? parsed.data : fallback;
+      } catch (e) {
+        return fallback;
+      }
+    }
 
-function showSuccess(order) {
-  checkoutCard.innerHTML = `
-    <div class="success">
-      <div class="check">✓</div>
-      <h3>Заказ принят!</h3>
-      <p>Спасибо, ${escapeHtml(order.name)}. Мы уже начали готовить.</p>
-      
-      <div style="margin: 20px 0; padding: 18px; background: rgba(255,176,32,.08); border: 1px dashed var(--accent); border-radius: 12px;">
-        <p style="margin-bottom: 8px; font-size: 0.9rem; color: var(--muted);">📢 <b>Важно:</b> мы вам перезвоним, когда заказ будет готов.</p>
-        <p style="margin-bottom: 12px; font-size: 0.9rem; color: var(--text);">📸 <b>Пожалуйста, сохраните или сфотографируйте номер вашего заказа:</b></p>
-        <div class="order-no" style="margin: 0; font-size: 1.8rem;">№ ${order.no}</div>
+    function writeLocalCache(collectionName, data) {
+      try {
+        localStorage.setItem(`anderdoner_cache_${collectionName}`, JSON.stringify({
+          updatedAt: Date.now(),
+          data
+        }));
+      } catch (e) {
+        console.warn('Cache write error:', e);
+      }
+    }
+
+    // Единый метод записи состояния: пишет в локальный кэш и при наличии ключей в Firestore
+    async function syncStateToBackend(collectionName, data) {
+      writeLocalCache(collectionName, data);
+      if (typeof window.firestoreSaveDoc === 'function') {
+        await window.firestoreSaveDoc(collectionName, data);
+      }
+      window.dispatchEvent(new CustomEvent('anderdoner:state-updated', {
+        detail: { collectionName, data }
+      }));
+    }
+  </script>
+
+  <!-- ==================== ШАПКА САЙТА ==================== -->
+  <header class="fixed top-0 left-0 right-0 z-40 glass border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-18 sm:h-20 py-3">
+
+        <a href="#" class="flex items-center gap-2.5 group">
+          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-fire-500 to-amber-500 flex items-center justify-center shadow-lg shadow-fire-500/30 group-hover:scale-105 transition-transform">
+            <svg class="w-6 h-6 text-coal-950" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M13.5 2C13.5 2 14.2 5.2 12.1 7.6C10.5 9.4 8.5 10.1 8.5 13C8.5 14.9 10 16.5 11.9 16.5C13.6 16.5 14.9 15.2 14.9 13.5C14.9 12.4 14.3 11.4 13.5 10.8C15.8 11.1 17.5 13.1 17.5 15.5C17.5 18.5 15 21 12 21C8.7 21 6 18.3 6 15C6 11.2 9.2 8.8 11.2 6.2C12.4 4.6 13.5 2 13.5 2Z"/>
+            </svg>
+          </div>
+          <div>
+            <span class="font-display font-extrabold text-lg sm:text-xl tracking-tight text-white block leading-none">
+              Ander<span class="text-fire-500">Doner</span>
+            </span>
+            <span class="text-[11px] text-neutral-400 font-medium">аг. Ждановичи, ул. Парковая, 6</span>
+          </div>
+        </a>
+
+        <nav class="hidden lg:flex items-center gap-6 text-sm font-medium text-neutral-300">
+          <a href="#menu" class="hover:text-fire-400 transition">Меню</a>
+          <a href="#reviews" class="hover:text-fire-400 transition">Отзывы</a>
+          <a href="#contacts" class="hover:text-fire-400 transition">Самовывоз</a>
+          <button onclick="openAdminModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-coal-800 hover:bg-coal-700 text-amber-400 border border-amber-500/25 transition text-xs font-bold">
+            <span>⚙️ Админ-панель</span>
+          </button>
+        </nav>
+
+        <div class="flex items-center gap-2 sm:gap-3">
+          <button onclick="openAdminModal()" title="Админ-панель"
+                  class="lg:hidden p-2.5 rounded-xl bg-coal-800 hover:bg-coal-700 text-amber-400 border border-amber-500/25 text-xs font-bold">
+            ⚙️
+          </button>
+
+          <button onclick="toggleCart(true)" id="header-cart-btn"
+                  class="relative inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-fire-500 to-fire-600 hover:from-fire-400 hover:to-fire-500 text-white font-semibold text-sm shadow-lg shadow-fire-500/25 transition active:scale-95">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
+            <span class="hidden sm:inline">Корзина</span>
+            <span id="cart-badge-count" class="inline-flex items-center justify-center min-w-[22px] h-[22px] px-1.5 rounded-full bg-coal-950 text-amber-400 text-xs font-extrabold">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== КОМПАКТНЫЙ HERO ==================== -->
+  <section class="relative pt-24 pb-10 sm:pt-28 sm:pb-12 overflow-hidden">
+    <div class="absolute top-12 -left-24 w-80 h-80 bg-fire-500/15 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="glass-card rounded-3xl p-6 sm:p-8 flex flex-col lg:flex-row items-center justify-between gap-6">
+        <div class="space-y-3 text-center lg:text-left max-w-2xl">
+          <div class="inline-flex flex-wrap items-center justify-center lg:justify-start gap-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-400 text-xs font-bold">
+            <span>★ <span id="hero-rating-val">4.9</span> на Яндекс Картах</span>
+            <span class="text-neutral-400">•</span>
+            <span class="text-neutral-200">Только самовывоз без очереди</span>
+            <span id="sync-status-badge" class="px-2 py-0.5 rounded bg-coal-900 text-[11px] text-neutral-300">Локальный режим</span>
+          </div>
+
+          <h1 id="hero-main-title" class="font-display font-black text-2xl sm:text-4xl leading-tight text-white">
+            <span class="text-gradient-fire">AnderDoner</span> — сочный донер в Ждановичах
+          </h1>
+
+          <p id="hero-subtitle" class="text-sm sm:text-base text-neutral-300">
+            Мясо с гриля, хрустящий лаваш и фирменные соусы. Выберите категорию меню ниже, добавьте блюда в корзину и заберите по коду заказа.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-center gap-3 shrink-0">
+          <a href="#menu" class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-fire-500 to-fire-600 hover:from-fire-400 hover:to-fire-500 text-white font-bold text-sm shadow-lg shadow-fire-500/25 transition">
+            Перейти к категориям
+          </a>
+          <a href="https://yandex.ru/maps/org/anderdoner/168975024236?si=pd3g265k3cw7mgbwygg1v86v40" target="_blank" rel="noopener noreferrer"
+             class="px-5 py-3.5 rounded-2xl bg-coal-800 hover:bg-coal-700 text-amber-400 font-semibold text-sm border border-white/10 transition">
+            Яндекс Карты →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== МЕНЮ ПО ОТДЕЛЬНЫМ КАТЕГОРИЯМ ==================== -->
+  <section id="menu" class="py-10 sm:py-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-fire-400">Компактный выбор по разделам</span>
+          <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-white mt-1">
+            Категории <span class="text-gradient-fire">меню</span>
+          </h2>
+        </div>
+        <div class="text-xs sm:text-sm text-neutral-400">
+          Показана категория: <strong id="active-category-label" class="text-white">Донеры и Шаурма</strong>
+        </div>
       </div>
 
-      <p>Самовывоз: ${escapeHtml(order.address)}</p>
-      <p>К оплате: <b style="color:var(--accent)">${money(order.total)}</b> (${order.pay==='card'?'картой онлайн':'наличными'})</p>
-      <div class="modal-actions" style="justify-content:center">
-        <button class="go" id="doneBtn">Готово</button>
+      <div id="category-tabs" class="flex items-center gap-2.5 overflow-x-auto no-scrollbar pb-3 mb-6 border-b border-white/10"></div>
+      <div id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
+    </div>
+  </section>
+
+  <!-- ==================== ОТЗЫВЫ: РАЗДЕЛЕНИЕ НА САЙТ И ЯНДЕКС КАРТЫ ==================== -->
+  <section id="reviews" class="py-12 sm:py-16 bg-coal-950/70 border-y border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-amber-400">Раздельные ленты отзывов</span>
+          <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-white mt-1">
+            Отзывы <span class="text-amber-400">гостей</span>
+          </h2>
+          <p class="text-xs sm:text-sm text-neutral-400 mt-1">
+            Отзывы с сайта и отзывы с Яндекс Карт разделены. На сайте можно опубликовать только 1 отзыв.
+          </p>
+        </div>
+
+        <div class="inline-flex p-1 rounded-2xl bg-coal-850 border border-white/10 self-start md:self-auto">
+          <button id="tab-reviews-all" onclick="setReviewViewTab('all')"
+                  class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-fire-500 text-white transition">
+            Оба раздела
+          </button>
+          <button id="tab-reviews-site" onclick="setReviewViewTab('site')"
+                  class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-neutral-300 hover:text-white transition">
+            🌐 На сайте
+          </button>
+          <button id="tab-reviews-yandex" onclick="setReviewViewTab('yandex')"
+                  class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-neutral-300 hover:text-white transition">
+            🗺️ Яндекс Карты
+          </button>
+        </div>
       </div>
-    </div>`;
-  checkoutCard.querySelector('#doneBtn').onclick = () => { 
-    closeCheckout(); 
-    setTimeout(()=>{ checkoutCard.innerHTML=''; }, 300); 
-  };
-}
-checkoutModal.onclick = (e) => { if (e.target === checkoutModal) closeCheckout(); };
 
-async function sendOrderToTelegram(order) {
-  const itemsText = order.items.map(i => {
-    const p = findP(i.id);
-    return `• ${p.name} x${i.qty} = ${money(p.price * i.qty)}`;
-  }).join('\n');
-  const text = `🆕 Новый заказ №${order.no}\n\n${itemsText}\n\n💰 Итого: ${money(order.total)}\n👤 Имя: ${order.name}\n📞 Телефон: ${order.phone}\n💳 Оплата: ${order.pay === 'card' ? 'Картой онлайн' : 'Наличными'}\n${order.comment ? `📝 Комментарий: ${order.comment}\n` : ''}🕐 ${new Date().toLocaleString('ru-RU')}`;
-  const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ chat_id: TG_CHAT_ID, text, parse_mode: 'HTML' })
-  });
-  const data = await res.json();
-  if (!data.ok) throw new Error(data.description || 'Telegram API error');
-}
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-let toastTimer;
-function toast(msg) {
-  const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('on');
-  clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove('on'), 1800);
-}
+        <!-- Форма публикации 1 отзыва на сайте -->
+        <div class="lg:col-span-4 glass-card rounded-3xl p-6 border border-fire-500/25">
+          <div class="flex items-center justify-between mb-2">
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-400">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              Отзыв на сайте
+            </span>
+            <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-coal-800 text-neutral-300 border border-white/10">
+              Лимит: 1 отзыв
+            </span>
+          </div>
 
-/* ---------- INIT ---------- */
-loadSiteSettings();
-loadReviews();
-updateReviewBtn();
-renderCart();
-</script>
+          <h3 class="font-display font-bold text-lg text-white">Написать отзыв на сайте</h3>
+          <p class="text-xs text-neutral-400 mt-1">
+            Каждый гость может оставить на сайте только один отзыв.
+          </p>
+
+          <div id="review-already-submitted-box" class="hidden mt-4 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-xs text-emerald-200 space-y-1.5">
+            <div class="font-bold text-sm text-emerald-300">✅ Ваш отзыв на сайте уже опубликован</div>
+            <p class="text-emerald-100/80">Повторная публикация с этого устройства заблокирована правилом «1 отзыв на гостя».</p>
+          </div>
+
+          <form id="review-form" class="mt-4 space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-neutral-300 mb-1.5">Оценка *</label>
+              <div class="flex items-center gap-1" id="star-rating-selector">
+                <button type="button" data-star="1" class="star-btn text-2xl text-amber-400 hover:scale-110 transition">★</button>
+                <button type="button" data-star="2" class="star-btn text-2xl text-amber-400 hover:scale-110 transition">★</button>
+                <button type="button" data-star="3" class="star-btn text-2xl text-amber-400 hover:scale-110 transition">★</button>
+                <button type="button" data-star="4" class="star-btn text-2xl text-amber-400 hover:scale-110 transition">★</button>
+                <button type="button" data-star="5" class="star-btn text-2xl text-amber-400 hover:scale-110 transition">★</button>
+                <span id="selected-rating-label" class="ml-2 text-xs font-bold text-amber-400">5 / 5</span>
+              </div>
+              <input type="hidden" id="review-rating-value" value="5" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-neutral-300 mb-1">Ваше имя *</label>
+              <input type="text" id="review-author" required maxlength="40" placeholder="Например, Дмитрий"
+                     class="w-full px-3.5 py-2.5 rounded-xl bg-coal-950 border border-white/10 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-fire-500" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-neutral-300 mb-1">Текст отзыва *</label>
+              <textarea id="review-text" required rows="3" minlength="5" maxlength="400"
+                        placeholder="Как вам донер, соусы и самовывоз?"
+                        class="w-full px-3.5 py-2.5 rounded-xl bg-coal-950 border border-white/10 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-fire-500"></textarea>
+            </div>
+
+            <button type="submit" id="submit-review-btn"
+                    class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-fire-500 to-fire-600 hover:from-fire-400 hover:to-fire-500 text-white font-bold text-sm shadow-lg shadow-fire-500/25 transition">
+              Опубликовать отзыв
+            </button>
+          </form>
+        </div>
+
+        <!-- Правая колонка: Раздельные блоки отзывов -->
+        <div class="lg:col-span-8 space-y-8">
+
+          <div id="section-site-reviews" class="glass-card rounded-3xl p-6 border border-white/10">
+            <div class="flex flex-wrap items-center justify-between gap-3 pb-4 mb-5 border-b border-white/10">
+              <div class="flex items-center gap-2.5">
+                <span class="px-3 py-1 rounded-xl bg-fire-500/15 border border-fire-500/30 text-fire-400 text-xs font-extrabold uppercase tracking-wider">
+                  🌐 Отзывы на сайте
+                </span>
+                <span id="site-reviews-count-badge" class="text-xs text-neutral-400 font-semibold">0 шт.</span>
+              </div>
+              <span class="text-xs text-neutral-400">Публикуются гостями напрямую на сайте</span>
+            </div>
+            <div id="site-reviews-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+          </div>
+
+          <div id="section-yandex-reviews" class="glass-card rounded-3xl p-6 border border-[#FC3F1D]/30">
+            <div class="flex flex-wrap items-center justify-between gap-3 pb-4 mb-5 border-b border-white/10">
+              <div class="flex items-center gap-2.5">
+                <span class="px-3 py-1 rounded-xl bg-[#FC3F1D]/15 border border-[#FC3F1D]/40 text-[#FF7A63] text-xs font-extrabold uppercase tracking-wider">
+                  🗺️ Отзывы с Яндекс Карт
+                </span>
+                <span id="yandex-rating-summary" class="text-xs font-bold text-amber-400">★ 4.9</span>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <button onclick="syncYandexReviews()" id="sync-yandex-btn"
+                        class="px-3 py-1.5 rounded-xl bg-coal-800 hover:bg-coal-700 text-xs font-semibold text-neutral-200 border border-white/10 transition">
+                  🔄 Синхронизировать
+                </button>
+                <a href="https://yandex.ru/maps/org/anderdoner/168975024236?si=pd3g265k3cw7mgbwygg1v86v40" target="_blank" rel="noopener noreferrer"
+                   class="px-3 py-1.5 rounded-xl bg-[#FC3F1D] hover:bg-[#e23516] text-xs font-bold text-white transition">
+                  Открыть в Яндексе →
+                </a>
+              </div>
+            </div>
+            <div id="yandex-reviews-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== КОНТАКТЫ И САМОВЫВОЗ ==================== -->
+  <footer id="contacts" class="py-12 bg-coal-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="glass-card rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div class="space-y-1.5">
+          <div class="font-display font-extrabold text-xl text-white">
+            Ander<span class="text-fire-500">Doner</span> • <span class="text-amber-400 text-base">Только самовывоз</span>
+          </div>
+          <p class="text-sm text-neutral-300">📍 аг. Ждановичи, ул. Парковая, 6</p>
+          <p id="footer-hours-line" class="text-xs text-neutral-400">🕒 Ежедневно: 10:00 – 23:00 • Выдача по коду заказа</p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <a id="footer-phone-link" href="tel:+375291234567" class="px-4 py-2.5 rounded-xl bg-coal-800 hover:bg-coal-700 text-sm font-semibold text-white border border-white/10 transition">
+            +375 (29) 123-45-67
+          </a>
+          <button onclick="openAdminModal()" class="px-4 py-2.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-sm font-bold text-amber-400 border border-amber-500/30 transition">
+            ⚙️ Админ-панель
+          </button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== МОДАЛЬНОЕ ОКНО: АДМИН-ПАНЕЛЬ ==================== -->
+  <div id="admin-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+    <div class="glass w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl border border-white/15 p-6 sm:p-7 space-y-6">
+
+      <div class="flex items-center justify-between border-b border-white/10 pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-amber-400">Управление сайтом</span>
+          <h3 class="font-display font-extrabold text-xl sm:text-2xl text-white">Админ-панель AnderDoner</h3>
+        </div>
+        <button onclick="closeAdminModal()" class="w-10 h-10 rounded-xl bg-coal-800 hover:bg-coal-700 text-neutral-300 flex items-center justify-center text-lg">✕</button>
+      </div>
+
+      <div id="admin-login-box" class="max-w-sm mx-auto py-8 space-y-4 text-center">
+        <div class="text-4xl">🔐</div>
+        <h4 class="font-display font-bold text-lg text-white">Вход в панель администратора</h4>
+        <p class="text-xs text-neutral-400">Введите PIN-код для редактирования меню, настроек и отзывов.</p>
+        <input type="password" id="admin-pin-input" maxlength="12" placeholder="PIN-код (по умолчанию 2026)"
+               class="w-full px-4 py-3 rounded-xl bg-coal-950 border border-white/10 text-center text-white text-sm focus:outline-none focus:border-amber-400" />
+        <button onclick="unlockAdminPanel()" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-coal-950 font-extrabold text-sm transition">
+          Войти в админку
+        </button>
+      </div>
+
+      <div id="admin-workspace" class="hidden space-y-6">
+        <div class="flex flex-wrap gap-2 border-b border-white/10 pb-3">
+          <button onclick="switchAdminTab('menu')" id="adm-tab-menu" class="adm-tab px-4 py-2 rounded-xl text-xs font-bold bg-fire-500 text-white">
+            🍽️ Меню и цены
+          </button>
+          <button onclick="switchAdminTab('site')" id="adm-tab-site" class="adm-tab px-4 py-2 rounded-xl text-xs font-semibold bg-coal-800 text-neutral-300">
+            ✏️ Тексты и контакты
+          </button>
+          <button onclick="switchAdminTab('reviews')" id="adm-tab-reviews" class="adm-tab px-4 py-2 rounded-xl text-xs font-semibold bg-coal-800 text-neutral-300">
+            💬 Отзывы (Сайт + Яндекс)
+          </button>
+        </div>
+
+        <!-- Меню -->
+        <div id="adm-panel-menu" class="space-y-5">
+          <form id="admin-add-item-form" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 p-4 rounded-2xl bg-coal-900 border border-white/10">
+            <input type="text" id="adm-item-name" required placeholder="Название блюда"
+                   class="px-3 py-2.5 rounded-xl bg-coal-950 border border-white/10 text-xs text-white" />
+            <select id="adm-item-cat" class="px-3 py-2.5 rounded-xl bg-coal-950 border border-white/10 text-xs text-white">
+              <option value="doner">Донеры и Шаурма</option>
+              <option value="combo">Комбо-наборы</option>
+              <option value="snacks">Закуски и Фри</option>
+              <option value="addons">Добавки и Соусы</option>
+              <option value="drinks">Напитки</option>
+            </select>
+            <input type="number" step="0.1" min="0.5" id="adm-item-price" required placeholder="Цена, BYN"
+                   class="px-3 py-2.5 rounded-xl bg-coal-950 border border-white/10 text-xs text-white" />
+            <input type="text" id="adm-item-weight" placeholder="Вес / объем (420 г)"
+                   class="px-3 py-2.5 rounded-xl bg-coal-950 border border-white/10 text-xs text-white" />
+            <button type="submit" class="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-coal-950 font-extrabold text-xs">
+              + Добавить блюдо
+            </button>
+            <input type="text" id="adm-item-desc" placeholder="Краткое описание состава"
+                   class="sm:col-span-2 lg:col-span-5 px-3 py-2 rounded-xl bg-coal-950 border border-white/10 text-xs text-white" />
+          </form>
+
+          <div id="admin-menu-list" class="space-y-2 max-h-80 overflow-y-auto pr-1"></div>
+        </div>
+
+        <!-- Настройки сайта -->
+        <div id="adm-panel-site" class="hidden space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs text-neutral-400 mb-1">Заголовок в шапке / баннере</label>
+              <input type="text" id="adm-hero-title" class="w-full px-3.5 py-2.5 rounded-xl bg-coal-950 border border-white/10 text-sm text-white" />
+            </div>
+            <div>
+              <label class="block text-xs text-neutral-400 mb-1">Часы работы</label>
+              <input type="text" id="adm-hours" class="w-full px-3.5 py-2.5 rounded-xl bg-coal-950 border border-white/10 text-sm text-white" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs text-neutral-400 mb-1">Подзаголовок</label>
+              <input type="text" id="adm-hero-subtitle" class="w-full px-3.5 py-2.5 rounded-xl bg-coal-950 border border-white/10 text-sm text-white" />
+            </div>
+            <div>
+              <label class="block text-xs text-neutral-400 mb-1">Телефон</label>
+              <input type="text" id="adm-phone" class="w-full px-3.5 py-2.5 rounded-xl bg-coal-950 border border-white/10 text-sm text-white" />
+            </div>
+            <div>
+              <label class="block text-xs text-neutral-400 mb-1">Новый PIN админа</label>
+              <input type="text" id="adm-new-pin" class="w-full px-3.5 py-2.5 rounded-xl bg-coal-950 border border-white/10 text-sm text-white" />
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-3 pt-2">
+            <button onclick="saveSiteSettingsFromAdmin()" class="px-5 py-2.5 rounded-xl bg-fire-500 hover:bg-fire-400 text-white font-bold text-xs">
+              Сохранить настройки
+            </button>
+            <button onclick="resetAllDefaultData()" class="px-4 py-2.5 rounded-xl bg-coal-800 hover:bg-coal-700 text-rose-400 font-semibold text-xs border border-rose-500/20">
+              Сбросить к заводским настройкам
+            </button>
+          </div>
+        </div>
+
+        <!-- Отзывы -->
+        <div id="adm-panel-reviews" class="hidden space-y-5">
+          <form id="admin-add-yandex-review-form" class="grid grid-cols-1 sm:grid-cols-4 gap-3 p-4 rounded-2xl bg-coal-900 border border-white/10">
+            <input type="text" id="adm-yr-author" required placeholder="Имя с Яндекс Карт"
+                   class="px-3 py-2 rounded-xl bg-coal-950 border border-white/10 text-xs text-white" />
+            <select id="adm-yr-rating" class="px-3 py-2 rounded-xl bg-coal-950 border border-white/10 text-xs text-white">
+              <option value="5">5 ★</option>
+              <option value="4">4 ★</option>
+              <option value="3">3 ★</option>
+            </select>
+            <input type="text" id="adm-yr-text" required placeholder="Текст отзыва с Яндекс Карт"
+                   class="sm:col-span-2 px-3 py-2 rounded-xl bg-coal-950 border border-white/10 text-xs text-white" />
+            <button type="submit" class="sm:col-span-4 py-2.5 rounded-xl bg-[#FC3F1D] hover:bg-[#e23516] text-white font-bold text-xs">
+              + Добавить отзыв в раздел «Яндекс Карты»
+            </button>
+          </form>
+
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-neutral-400">Модерация отзывов на сайте:</span>
+            <button onclick="resetMyReviewLimit()" class="px-3 py-1.5 rounded-xl bg-coal-800 hover:bg-coal-700 text-xs text-amber-400 font-semibold border border-white/10">
+              Разрешить мне оставить ещё 1 отзыв на сайте
+            </button>
+          </div>
+
+          <div id="admin-reviews-list" class="space-y-2 max-h-72 overflow-y-auto"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== КОРЗИНА (DRAWER) ==================== -->
+  <div id="cart-backdrop" onclick="toggleCart(false)" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs hidden"></div>
+  <aside id="cart-drawer" class="fixed top-0 right-0 bottom-0 z-50 w-full max-w-md bg-coal-900 border-l border-white/10 translate-x-full transition-transform duration-300 flex flex-col">
+    <div class="p-5 border-b border-white/10 flex items-center justify-between">
+      <div>
+        <h3 class="font-display font-bold text-lg text-white">Ваш заказ</h3>
+        <p class="text-xs text-neutral-400">Самовывоз • Без очереди по коду</p>
+      </div>
+      <button onclick="toggleCart(false)" class="w-9 h-9 rounded-xl bg-coal-800 hover:bg-coal-700 text-neutral-300 flex items-center justify-center">✕</button>
+    </div>
+
+    <div id="cart-items-container" class="flex-1 overflow-y-auto p-5 space-y-3"></div>
+
+    <div class="p-5 border-t border-white/10 space-y-4 bg-coal-950/70">
+      <div class="flex items-center justify-between text-base font-bold">
+        <span class="text-neutral-300">Итого к оплате:</span>
+        <span id="cart-total-price" class="font-display text-xl text-amber-400">0.00 BYN</span>
+      </div>
+
+      <div class="space-y-2.5">
+        <input type="text" id="checkout-name" placeholder="Ваше имя (необязательно)"
+               class="w-full px-3.5 py-2.5 rounded-xl bg-coal-900 border border-white/10 text-sm text-white placeholder-neutral-500" />
+        <input type="tel" id="checkout-phone" placeholder="Телефон, например +375 29..."
+               class="w-full px-3.5 py-2.5 rounded-xl bg-coal-900 border border-white/10 text-sm text-white placeholder-neutral-500" />
+        <input type="text" id="checkout-comment" placeholder="Комментарий к заказу (без лука, острее и т.д.)"
+               class="w-full px-3.5 py-2.5 rounded-xl bg-coal-900 border border-white/10 text-sm text-white placeholder-neutral-500" />
+      </div>
+
+      <button onclick="submitOrderToTelegram()" id="submit-order-btn"
+              class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-fire-500 to-fire-600 hover:from-fire-400 hover:to-fire-500 text-white font-extrabold text-sm shadow-lg shadow-fire-500/25 transition">
+        Оформить самовывоз
+      </button>
+
+      <div id="order-success-box" class="hidden p-4 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-center space-y-1">
+        <div class="text-xs font-bold uppercase text-emerald-300">Заказ принят! Ваш код выдачи:</div>
+        <div id="order-pickup-code" class="font-display font-black text-2xl text-amber-400 tracking-wider">AD-0000</div>
+      </div>
+    </div>
+  </aside>
+
+  <div id="toast-container" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] pointer-events-none flex flex-col gap-2"></div>
+
+  <!-- ==================== ЛОГИКА ПРИЛОЖЕНИЯ ==================== -->
+  <script>
+    const CATEGORIES = [
+      { id: 'doner', label: '🌯 Донеры и Шаурма' },
+      { id: 'combo', label: '🔥 Комбо-наборы' },
+      { id: 'snacks', label: '🍟 Закуски и Фри' },
+      { id: 'addons', label: '🧀 Добавки и Соусы' },
+      { id: 'drinks', label: '🥤 Напитки' }
+    ];
+
+    const DEFAULT_MENU = [
+      { id: 1, category: 'doner', name: 'Классический Донер с курицей', weight: '420 г', price: 12.50, badge: 'ХИТ', desc: 'Сочное куриное бедро с гриля, свежие огурцы, томаты, капуста и фирменный соус в лаваше.' },
+      { id: 2, category: 'doner', name: 'Фирменный Говяжий Донер', weight: '440 г', price: 14.50, badge: 'ТОП', desc: 'Мраморная говядина с вертела, красный лук, томаты и соус барбекю-чеснок.' },
+      { id: 3, category: 'doner', name: 'Сырный Донер с чеддером', weight: '450 г', price: 14.00, badge: 'СЫР', desc: 'Курица гриль, тягучий сырный соус, моцарелла и хрустящий лаваш.' },
+      { id: 4, category: 'combo', name: 'Комбо на одного', weight: '670 г', price: 17.50, badge: '-15%', desc: 'Классический донер с курицей + картофель фри + напиток 0.33 л.' },
+      { id: 5, category: 'combo', name: 'Дуэт «Ждановичи»', weight: '1150 г', price: 31.00, badge: 'ВЫГОДНО', desc: '2 фирменных донера на выбор + большая порция фри + 2 фирменных соуса.' },
+      { id: 6, category: 'snacks', name: 'Картофель фри по-деревенски', weight: '160 г', price: 5.50, badge: '', desc: 'Хрустящий золотистый картофель с ароматными специями.' },
+      { id: 7, category: 'snacks', name: 'Наггетсы куриные (6 шт.)', weight: '150 г', price: 6.50, badge: '', desc: 'Нежное куриное филе в хрустящей панировке.' },
+      { id: 8, category: 'addons', name: 'Двойное мясо на гриле', weight: '100 г', price: 4.50, badge: '', desc: 'Увеличиваем мясную начинку в вашем донере.' },
+      { id: 9, category: 'addons', name: 'Фирменный соус в баночке', weight: '50 г', price: 2.00, badge: '', desc: 'Чесночно-йогуртовый, сырный или острый томатный соус.' },
+      { id: 10, category: 'drinks', name: 'Лимонад / Кола 0.5 л', weight: '500 мл', price: 3.50, badge: '', desc: 'Охлажденный безалкогольный напиток к вашему заказу.' }
+    ];
+
+    const DEFAULT_SITE_SETTINGS = {
+      heroTitle: 'AnderDoner — сочный донер в Ждановичах',
+      heroSubtitle: 'Мясо с гриля, хрустящий лаваш и фирменные соусы. Выберите категорию меню ниже, добавьте блюда в корзину и заберите по коду заказа.',
+      workingHours: BUSINESS_CONFIG.workingHours,
+      phoneDisplay: BUSINESS_CONFIG.phoneDisplay,
+      adminPin: BUSINESS_CONFIG.defaultAdminPin
+    };
+
+    const DEFAULT_SITE_REVIEWS = [
+      { id: 'site-1', source: 'site', author: 'Артём К.', rating: 5, text: 'Брал классический с курицей — сочный, лаваш не размокает, забрал ровно через 15 минут по коду.', date: 'Сегодня' },
+      { id: 'site-2', source: 'site', author: 'Марина Л.', rating: 5, text: 'Сырный донер топ! Удобно, что можно выбрать категорию и сразу оформить самовывоз без очереди.', date: 'Вчера' }
+    ];
+
+    const DEFAULT_YANDEX_REVIEWS = [
+      { id: 'ya-1', source: 'yandex', author: 'Павел С.', rating: 5, text: 'Отличная точка в Ждановичах на Парковой, 6. Мясо реально с огня, честный вес, 5 звёзд на Яндексе.', date: 'Яндекс Карты' },
+      { id: 'ya-2', source: 'yandex', author: 'Екатерина В.', rating: 5, text: 'Всегда свежие овощи и вкусные соусы. Постоянно заезжаем по пути с Дроздов за самовывозом.', date: 'Яндекс Карты' },
+      { id: 'ya-3', source: 'yandex', author: 'Илья М.', rating: 5, text: 'Взяли комбо на двоих — наелись от души. Быстрая выдача и приятный персонал.', date: 'Яндекс Карты' }
+    ];
+
+    let state = {
+      activeCategory: 'doner',
+      reviewTab: 'all',
+      menu: readLocalCache('menu', DEFAULT_MENU),
+      siteSettings: readLocalCache('siteSettings', DEFAULT_SITE_SETTINGS),
+      siteReviews: readLocalCache('siteReviews', DEFAULT_SITE_REVIEWS),
+      yandexReviews: readLocalCache('yandexReviews', DEFAULT_YANDEX_REVIEWS),
+      cart: JSON.parse(localStorage.getItem('anderdoner_cart_v1') || '[]'),
+      adminUnlocked: false
+    };
+
+    const USER_REVIEW_LOCK_KEY = 'anderdoner_single_site_review_submitted_v1';
+
+    function hasUserAlreadySubmittedSiteReview() {
+      return localStorage.getItem(USER_REVIEW_LOCK_KEY) === '1';
+    }
+
+    function markUserSubmittedSiteReview() {
+      localStorage.setItem(USER_REVIEW_LOCK_KEY, '1');
+    }
+
+    function showToast(message) {
+      const container = document.getElementById('toast-container');
+      const el = document.createElement('div');
+      el.className = 'px-4 py-2.5 rounded-2xl bg-coal-800 text-white text-xs sm:text-sm font-semibold border border-fire-500/40 shadow-2xl';
+      el.textContent = message;
+      container.appendChild(el);
+      setTimeout(() => el.remove(), 2600);
+    }
+
+    function applySiteSettings() {
+      const s = state.siteSettings;
+      document.getElementById('hero-main-title').innerHTML = `<span class="text-gradient-fire">AnderDoner</span> — ${escapeHtml((s.heroTitle || '').replace(/^AnderDoner\s*[—-]\s*/i, ''))}`;
+      document.getElementById('hero-subtitle').textContent = s.heroSubtitle || '';
+      document.getElementById('footer-hours-line').textContent = `🕒 ${s.workingHours || ''} • Выдача по коду заказа`;
+      const phoneLink = document.getElementById('footer-phone-link');
+      phoneLink.textContent = s.phoneDisplay || '';
+      phoneLink.href = `tel:${(s.phoneDisplay || '').replace(/[^+\d]/g, '')}`;
+    }
+
+    function renderCategoryTabs() {
+      const tabsEl = document.getElementById('category-tabs');
+      tabsEl.innerHTML = CATEGORIES.map(cat => {
+        const isActive = state.activeCategory === cat.id;
+        return `
+          <button onclick="selectCategory('${cat.id}')"
+                  class="shrink-0 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition ${
+                    isActive
+                      ? 'bg-fire-500 text-white shadow-lg shadow-fire-500/25'
+                      : 'bg-coal-850 text-neutral-300 hover:bg-coal-800 border border-white/10'
+                  }">
+            ${cat.label}
+          </button>
+        `;
+      }).join('');
+
+      const activeObj = CATEGORIES.find(c => c.id === state.activeCategory) || CATEGORIES[0];
+      document.getElementById('active-category-label').textContent = activeObj.label.replace(/^[^\s]+\s/, '');
+    }
+
+    function selectCategory(categoryId) {
+      state.activeCategory = categoryId;
+      renderCategoryTabs();
+      renderMenuGrid();
+    }
+
+    function renderMenuGrid() {
+      const grid = document.getElementById('menu-grid');
+      const items = state.menu.filter(item => item.category === state.activeCategory);
+
+      if (!items.length) {
+        grid.innerHTML = `<div class="col-span-full glass-card rounded-2xl p-8 text-center text-neutral-400 text-sm">В этой категории пока нет позиций. Добавьте их через админ-панель.</div>`;
+        return;
+      }
+
+      grid.innerHTML = items.map(item => `
+        <div class="glass-card rounded-2xl p-5 flex flex-col justify-between gap-4">
+          <div>
+            <div class="flex items-start justify-between gap-2 mb-2">
+              <h3 class="font-display font-bold text-base text-white leading-snug">${escapeHtml(item.name)}</h3>
+              ${item.badge ? `<span class="shrink-0 px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-400 text-[10px] font-extrabold uppercase">${escapeHtml(item.badge)}</span>` : ''}
+            </div>
+            <p class="text-xs text-neutral-400 leading-relaxed">${escapeHtml(item.desc || '')}</p>
+          </div>
+
+          <div class="pt-3 border-t border-white/10 flex items-center justify-between gap-2">
+            <div>
+              <div class="font-display font-extrabold text-base text-amber-400">${Number(item.price).toFixed(2)} BYN</div>
+              <div class="text-[11px] text-neutral-500">${escapeHtml(item.weight || '')}</div>
+            </div>
+            <button onclick="addToCart(${item.id})"
+                    class="px-4 py-2 rounded-xl bg-fire-500 hover:bg-fire-400 text-white font-bold text-xs shadow-md shadow-fire-500/20 transition active:scale-95">
+              + В корзину
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addToCart(itemId) {
+      const item = state.menu.find(m => m.id === itemId);
+      if (!item) return;
+
+      const existing = state.cart.find(c => c.id === itemId);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        state.cart.push({ id: item.id, name: item.name, price: Number(item.price), qty: 1 });
+      }
+      saveCart();
+      renderCart();
+      showToast(`Добавлено: ${item.name}`);
+    }
+
+    function changeCartQty(itemId, delta) {
+      const idx = state.cart.findIndex(c => c.id === itemId);
+      if (idx === -1) return;
+      state.cart[idx].qty += delta;
+      if (state.cart[idx].qty <= 0) {
+        state.cart.splice(idx, 1);
+      }
+      saveCart();
+      renderCart();
+    }
+
+    function saveCart() {
+      localStorage.setItem('anderdoner_cart_v1', JSON.stringify(state.cart));
+    }
+
+    function toggleCart(open) {
+      const backdrop = document.getElementById('cart-backdrop');
+      const drawer = document.getElementById('cart-drawer');
+      if (open) {
+        backdrop.classList.remove('hidden');
+        requestAnimationFrame(() => drawer.classList.remove('translate-x-full'));
+      } else {
+        drawer.classList.add('translate-x-full');
+        setTimeout(() => backdrop.classList.add('hidden'), 250);
+      }
+    }
+
+    function renderCart() {
+      const totalCount = state.cart.reduce((acc, item) => acc + item.qty, 0);
+      const totalSum = state.cart.reduce((acc, item) => acc + item.qty * Number(item.price), 0);
+
+      document.getElementById('cart-badge-count').textContent = totalCount;
+      document.getElementById('cart-total-price').textContent = `${totalSum.toFixed(2)} BYN`;
+
+      const container = document.getElementById('cart-items-container');
+      if (!state.cart.length) {
+        container.innerHTML = `<div class="text-center py-12 text-neutral-400 text-sm">Корзина пока пуста. Выберите блюдо в меню.</div>`;
+        return;
+      }
+
+      container.innerHTML = state.cart.map(item => `
+        <div class="p-3.5 rounded-2xl bg-coal-850 border border-white/10 flex items-center justify-between gap-3">
+          <div>
+            <div class="text-sm font-bold text-white">${escapeHtml(item.name)}</div>
+            <div class="text-xs text-amber-400 font-semibold">${(item.price * item.qty).toFixed(2)} BYN</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="changeCartQty(${item.id}, -1)" class="w-7 h-7 rounded-lg bg-coal-700 text-white font-bold text-sm">−</button>
+            <span class="text-sm font-bold w-5 text-center">${item.qty}</span>
+            <button onclick="changeCartQty(${item.id}, 1)" class="w-7 h-7 rounded-lg bg-coal-700 text-white font-bold text-sm">+</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function submitOrderToTelegram() {
+      if (!state.cart.length) {
+        showToast('Корзина пуста');
+        return;
+      }
+
+      const code = 'AD-' + Math.floor(1000 + Math.random() * 9000);
+      const name = document.getElementById('checkout-name').value.trim();
+      const phone = document.getElementById('checkout-phone').value.trim();
+      const comment = document.getElementById('checkout-comment').value.trim();
+      const totalSum = state.cart.reduce((acc, item) => acc + item.qty * Number(item.price), 0);
+
+      const lines = state.cart.map(i => `• ${i.name} × ${i.qty} — ${(i.price * i.qty).toFixed(2)} BYN`).join('\n');
+
+      // Адрес точки из сообщения намеренно убран, так как точка одна
+      const messageText = [
+        `🔥 НОВЫЙ ЗАКАЗ (САМОВЫВОЗ) — Код: ${code}`,
+        ``,
+        lines,
+        ``,
+        `💰 Итого: ${totalSum.toFixed(2)} BYN`,
+        name ? `👤 Гость: ${name}` : null,
+        phone ? `📞 Телефон: ${phone}` : null,
+        comment ? `💬 Комментарий: ${comment}` : null
+      ].filter(Boolean).join('\n');
+
+      const btn = document.getElementById('submit-order-btn');
+      btn.disabled = true;
+      btn.textContent = 'Отправка...';
+
+      try {
+        await fetch(`https://api.telegram.org/bot${BUSINESS_CONFIG.telegramBotToken}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: BUSINESS_CONFIG.telegramChatId,
+            text: messageText
+          })
+        });
+      } catch (e) {
+        console.warn('Telegram send warning:', e);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Оформить самовывоз';
+      }
+
+      document.getElementById('order-pickup-code').textContent = code;
+      document.getElementById('order-success-box').classList.remove('hidden');
+      state.cart = [];
+      saveCart();
+      renderCart();
+      showToast(`Заказ оформлен! Код: ${code}`);
+    }
+
+    function setReviewViewTab(tab) {
+      state.reviewTab = tab;
+      ['all', 'site', 'yandex'].forEach(t => {
+        const btn = document.getElementById(`tab-reviews-${t}`);
+        if (t === tab) {
+          btn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-fire-500 text-white transition';
+        } else {
+          btn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-neutral-300 hover:text-white transition';
+        }
+      });
+
+      document.getElementById('section-site-reviews').classList.toggle('hidden', tab === 'yandex');
+      document.getElementById('section-yandex-reviews').classList.toggle('hidden', tab === 'site');
+    }
+
+    function renderReviews() {
+      const siteList = document.getElementById('site-reviews-list');
+      const yaList = document.getElementById('yandex-reviews-list');
+
+      document.getElementById('site-reviews-count-badge').textContent = `${state.siteReviews.length} шт.`;
+
+      siteList.innerHTML = state.siteReviews.length
+        ? state.siteReviews.map(r => `
+            <div class="p-4 rounded-2xl bg-coal-900 border border-fire-500/20 space-y-2">
+              <div class="flex items-center justify-between gap-2">
+                <span class="font-bold text-sm text-white">${escapeHtml(r.author)}</span>
+                <span class="text-amber-400 text-xs">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</span>
+              </div>
+              <p class="text-xs text-neutral-300 leading-relaxed">${escapeHtml(r.text)}</p>
+              <div class="flex items-center justify-between text-[11px] text-neutral-500 pt-1">
+                <span class="text-fire-400 font-semibold">🌐 С сайта</span>
+                <span>${escapeHtml(r.date || 'Недавно')}</span>
+              </div>
+            </div>
+          `).join('')
+        : `<div class="col-span-full text-xs text-neutral-400 py-4">Отзывов на сайте пока нет. Будьте первым!</div>`;
+
+      yaList.innerHTML = state.yandexReviews.length
+        ? state.yandexReviews.map(r => `
+            <div class="p-4 rounded-2xl bg-coal-900 border border-[#FC3F1D]/25 space-y-2">
+              <div class="flex items-center justify-between gap-2">
+                <span class="font-bold text-sm text-white">${escapeHtml(r.author)}</span>
+                <span class="text-amber-400 text-xs">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</span>
+              </div>
+              <p class="text-xs text-neutral-300 leading-relaxed">${escapeHtml(r.text)}</p>
+              <div class="flex items-center justify-between text-[11px] text-neutral-500 pt-1">
+                <span class="text-[#FF7A63] font-semibold">🗺️ Яндекс Карты</span>
+                <span>${escapeHtml(r.date || 'Яндекс Карты')}</span>
+              </div>
+            </div>
+          `).join('')
+        : `<div class="col-span-full text-xs text-neutral-400 py-4">Нет загруженных отзывов с Яндекс Карт.</div>`;
+
+      const all = [...state.siteReviews, ...state.yandexReviews];
+      const avg = all.length
+        ? (all.reduce((acc, r) => acc + Number(r.rating || 5), 0) / all.length).toFixed(1)
+        : '4.9';
+      document.getElementById('hero-rating-val').textContent = avg;
+      document.getElementById('yandex-rating-summary').textContent = `★ ${avg} (${state.yandexReviews.length} в ленте)`;
+
+      updateReviewFormLockState();
+    }
+
+    function updateReviewFormLockState() {
+      const form = document.getElementById('review-form');
+      const lockBox = document.getElementById('review-already-submitted-box');
+      const locked = hasUserAlreadySubmittedSiteReview();
+      form.classList.toggle('hidden', locked);
+      lockBox.classList.toggle('hidden', !locked);
+    }
+
+    function syncYandexReviews() {
+      const btn = document.getElementById('sync-yandex-btn');
+      btn.textContent = '⏳ Синхронизация...';
+      setTimeout(() => {
+        syncStateToBackend('yandexReviews', state.yandexReviews);
+        renderReviews();
+        btn.textContent = '🔄 Синхронизировать';
+        showToast('Лента отзывов Яндекс Карт синхронизирована');
+      }, 450);
+    }
+
+    document.querySelectorAll('.star-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const val = Number(btn.dataset.star);
+        document.getElementById('review-rating-value').value = val;
+        document.getElementById('selected-rating-label').textContent = `${val} / 5`;
+        document.querySelectorAll('.star-btn').forEach(b => {
+          const s = Number(b.dataset.star);
+          b.classList.toggle('text-amber-400', s <= val);
+          b.classList.toggle('text-neutral-600', s > val);
+        });
+      });
+    });
+
+    document.getElementById('review-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (hasUserAlreadySubmittedSiteReview()) {
+        updateReviewFormLockState();
+        showToast('На сайте можно оставить только один отзыв');
+        return;
+      }
+
+      const author = document.getElementById('review-author').value.trim();
+      const text = document.getElementById('review-text').value.trim();
+      const rating = Number(document.getElementById('review-rating-value').value || 5);
+      if (author.length < 2 || text.length < 5) return;
+
+      const newReview = {
+        id: 'site-' + Date.now(),
+        source: 'site',
+        author,
+        rating,
+        text,
+        date: new Date().toLocaleDateString('ru-RU')
+      };
+
+      state.siteReviews.unshift(newReview);
+      markUserSubmittedSiteReview();
+      await syncStateToBackend('siteReviews', state.siteReviews);
+      renderReviews();
+      showToast('Спасибо! Ваш отзыв опубликован');
+    });
+
+    // ==================== АДМИН-ПАНЕЛЬ ====================
+    function openAdminModal() {
+      const modal = document.getElementById('admin-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      if (state.adminUnlocked) {
+        showAdminWorkspace();
+      }
+    }
+
+    function closeAdminModal() {
+      const modal = document.getElementById('admin-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function unlockAdminPanel() {
+      const pin = document.getElementById('admin-pin-input').value.trim();
+      const expectedPin = state.siteSettings.adminPin || BUSINESS_CONFIG.defaultAdminPin;
+      if (pin === expectedPin) {
+        state.adminUnlocked = true;
+        showAdminWorkspace();
+        showToast('Доступ в админ-панель открыт');
+      } else {
+        showToast('Неверный PIN-код');
+      }
+    }
+
+    function showAdminWorkspace() {
+      document.getElementById('admin-login-box').classList.add('hidden');
+      document.getElementById('admin-workspace').classList.remove('hidden');
+      fillAdminSettingsInputs();
+      renderAdminMenuList();
+      renderAdminReviewsList();
+    }
+
+    function switchAdminTab(tab) {
+      ['menu', 'site', 'reviews'].forEach(t => {
+        document.getElementById(`adm-panel-${t}`).classList.toggle('hidden', t !== tab);
+        const btn = document.getElementById(`adm-tab-${t}`);
+        btn.className = t === tab
+          ? 'adm-tab px-4 py-2 rounded-xl text-xs font-bold bg-fire-500 text-white'
+          : 'adm-tab px-4 py-2 rounded-xl text-xs font-semibold bg-coal-800 text-neutral-300';
+      });
+    }
+
+    document.getElementById('admin-add-item-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('adm-item-name').value.trim();
+      const category = document.getElementById('adm-item-cat').value;
+      const price = parseFloat(document.getElementById('adm-item-price').value);
+      const weight = document.getElementById('adm-item-weight').value.trim();
+      const desc = document.getElementById('adm-item-desc').value.trim();
+      if (!name || isNaN(price) || price <= 0) return;
+
+      state.menu.unshift({
+        id: Date.now(),
+        category,
+        name,
+        price,
+        weight: weight || '350 г',
+        badge: 'НОВИНКА',
+        desc
+      });
+      await syncStateToBackend('menu', state.menu);
+      state.activeCategory = category;
+      renderCategoryTabs();
+      renderMenuGrid();
+      renderAdminMenuList();
+      e.target.reset();
+      showToast('Блюдо добавлено и сохранено');
+    });
+
+    function renderAdminMenuList() {
+      const box = document.getElementById('admin-menu-list');
+      box.innerHTML = state.menu.map(item => `
+        <div class="p-3 rounded-xl bg-coal-900 border border-white/10 flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div>
+            <strong class="text-white">${escapeHtml(item.name)}</strong>
+            <span class="text-neutral-400">(${escapeHtml(item.category)})</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <input type="number" step="0.1" value="${item.price}" id="price-input-${item.id}"
+                   class="w-20 px-2 py-1 rounded-lg bg-coal-950 border border-white/10 text-amber-400 font-bold" />
+            <button onclick="updateMenuPrice(${item.id})" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold">Цена</button>
+            <button onclick="deleteMenuItem(${item.id})" class="px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-300 font-bold">Удалить</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function updateMenuPrice(id) {
+      const val = parseFloat(document.getElementById(`price-input-${id}`).value);
+      if (isNaN(val) || val <= 0) return;
+      const item = state.menu.find(m => m.id === id);
+      if (!item) return;
+      item.price = val;
+      await syncStateToBackend('menu', state.menu);
+      renderMenuGrid();
+      showToast('Цена обновлена');
+    }
+
+    async function deleteMenuItem(id) {
+      state.menu = state.menu.filter(m => m.id !== id);
+      await syncStateToBackend('menu', state.menu);
+      renderMenuGrid();
+      renderAdminMenuList();
+      showToast('Позиция удалена');
+    }
+
+    function fillAdminSettingsInputs() {
+      document.getElementById('adm-hero-title').value = state.siteSettings.heroTitle || '';
+      document.getElementById('adm-hero-subtitle').value = state.siteSettings.heroSubtitle || '';
+      document.getElementById('adm-hours').value = state.siteSettings.workingHours || '';
+      document.getElementById('adm-phone').value = state.siteSettings.phoneDisplay || '';
+      document.getElementById('adm-new-pin').value = state.siteSettings.adminPin || BUSINESS_CONFIG.defaultAdminPin;
+    }
+
+    async function saveSiteSettingsFromAdmin() {
+      state.siteSettings = {
+        heroTitle: document.getElementById('adm-hero-title').value.trim() || DEFAULT_SITE_SETTINGS.heroTitle,
+        heroSubtitle: document.getElementById('adm-hero-subtitle').value.trim() || DEFAULT_SITE_SETTINGS.heroSubtitle,
+        workingHours: document.getElementById('adm-hours').value.trim() || DEFAULT_SITE_SETTINGS.workingHours,
+        phoneDisplay: document.getElementById('adm-phone').value.trim() || DEFAULT_SITE_SETTINGS.phoneDisplay,
+        adminPin: document.getElementById('adm-new-pin').value.trim() || BUSINESS_CONFIG.defaultAdminPin
+      };
+      await syncStateToBackend('siteSettings', state.siteSettings);
+      applySiteSettings();
+      showToast('Настройки сохранены');
+    }
+
+    document.getElementById('admin-add-yandex-review-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const author = document.getElementById('adm-yr-author').value.trim();
+      const rating = Number(document.getElementById('adm-yr-rating').value);
+      const text = document.getElementById('adm-yr-text').value.trim();
+      if (!author || !text) return;
+
+      state.yandexReviews.unshift({
+        id: 'ya-' + Date.now(),
+        source: 'yandex',
+        author,
+        rating,
+        text,
+        date: 'Яндекс Карты'
+      });
+      await syncStateToBackend('yandexReviews', state.yandexReviews);
+      renderReviews();
+      renderAdminReviewsList();
+      e.target.reset();
+      showToast('Отзыв добавлен в блок Яндекс Карт');
+    });
+
+    function renderAdminReviewsList() {
+      const box = document.getElementById('admin-reviews-list');
+      const combined = [
+        ...state.siteReviews.map(r => ({ ...r, bucket: 'site' })),
+        ...state.yandexReviews.map(r => ({ ...r, bucket: 'yandex' }))
+      ];
+
+      box.innerHTML = combined.map(r => `
+        <div class="p-3 rounded-xl bg-coal-900 border border-white/10 flex items-center justify-between gap-2 text-xs">
+          <div>
+            <span class="font-bold text-white">${escapeHtml(r.author)}</span>
+            <span class="text-amber-400">★${r.rating}</span>
+            <span class="ml-1 px-2 py-0.5 rounded bg-coal-800 text-[10px] ${r.bucket === 'yandex' ? 'text-[#FF7A63]' : 'text-fire-400'}">
+              ${r.bucket === 'yandex' ? 'Яндекс Карты' : 'Сайт'}
+            </span>
+            <div class="text-neutral-400 mt-0.5">${escapeHtml(r.text)}</div>
+          </div>
+          <button onclick="deleteReview('${r.bucket}', '${r.id}')" class="px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-300 font-bold shrink-0">
+            Удалить
+          </button>
+        </div>
+      `).join('');
+    }
+
+    async function deleteReview(bucket, id) {
+      if (bucket === 'yandex') {
+        state.yandexReviews = state.yandexReviews.filter(r => r.id !== id);
+        await syncStateToBackend('yandexReviews', state.yandexReviews);
+      } else {
+        state.siteReviews = state.siteReviews.filter(r => r.id !== id);
+        await syncStateToBackend('siteReviews', state.siteReviews);
+      }
+      renderReviews();
+      renderAdminReviewsList();
+      showToast('Отзыв удалён');
+    }
+
+    function resetMyReviewLimit() {
+      localStorage.removeItem(USER_REVIEW_LOCK_KEY);
+      updateReviewFormLockState();
+      showToast('Лимит 1 отзыва на сайте сброшен');
+    }
+
+    async function resetAllDefaultData() {
+      state.menu = [...DEFAULT_MENU];
+      state.siteSettings = { ...DEFAULT_SITE_SETTINGS };
+      state.siteReviews = [...DEFAULT_SITE_REVIEWS];
+      state.yandexReviews = [...DEFAULT_YANDEX_REVIEWS];
+      await syncStateToBackend('menu', state.menu);
+      await syncStateToBackend('siteSettings', state.siteSettings);
+      await syncStateToBackend('siteReviews', state.siteReviews);
+      await syncStateToBackend('yandexReviews', state.yandexReviews);
+      applySiteSettings();
+      renderCategoryTabs();
+      renderMenuGrid();
+      renderReviews();
+      fillAdminSettingsInputs();
+      renderAdminMenuList();
+      renderAdminReviewsList();
+      showToast('Данные сброшены к значениям по умолчанию');
+    }
+
+    window.addEventListener('anderdoner:state-updated', (e) => {
+      const { collectionName, data } = e.detail || {};
+      if (collectionName === 'menu') {
+        state.menu = data;
+        renderMenuGrid();
+        if (state.adminUnlocked) renderAdminMenuList();
+      }
+      if (collectionName === 'siteSettings') {
+        state.siteSettings = { ...DEFAULT_SITE_SETTINGS, ...data };
+        applySiteSettings();
+        if (state.adminUnlocked) fillAdminSettingsInputs();
+      }
+      if (collectionName === 'siteReviews') {
+        state.siteReviews = data;
+        renderReviews();
+        if (state.adminUnlocked) renderAdminReviewsList();
+      }
+      if (collectionName === 'yandexReviews') {
+        state.yandexReviews = data;
+        renderReviews();
+        if (state.adminUnlocked) renderAdminReviewsList();
+      }
+    });
+
+    function escapeHtml(str) {
+      return String(str || '').replace(/[&<>"']/g, s => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[s]));
+    }
+
+    // Первичный рендер
+    applySiteSettings();
+    renderCategoryTabs();
+    renderMenuGrid();
+    renderCart();
+    renderReviews();
+  </script>
+
+  <!-- ==================== ПОДКЛЮЧЕНИЕ FIREBASE FIRESTORE (REALTIME) ==================== -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      onSnapshot
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const statusBadge = document.getElementById('sync-status-badge');
+
+    if (isFirebaseConfigured()) {
+      try {
+        const app = initializeApp(FIREBASE_CONFIG);
+        const db = getFirestore(app);
+        const DOC_IDS = ['menu', 'siteSettings', 'siteReviews', 'yandexReviews'];
+
+        window.firestoreSaveDoc = async function(collectionName, data) {
+          try {
+            const ref = doc(db, 'anderdoner_store', collectionName);
+            await setDoc(ref, {
+              updatedAt: Date.now(),
+              data
+            }, { merge: true });
+          } catch (err) {
+            console.error('Firestore write failed:', err);
+            showToast('Ошибка записи в облако Firestore');
+          }
+        };
+
+        DOC_IDS.forEach((docId) => {
+          const ref = doc(db, 'anderdoner_store', docId);
+          onSnapshot(ref, (snap) => {
+            if (snap.exists()) {
+              const payload = snap.data();
+              if (payload && payload.data !== undefined) {
+                writeLocalCache(docId, payload.data);
+                window.dispatchEvent(new CustomEvent('anderdoner:state-updated', {
+                  detail: { collectionName: docId, data: payload.data }
+                }));
+              }
+            }
+          });
+        });
+
+        if (statusBadge) {
+          statusBadge.textContent = '☁️ Облако подключено';
+          statusBadge.className = 'px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[11px] font-bold';
+        }
+      } catch (e) {
+        console.warn('Firebase init error:', e);
+        if (statusBadge) {
+          statusBadge.textContent = '⚠️ Ошибка облака';
+          statusBadge.className = 'px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 text-[11px] font-bold';
+        }
+      }
+    } else {
+      if (statusBadge) {
+        statusBadge.textContent = '💾 Локальный кэш (вставьте ключи Firebase)';
+      }
+    }
+  </script>
 </body>
 </html>
