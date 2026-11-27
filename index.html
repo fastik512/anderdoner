@@ -67,7 +67,7 @@
     }
 
     .glass {
-      background: rgba(24, 24, 24, 0.82);
+      background: rgba(24, 24, 24, 0.85);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border: 1px solid rgba(255, 255, 255, 0.08);
@@ -108,13 +108,13 @@
       name: "AnderDoner",
       yandexMapsUrl: "https://yandex.ru/maps/org/anderdoner/168975024236?si=pd3g265k3cw7mgbwygg1v86v40",
       address: "аг. Ждановичи, ул. Парковая, 6",
-      phoneDisplay: "+375 (29) 123-45-67",
-      phoneRaw: "+375291234567",
+      phoneDisplay: "+375 (44) 601-44-10",
+      phoneRaw: "Покачто нету",
       workingHours: "Ежедневно: 10:00 – 23:00",
       currency: "BYN",
       telegramBotToken: "9231859251:AAE1u5xXxvGbvPEIbCEe9S507Ms755Ig4Hk",
       telegramChatId: "1460289386",
-      defaultAdminPin: "2026"
+      defaultAdminPin: "anderdoneradmin2026"
     };
 
     // Вставьте сюда ваши реальные ключи из Firebase Console -> Project settings -> Your apps
@@ -138,7 +138,7 @@
 
     function readLocalCache(collectionName, fallback) {
       try {
-        const raw = localStorage.getItem(`anderdoner_cache_${collectionName}`);
+        const raw = localStorage.getItem(`anderdoner_cache_v2_${collectionName}`);
         if (!raw) return fallback;
         const parsed = JSON.parse(raw);
         return parsed && parsed.data !== undefined ? parsed.data : fallback;
@@ -149,7 +149,7 @@
 
     function writeLocalCache(collectionName, data) {
       try {
-        localStorage.setItem(`anderdoner_cache_${collectionName}`, JSON.stringify({
+        localStorage.setItem(`anderdoner_cache_v2_${collectionName}`, JSON.stringify({
           updatedAt: Date.now(),
           data
         }));
@@ -158,7 +158,7 @@
       }
     }
 
-    // Единый метод записи состояния: пишет в локальный кэш и при наличии ключей в Firestore
+    // Единый метод записи состояния: сохраняет локально, в Firestore (если подключен) и оповещает все вкладки
     async function syncStateToBackend(collectionName, data) {
       writeLocalCache(collectionName, data);
       if (typeof window.firestoreSaveDoc === 'function') {
@@ -168,6 +168,20 @@
         detail: { collectionName, data }
       }));
     }
+
+    // Синхронизация между открытыми вкладками браузера через событие storage
+    window.addEventListener('storage', (event) => {
+      if (!event.key || !event.key.startsWith('anderdoner_cache_v2_') || !event.newValue) return;
+      const collectionName = event.key.replace('anderdoner_cache_v2_', '');
+      try {
+        const parsed = JSON.parse(event.newValue);
+        if (parsed && parsed.data !== undefined) {
+          window.dispatchEvent(new CustomEvent('anderdoner:state-updated', {
+            detail: { collectionName, data: parsed.data }
+          }));
+        }
+      } catch (e) {}
+    });
   </script>
 
   <!-- ==================== ШАПКА САЙТА ==================== -->
@@ -432,7 +446,7 @@
 
   <!-- ==================== МОДАЛЬНОЕ ОКНО: АДМИН-ПАНЕЛЬ ==================== -->
   <div id="admin-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-    <div class="glass w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl border border-white/15 p-6 sm:p-7 space-y-6">
+    <div class="glass w-full max-w-5xl max-h-[92vh] overflow-y-auto rounded-3xl border border-white/15 p-6 sm:p-7 space-y-6">
 
       <div class="flex items-center justify-between border-b border-white/10 pb-4">
         <div>
@@ -442,35 +456,45 @@
         <button onclick="closeAdminModal()" class="w-10 h-10 rounded-xl bg-coal-800 hover:bg-coal-700 text-neutral-300 flex items-center justify-center text-lg">✕</button>
       </div>
 
+      <!-- Экран входа по паролю -->
       <div id="admin-login-box" class="max-w-sm mx-auto py-8 space-y-4 text-center">
         <div class="text-4xl">🔐</div>
         <h4 class="font-display font-bold text-lg text-white">Вход в панель администратора</h4>
-        <p class="text-xs text-neutral-400">Введите PIN-код для редактирования меню, настроек и отзывов.</p>
-        <input type="password" id="admin-pin-input" maxlength="12" placeholder="PIN-код (по умолчанию 2026)"
+        <p class="text-xs text-neutral-400">Введите пароль для редактирования меню, настроек и отзывов.</p>
+        <input type="password" id="admin-pin-input" placeholder="Введите пароль"
+               onkeydown="if(event.key==='Enter'){unlockAdminPanel();}"
                class="w-full px-4 py-3 rounded-xl bg-coal-950 border border-white/10 text-center text-white text-sm focus:outline-none focus:border-amber-400" />
         <button onclick="unlockAdminPanel()" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-coal-950 font-extrabold text-sm transition">
           Войти в админку
         </button>
       </div>
 
+      <!-- Рабочая зона админки -->
       <div id="admin-workspace" class="hidden space-y-6">
-        <div class="flex flex-wrap gap-2 border-b border-white/10 pb-3">
-          <button onclick="switchAdminTab('menu')" id="adm-tab-menu" class="adm-tab px-4 py-2 rounded-xl text-xs font-bold bg-fire-500 text-white">
-            🍽️ Меню и цены
-          </button>
-          <button onclick="switchAdminTab('site')" id="adm-tab-site" class="adm-tab px-4 py-2 rounded-xl text-xs font-semibold bg-coal-800 text-neutral-300">
-            ✏️ Тексты и контакты
-          </button>
-          <button onclick="switchAdminTab('reviews')" id="adm-tab-reviews" class="adm-tab px-4 py-2 rounded-xl text-xs font-semibold bg-coal-800 text-neutral-300">
-            💬 Отзывы (Сайт + Яндекс)
-          </button>
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
+          <div class="flex flex-wrap gap-2">
+            <button onclick="switchAdminTab('menu')" id="adm-tab-menu" class="adm-tab px-4 py-2 rounded-xl text-xs font-bold bg-fire-500 text-white">
+              🍽️ Меню и цены
+            </button>
+            <button onclick="switchAdminTab('site')" id="adm-tab-site" class="adm-tab px-4 py-2 rounded-xl text-xs font-semibold bg-coal-800 text-neutral-300">
+              ✏️ Тексты и контакты
+            </button>
+            <button onclick="switchAdminTab('reviews')" id="adm-tab-reviews" class="adm-tab px-4 py-2 rounded-xl text-xs font-semibold bg-coal-800 text-neutral-300">
+              💬 Отзывы (Сайт + Яндекс)
+            </button>
+          </div>
+
+          <span id="admin-sync-indicator" class="text-[11px] font-semibold text-emerald-400">
+            ● Все изменения готовы к сохранению
+          </span>
         </div>
 
-        <!-- Меню -->
+        <!-- Вкладка 1: Меню и цены -->
         <div id="adm-panel-menu" class="space-y-5">
-          <form id="admin-add-item-form" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 p-4 rounded-2xl bg-coal-900 border border-white/10">
+          <!-- Форма добавления нового блюда -->
+          <form id="admin-add-item-form" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 p-4 rounded-2xl bg-coal-900 border border-white/10">
             <input type="text" id="adm-item-name" required placeholder="Название блюда"
-                   class="px-3 py-2.5 rounded-xl bg-coal-950 border border-white/10 text-xs text-white" />
+                   class="lg:col-span-2 px-3 py-2.5 rounded-xl bg-coal-950 border border-white/10 text-xs text-white" />
             <select id="adm-item-cat" class="px-3 py-2.5 rounded-xl bg-coal-950 border border-white/10 text-xs text-white">
               <option value="doner">Донеры и Шаурма</option>
               <option value="combo">Комбо-наборы</option>
@@ -478,25 +502,37 @@
               <option value="addons">Добавки и Соусы</option>
               <option value="drinks">Напитки</option>
             </select>
-            <input type="number" step="0.1" min="0.5" id="adm-item-price" required placeholder="Цена, BYN"
+            <input type="number" step="0.1" min="0.1" id="adm-item-price" required placeholder="Цена, BYN"
                    class="px-3 py-2.5 rounded-xl bg-coal-950 border border-white/10 text-xs text-white" />
-            <input type="text" id="adm-item-weight" placeholder="Вес / объем (420 г)"
+            <input type="text" id="adm-item-weight" placeholder="Вес (420 г)"
                    class="px-3 py-2.5 rounded-xl bg-coal-950 border border-white/10 text-xs text-white" />
             <button type="submit" class="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-coal-950 font-extrabold text-xs">
-              + Добавить блюдо
+              + Добавить
             </button>
-            <input type="text" id="adm-item-desc" placeholder="Краткое описание состава"
-                   class="sm:col-span-2 lg:col-span-5 px-3 py-2 rounded-xl bg-coal-950 border border-white/10 text-xs text-white" />
+            <input type="text" id="adm-item-desc" placeholder="Описание состава блюда"
+                   class="sm:col-span-2 lg:col-span-6 px-3 py-2 rounded-xl bg-coal-950 border border-white/10 text-xs text-white" />
           </form>
 
-          <div id="admin-menu-list" class="space-y-2 max-h-80 overflow-y-auto pr-1"></div>
+          <!-- Список существующих блюд с полным редактированием -->
+          <div id="admin-menu-list" class="space-y-3 max-h-[380px] overflow-y-auto pr-1"></div>
+
+          <!-- Главная кнопка сохранения всех изменений меню для всех пользователей -->
+          <div class="p-4 rounded-2xl bg-coal-900 border border-emerald-500/30 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="text-xs text-neutral-300">
+              После редактирования названий, описаний, категорий или цен нажмите кнопку справа, чтобы <strong class="text-white">сохранить и обновить меню для всех пользователей</strong>.
+            </div>
+            <button type="button" onclick="saveAllMenuChanges()" id="save-all-menu-btn"
+                    class="w-full sm:w-auto shrink-0 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-coal-950 font-extrabold text-xs sm:text-sm shadow-lg shadow-emerald-500/20 transition active:scale-95">
+              💾 Сохранить изменения меню для всех
+            </button>
+          </div>
         </div>
 
-        <!-- Настройки сайта -->
+        <!-- Вкладка 2: Настройки сайта -->
         <div id="adm-panel-site" class="hidden space-y-4">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs text-neutral-400 mb-1">Заголовок в шапке / баннере</label>
+              <label class="block text-xs text-neutral-400 mb-1">Заголовок на главной</label>
               <input type="text" id="adm-hero-title" class="w-full px-3.5 py-2.5 rounded-xl bg-coal-950 border border-white/10 text-sm text-white" />
             </div>
             <div>
@@ -512,21 +548,21 @@
               <input type="text" id="adm-phone" class="w-full px-3.5 py-2.5 rounded-xl bg-coal-950 border border-white/10 text-sm text-white" />
             </div>
             <div>
-              <label class="block text-xs text-neutral-400 mb-1">Новый PIN админа</label>
+              <label class="block text-xs text-neutral-400 mb-1">Пароль админа</label>
               <input type="text" id="adm-new-pin" class="w-full px-3.5 py-2.5 rounded-xl bg-coal-950 border border-white/10 text-sm text-white" />
             </div>
           </div>
           <div class="flex flex-wrap items-center gap-3 pt-2">
-            <button onclick="saveSiteSettingsFromAdmin()" class="px-5 py-2.5 rounded-xl bg-fire-500 hover:bg-fire-400 text-white font-bold text-xs">
-              Сохранить настройки
+            <button onclick="saveSiteSettingsFromAdmin()" class="px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-coal-950 font-extrabold text-xs">
+              💾 Сохранить настройки для всех
             </button>
-            <button onclick="resetAllDefaultData()" class="px-4 py-2.5 rounded-xl bg-coal-800 hover:bg-coal-700 text-rose-400 font-semibold text-xs border border-rose-500/20">
+            <button onclick="resetAllDefaultData()" class="px-4 py-3 rounded-xl bg-coal-800 hover:bg-coal-700 text-rose-400 font-semibold text-xs border border-rose-500/20">
               Сбросить к заводским настройкам
             </button>
           </div>
         </div>
 
-        <!-- Отзывы -->
+        <!-- Вкладка 3: Отзывы -->
         <div id="adm-panel-reviews" class="hidden space-y-5">
           <form id="admin-add-yandex-review-form" class="grid grid-cols-1 sm:grid-cols-4 gap-3 p-4 rounded-2xl bg-coal-900 border border-white/10">
             <input type="text" id="adm-yr-author" required placeholder="Имя с Яндекс Карт"
@@ -539,7 +575,7 @@
             <input type="text" id="adm-yr-text" required placeholder="Текст отзыва с Яндекс Карт"
                    class="sm:col-span-2 px-3 py-2 rounded-xl bg-coal-950 border border-white/10 text-xs text-white" />
             <button type="submit" class="sm:col-span-4 py-2.5 rounded-xl bg-[#FC3F1D] hover:bg-[#e23516] text-white font-bold text-xs">
-              + Добавить отзыв в раздел «Яндекс Карты»
+              + Добавить отзыв в раздел «Яндекс Карты» и сохранить для всех
             </button>
           </form>
 
@@ -824,7 +860,7 @@
 
       const lines = state.cart.map(i => `• ${i.name} × ${i.qty} — ${(i.price * i.qty).toFixed(2)} BYN`).join('\n');
 
-      // Адрес точки из сообщения намеренно убран, так как точка одна
+      // Адрес точки из сообщения убран, так как точка одна
       const messageText = [
         `🔥 НОВЫЙ ЗАКАЗ (САМОВЫВОЗ) — Код: ${code}`,
         ``,
@@ -935,15 +971,13 @@
       lockBox.classList.toggle('hidden', !locked);
     }
 
-    function syncYandexReviews() {
+    async function syncYandexReviews() {
       const btn = document.getElementById('sync-yandex-btn');
       btn.textContent = '⏳ Синхронизация...';
-      setTimeout(() => {
-        syncStateToBackend('yandexReviews', state.yandexReviews);
-        renderReviews();
-        btn.textContent = '🔄 Синхронизировать';
-        showToast('Лента отзывов Яндекс Карт синхронизирована');
-      }, 450);
+      await syncStateToBackend('yandexReviews', state.yandexReviews);
+      renderReviews();
+      btn.textContent = '🔄 Синхронизировать';
+      showToast('Лента отзывов Яндекс Карт синхронизирована');
     }
 
     document.querySelectorAll('.star-btn').forEach(btn => {
@@ -995,6 +1029,8 @@
       modal.classList.add('flex');
       if (state.adminUnlocked) {
         showAdminWorkspace();
+      } else {
+        setTimeout(() => document.getElementById('admin-pin-input')?.focus(), 50);
       }
     }
 
@@ -1006,13 +1042,13 @@
 
     function unlockAdminPanel() {
       const pin = document.getElementById('admin-pin-input').value.trim();
-      const expectedPin = state.siteSettings.adminPin || BUSINESS_CONFIG.defaultAdminPin;
-      if (pin === expectedPin) {
+      const customPin = state.siteSettings.adminPin;
+      if (pin === BUSINESS_CONFIG.defaultAdminPin || (customPin && pin === customPin)) {
         state.adminUnlocked = true;
         showAdminWorkspace();
         showToast('Доступ в админ-панель открыт');
       } else {
-        showToast('Неверный PIN-код');
+        showToast('Неверный пароль');
       }
     }
 
@@ -1052,42 +1088,88 @@
         badge: 'НОВИНКА',
         desc
       });
+
       await syncStateToBackend('menu', state.menu);
       state.activeCategory = category;
       renderCategoryTabs();
       renderMenuGrid();
       renderAdminMenuList();
       e.target.reset();
-      showToast('Блюдо добавлено и сохранено');
+      showToast('Блюдо добавлено и синхронизировано');
     });
 
     function renderAdminMenuList() {
       const box = document.getElementById('admin-menu-list');
       box.innerHTML = state.menu.map(item => `
-        <div class="p-3 rounded-xl bg-coal-900 border border-white/10 flex flex-wrap items-center justify-between gap-2 text-xs">
-          <div>
-            <strong class="text-white">${escapeHtml(item.name)}</strong>
-            <span class="text-neutral-400">(${escapeHtml(item.category)})</span>
+        <div data-admin-item-id="${item.id}" class="p-3.5 rounded-2xl bg-coal-900 border border-white/10 space-y-2.5 text-xs">
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-2 items-center">
+            <input type="text" data-field="name" value="${escapeHtml(item.name)}" placeholder="Название"
+                   class="sm:col-span-4 px-2.5 py-2 rounded-lg bg-coal-950 border border-white/10 text-white font-semibold" />
+
+            <select data-field="category" class="sm:col-span-3 px-2.5 py-2 rounded-lg bg-coal-950 border border-white/10 text-neutral-200">
+              ${CATEGORIES.map(c => `<option value="${c.id}" ${c.id === item.category ? 'selected' : ''}>${c.label}</option>`).join('')}
+            </select>
+
+            <input type="number" step="0.1" min="0.1" data-field="price" value="${item.price}" placeholder="Цена"
+                   class="sm:col-span-2 px-2.5 py-2 rounded-lg bg-coal-950 border border-white/10 text-amber-400 font-bold" />
+
+            <input type="text" data-field="weight" value="${escapeHtml(item.weight || '')}" placeholder="Вес"
+                   class="sm:col-span-2 px-2.5 py-2 rounded-lg bg-coal-950 border border-white/10 text-neutral-300" />
+
+            <button type="button" onclick="deleteMenuItem(${item.id})"
+                    class="sm:col-span-1 px-2.5 py-2 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 font-bold text-center">
+              ✕
+            </button>
           </div>
-          <div class="flex items-center gap-2">
-            <input type="number" step="0.1" value="${item.price}" id="price-input-${item.id}"
-                   class="w-20 px-2 py-1 rounded-lg bg-coal-950 border border-white/10 text-amber-400 font-bold" />
-            <button onclick="updateMenuPrice(${item.id})" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold">Цена</button>
-            <button onclick="deleteMenuItem(${item.id})" class="px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-300 font-bold">Удалить</button>
+
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-2">
+            <input type="text" data-field="badge" value="${escapeHtml(item.badge || '')}" placeholder="Бейдж (ХИТ, ТОП...)"
+                   class="sm:col-span-3 px-2.5 py-1.5 rounded-lg bg-coal-950 border border-white/10 text-amber-300" />
+            <input type="text" data-field="desc" value="${escapeHtml(item.desc || '')}" placeholder="Описание блюда"
+                   class="sm:col-span-9 px-2.5 py-1.5 rounded-lg bg-coal-950 border border-white/10 text-neutral-300" />
           </div>
         </div>
       `).join('');
     }
 
-    async function updateMenuPrice(id) {
-      const val = parseFloat(document.getElementById(`price-input-${id}`).value);
-      if (isNaN(val) || val <= 0) return;
-      const item = state.menu.find(m => m.id === id);
-      if (!item) return;
-      item.price = val;
+    // Сохранение всех отредактированных карточек меню по кнопке «Сохранить изменения меню для всех»
+    async function saveAllMenuChanges() {
+      const btn = document.getElementById('save-all-menu-btn');
+      const indicator = document.getElementById('admin-sync-indicator');
+      const rows = document.querySelectorAll('#admin-menu-list [data-admin-item-id]');
+
+      const updatedMenu = [];
+      rows.forEach(row => {
+        const id = Number(row.getAttribute('data-admin-item-id'));
+        const name = row.querySelector('[data-field="name"]').value.trim();
+        const category = row.querySelector('[data-field="category"]').value;
+        const price = parseFloat(row.querySelector('[data-field="price"]').value);
+        const weight = row.querySelector('[data-field="weight"]').value.trim();
+        const badge = row.querySelector('[data-field="badge"]').value.trim();
+        const desc = row.querySelector('[data-field="desc"]').value.trim();
+
+        if (name && !isNaN(price) && price > 0) {
+          updatedMenu.push({ id, name, category, price, weight, badge, desc });
+        }
+      });
+
+      btn.disabled = true;
+      btn.textContent = '⏳ Сохранение...';
+      if (indicator) indicator.textContent = '⏳ Синхронизация меню...';
+
+      state.menu = updatedMenu;
       await syncStateToBackend('menu', state.menu);
+
+      renderCategoryTabs();
       renderMenuGrid();
-      showToast('Цена обновлена');
+      renderAdminMenuList();
+
+      btn.disabled = false;
+      btn.textContent = '💾 Сохранить изменения меню для всех';
+      if (indicator) {
+        indicator.textContent = `✅ Сохранено в ${new Date().toLocaleTimeString('ru-RU')}`;
+      }
+      showToast('Меню сохранено и обновлено для всех пользователей!');
     }
 
     async function deleteMenuItem(id) {
@@ -1095,7 +1177,7 @@
       await syncStateToBackend('menu', state.menu);
       renderMenuGrid();
       renderAdminMenuList();
-      showToast('Позиция удалена');
+      showToast('Позиция удалена и синхронизирована');
     }
 
     function fillAdminSettingsInputs() {
@@ -1116,7 +1198,7 @@
       };
       await syncStateToBackend('siteSettings', state.siteSettings);
       applySiteSettings();
-      showToast('Настройки сохранены');
+      showToast('Настройки сохранены для всех пользователей!');
     }
 
     document.getElementById('admin-add-yandex-review-form').addEventListener('submit', async (e) => {
@@ -1138,7 +1220,7 @@
       renderReviews();
       renderAdminReviewsList();
       e.target.reset();
-      showToast('Отзыв добавлен в блок Яндекс Карт');
+      showToast('Отзыв добавлен и синхронизирован для всех');
     });
 
     function renderAdminReviewsList() {
@@ -1265,7 +1347,7 @@
             await setDoc(ref, {
               updatedAt: Date.now(),
               data
-            }, { merge: true });
+            });
           } catch (err) {
             console.error('Firestore write failed:', err);
             showToast('Ошибка записи в облако Firestore');
@@ -1288,7 +1370,7 @@
         });
 
         if (statusBadge) {
-          statusBadge.textContent = '☁️ Облако подключено';
+          statusBadge.textContent = '☁️ Облако подключено (общая синхронизация)';
           statusBadge.className = 'px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[11px] font-bold';
         }
       } catch (e) {
@@ -1300,7 +1382,7 @@
       }
     } else {
       if (statusBadge) {
-        statusBadge.textContent = '💾 Локальный кэш (вставьте ключи Firebase)';
+        statusBadge.textContent = '💾 Локальный режим (вставьте ключи Firebase для всех)';
       }
     }
   </script>
