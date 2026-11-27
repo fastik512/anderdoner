@@ -140,6 +140,20 @@ main { max-width:1240px; margin:0 auto; padding: 0 32px; }
 .add { background: var(--surface-2); color: var(--text); border:1px solid var(--line-2); padding:10px 16px; border-radius:11px; font-weight:800; font-size:.86rem; transition:.18s; white-space:nowrap; }
 .add:hover { background: linear-gradient(135deg, var(--accent-3), var(--accent-2)); color:#1a0f00; border-color:transparent; transform: scale(1.04); }
 
+/* ВЫБОР ВЕСА */
+.size-selector { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.size-btn {
+    background: var(--surface-2); color: var(--muted); border: 1px solid var(--line-2);
+    padding: 6px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 800;
+    cursor: pointer; transition: 0.2s; flex: 1; text-align: center;
+}
+.size-btn:hover { border-color: var(--accent); color: var(--accent); }
+.size-btn.active {
+    background: linear-gradient(135deg, var(--accent-3), var(--accent-2));
+    color: #1a0f00; border-color: transparent; box-shadow: 0 4px 10px rgba(255,87,34,.3);
+}
+.single-weight { font-size: 0.8rem; color: var(--muted); margin-top: 8px; font-weight: 600; }
+
 /* PROMO */
 .promo-band { margin: 20px 0 0; padding: 40px 32px; border-radius: 24px; background: radial-gradient(700px 300px at 15% 20%, rgba(255,176,32,.35), transparent 60%), radial-gradient(600px 320px at 100% 100%, rgba(255,87,34,.4), transparent 60%), linear-gradient(140deg, #1a130b, #0d0b09); border: 1px solid var(--line-2); position: relative; overflow: hidden; }
 .promo-band::before { content:''; position:absolute; top:-100px; right:-100px; width:300px; height:300px; border-radius:50%; background: radial-gradient(circle, rgba(255,206,60,.5), transparent 65%); filter: blur(40px); }
@@ -291,6 +305,14 @@ main { max-width:1240px; margin:0 auto; padding: 0 32px; }
 .form-actions button { flex: 1; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; }
 .form-actions .save-btn { background: var(--ok); color: #0a0908; border: none; }
 .form-actions .cancel-btn { background: transparent; border: 1px solid var(--line-2); color: var(--text); }
+
+/* Размеры в админке */
+.add-size-btn { margin-top: 8px; padding: 8px 12px; background: rgba(255,176,32,.1); color: var(--accent); border: 1px dashed rgba(255,176,32,.4); border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.8rem; width: 100%; transition: 0.2s; }
+.add-size-btn:hover { background: rgba(255,176,32,.2); }
+.size-row { display: flex; gap: 8px; margin-bottom: 8px; }
+.size-row input:first-child { flex: 2; min-width: 80px; }
+.size-row input:nth-child(2) { flex: 1; min-width: 70px; }
+.size-row button { background: var(--err); color: #fff; border: none; border-radius: 6px; padding: 0 10px; cursor: pointer; font-weight: bold; }
 </style>
 </head>
 <body>
@@ -517,16 +539,22 @@ main { max-width:1240px; margin:0 auto; padding: 0 32px; }
         <div id="itemForm" class="admin-form">
           <div class="form-row">
             <div class="field" style="margin:0;"><label>Название</label><input type="text" id="itemName"></div>
-            <div class="field" style="margin:0;"><label>Цена (коп.)</label><input type="number" id="itemPrice" placeholder="790"></div>
-          </div>
-          <div class="form-row">
             <div class="field" style="margin:0;">
               <label>Категория</label>
               <select id="itemCat"></select>
             </div>
-            <div class="field" style="margin:0;"><label>Эмодзи</label><input type="text" id="itemGlyph" placeholder="🌯" maxlength="2"></div>
           </div>
-          <div class="field" style="margin-top:10px; margin-bottom:0;"><label>Описание</label><input type="text" id="itemDesc" placeholder="Курица, овощи, соус"></div>
+          <div class="form-row">
+            <div class="field" style="margin:0;"><label>Эмодзи</label><input type="text" id="itemGlyph" placeholder="🌯" maxlength="2"></div>
+            <div class="field" style="margin:0;"><label>Описание</label><input type="text" id="itemDesc" placeholder="Курица, овощи, соус"></div>
+          </div>
+          
+          <div class="field" style="margin-bottom:10px;">
+            <label>Размеры и цены (коп.)</label>
+            <div id="itemSizesContainer"></div>
+            <button type="button" class="add-size-btn" onclick="addSizeRow()">+ Добавить размер</button>
+          </div>
+
           <div class="form-actions">
             <button class="save-btn" onclick="saveItem()">Сохранить товар</button>
             <button class="cancel-btn" onclick="document.getElementById('itemForm').classList.remove('active')">Отмена</button>
@@ -577,18 +605,34 @@ const defaultCategories = [
 ];
 
 const defaultProducts = [
-  { id:1, cat:'doner', name:'Донер классический', desc:'Лепёшка, курица, капуста, огурец, помидор, чесночный соус', price:790, glyph:'🌯', tag:'Хит' },
-  { id:2, cat:'doner', name:'Донер сырный', desc:'Двойной чеддер, курица, сырный соус, свежий огурец', price:1450, glyph:'🧀', tag:'' },
-  { id:3, cat:'doner', name:'Донер с говядиной', desc:'Мраморная говядина, пекинская капуста, барбекю', price:1450, glyph:'🥩', tag:'' },
-  { id:4, cat:'doner', name:'Донер с беконом', desc:'Бекон, курица, свежий огурец, чесночный соус', price:1250, glyph:'🥓', tag:'Хит' },
-  { id:5, cat:'doner', name:'Донер с креветками', desc:'Королевские креветки, пекинская капуста, кунжутный соус', price:1450, glyph:'🍤', tag:'' },
-  { id:6, cat:'doner', name:'Донер с фалафелем', desc:'Фалафель, пекинская капуста, хумус, свежий огурец', price:1050, glyph:'🧆', tag:'Веган' },
-  { id:7, cat:'stick', name:'Стик с курицей', desc:'Курица, сырный и чесночный соусы', price:490, glyph:'🍢', tag:'' },
-  { id:8, cat:'stick', name:'Стик барбекю', desc:'Курица, барбекю, чесночный соус', price:490, glyph:'🍢', tag:'' },
-  { id:12, cat:'box', name:'Ланч-бокс классический', desc:'Курица, картофель фри, овощи, два соуса', price:1690, glyph:'🍱', tag:'' },
-  { id:15, cat:'side', name:'Картофель фри', desc:'Порция 110 г, соль', price:490, glyph:'🍟', tag:'' },
-  { id:18, cat:'drink', name:'Кола 0.5 л', desc:'Классическая, холодная', price:350, glyph:'🥤', tag:'' },
-  { id:21, cat:'sauce', name:'Чесночный соус', desc:'25 г', price:120, glyph:'🧄', tag:'' },
+  { id:1, cat:'doner', name:'Донер классический', desc:'Лепёшка, курица, капуста, огурец, помидор, чесночный соус', price:790, sizes: [{weight: '300г', price: 790}, {weight: '400г', price: 1050}, {weight: '550г', price: 1250}], glyph:'🌯', tag:'Хит' },
+  { id:2, cat:'doner', name:'Донер сырный', desc:'Двойной чеддер, курица, сырный соус, свежий огурец', price:1450, sizes: [{weight: '400г', price: 1450}, {weight: '550г', price: 1650}], glyph:'🧀', tag:'' },
+  { id:3, cat:'doner', name:'Донер с говядиной', desc:'Мраморная говядина, пекинская капуста, барбекю', price:1450, sizes: [{weight: '400г', price: 1450}, {weight: '550г', price: 1650}], glyph:'🥩', tag:'' },
+  { id:4, cat:'doner', name:'Донер с беконом', desc:'Бекон, курица, свежий огурец, чесночный соус', price:1250, sizes: [{weight: '400г', price: 1250}, {weight: '550г', price: 1450}], glyph:'🥓', tag:'Хит' },
+  { id:5, cat:'doner', name:'Донер с креветками', desc:'Королевские креветки, пекинская капуста, кунжутный соус', price:1450, sizes: [{weight: '400г', price: 1450}, {weight: '550г', price: 1650}], glyph:'🍤', tag:'' },
+  { id:6, cat:'doner', name:'Донер с фалафелем', desc:'Фалафель, пекинская капуста, хумус, свежий огурец', price:1050, sizes: [{weight: '300г', price: 1050}, {weight: '400г', price: 1250}], glyph:'🧆', tag:'Веган' },
+  
+  { id:7, cat:'stick', name:'Стик с курицей', desc:'Курица, сырный и чесночный соусы', price:490, sizes: [{weight: '150г', price: 490}, {weight: '200г', price: 650}], glyph:'🍢', tag:'' },
+  { id:8, cat:'stick', name:'Стик барбекю', desc:'Курица, барбекю, чесночный соус', price:490, sizes: [{weight: '150г', price: 490}, {weight: '200г', price: 650}], glyph:'🍢', tag:'' },
+  { id:9, cat:'stick', name:'Стик с сухариками', desc:'Курица, сухарики, соус цезарь', price:490, sizes: [{weight: '150г', price: 490}, {weight: '200г', price: 650}], glyph:'🍢', tag:'' },
+  { id:10, cat:'stick', name:'Стик терияки', desc:'Курица, терияки, чесночный соус', price:490, sizes: [{weight: '150г', price: 490}, {weight: '200г', price: 650}], glyph:'🍢', tag:'' },
+  { id:11, cat:'stick', name:'Стик с сыром', desc:'Сливочный сыр, курица, чесночный соус', price:490, sizes: [{weight: '150г', price: 490}, {weight: '200г', price: 650}], glyph:'🍢', tag:'' },
+  
+  { id:12, cat:'box', name:'Ланч-бокс классический', desc:'Курица, картофель фри, овощи, два соуса', price:1690, sizes: [{weight: '360г', price: 1690}, {weight: '450г', price: 1890}], glyph:'🍱', tag:'' },
+  { id:13, cat:'box', name:'Ланч-бокс сырный', desc:'Курица, фри, жидкий чеддер, овощи', price:1890, sizes: [{weight: '390г', price: 1890}, {weight: '480г', price: 2090}], glyph:'🍱', tag:'' },
+  { id:14, cat:'box', name:'Наггетсы 6 шт.', desc:'Куриные наггетсы, соус на выбор', price:710, sizes: [{weight: '6 шт.', price: 710}, {weight: '9 шт.', price: 990}], glyph:'🍗', tag:'' },
+  
+  { id:15, cat:'side', name:'Картофель фри', desc:'Порция 110 г, соль', price:490, sizes: [{weight: '110г', price: 490}, {weight: '160г', price: 650}], glyph:'🍟', tag:'' },
+  { id:16, cat:'side', name:'Картофель по-деревенски', desc:'Порция 110 г, специи', price:550, sizes: [{weight: '110г', price: 550}, {weight: '160г', price: 700}], glyph:'🍟', tag:'' },
+  { id:17, cat:'side', name:'Фритос с беконом', desc:'Картофель фри, бекон, плавленый сыр', price:890, sizes: [{weight: '200г', price: 890}], glyph:'🥔', tag:'Хит' },
+  
+  { id:18, cat:'drink', name:'Кола 0.5 л', desc:'Классическая, холодная', price:350, sizes: [{weight: '0.5 л', price: 350}], glyph:'🥤', tag:'' },
+  { id:19, cat:'drink', name:'Вода 0.5 л', desc:'Негазированная', price:160, sizes: [{weight: '0.5 л', price: 160}], glyph:'💧', tag:'' },
+  { id:20, cat:'drink', name:'Лимонад 0.5 л', desc:'Цитрус, охлаждённый', price:350, sizes: [{weight: '0.5 л', price: 350}], glyph:'🍋', tag:'' },
+  
+  { id:21, cat:'sauce', name:'Чесночный соус', desc:'25 г', price:120, sizes: [{weight: '25 г', price: 120}], glyph:'🧄', tag:'' },
+  { id:22, cat:'sauce', name:'Барбекю', desc:'25 г', price:120, sizes: [{weight: '25 г', price: 120}], glyph:'🍯', tag:'' },
+  { id:23, cat:'sauce', name:'Сырный соус', desc:'25 г', price:120, sizes: [{weight: '25 г', price: 120}], glyph:'🧀', tag:'' },
 ];
 
 let products = [...defaultProducts];
@@ -607,7 +651,14 @@ async function loadSiteSettings() {
       const data = await res.json();
       if (data && data.length > 0) {
         const settings = data[0];
-        if (settings.products && settings.products.length > 0) products = settings.products;
+        if (settings.products && settings.products.length > 0) {
+            products = settings.products.map(p => {
+                if (!p.sizes || p.sizes.length === 0) {
+                    p.sizes = [{ weight: '1 шт.', price: p.price }];
+                }
+                return p;
+            });
+        }
         if (settings.categories && settings.categories.length > 0) categories = settings.categories;
         if (settings.address) PICKUP_ADDRESS = settings.address;
         if (settings.work_hours) PICKUP_TIME = settings.work_hours;
@@ -637,8 +688,6 @@ async function saveSiteSettings(newProducts, newCategories, newAddress, newHours
     work_hours: newHours 
   };
   
-  // Используем POST (UPSERT) вместо PATCH. Это надежнее.
-  // resolution=merge-duplicates означает "если строка с id=1 есть, обнови её, если нет - создай".
   const res = await fetch(`${SUPABASE_URL}/rest/v1/site_settings`, {
     method: 'POST',
     headers: {
@@ -754,7 +803,7 @@ window.saveCategory = function() {
   
   document.getElementById('catForm').classList.remove('active');
   renderAdminCategories();
-  renderAdminProducts(); // Обновляем выпадающий список в форме товаров
+  renderAdminProducts();
 }
 
 window.deleteCategory = function(index) {
@@ -780,11 +829,18 @@ function renderAdminProducts() {
   
   list.innerHTML = tempProducts.map((p, index) => {
     const catName = tempCategories.find(c => c.key === p.cat)?.label || p.cat;
+    let sizeText = '';
+    if (p.sizes && p.sizes.length > 0) {
+        sizeText = p.sizes.map(s => `${s.weight} - ${money(s.price)}`).join(', ');
+    } else {
+        sizeText = `Стандарт - ${money(p.price)}`;
+    }
+
     return `
     <div class="admin-item">
       <div class="item-info">
         <b>${p.name}</b> <br>
-        <span style="font-size:0.75rem; color:var(--muted);">${catName} · ${(p.price/100).toFixed(2)} BYN</span>
+        <span style="font-size:0.75rem; color:var(--muted);">${catName} · ${sizeText}</span>
       </div>
       <div class="item-actions">
         <button onclick="editItem(${index})">✏️</button>
@@ -798,20 +854,26 @@ function renderAdminProducts() {
 window.showItemForm = function() {
   editingItemIndex = -1;
   document.getElementById('itemName').value = '';
-  document.getElementById('itemPrice').value = '';
+  document.getElementById('itemSizesContainer').innerHTML = '';
+  addSizeRow('Стандарт', '');
   document.getElementById('itemGlyph').value = '🌯';
   document.getElementById('itemDesc').value = '';
   document.getElementById('itemForm').classList.add('active');
+  document.getElementById('itemForm').scrollIntoView({ behavior: 'smooth' });
 }
 
 window.editItem = function(index) {
   editingItemIndex = index;
   const p = tempProducts[index];
   document.getElementById('itemName').value = p.name;
-  document.getElementById('itemPrice').value = p.price;
   document.getElementById('itemGlyph').value = p.glyph;
   document.getElementById('itemDesc').value = p.desc || '';
   document.getElementById('itemCat').value = p.cat;
+  
+  document.getElementById('itemSizesContainer').innerHTML = '';
+  const sizes = p.sizes && p.sizes.length > 0 ? p.sizes : [{ weight: '1 шт.', price: p.price }];
+  sizes.forEach(s => addSizeRow(s.weight, s.price));
+  
   document.getElementById('itemForm').classList.add('active');
   document.getElementById('itemForm').scrollIntoView({ behavior: 'smooth' });
 }
@@ -823,20 +885,44 @@ window.deleteItem = function(index) {
   }
 }
 
+window.addSizeRow = function(weight = '', price = '') {
+  const container = document.getElementById('itemSizesContainer');
+  const div = document.createElement('div');
+  div.className = 'size-row';
+  div.innerHTML = `
+      <input type="text" placeholder="Вес (300г)" value="${weight}" class="size-weight">
+      <input type="number" placeholder="Цена (790)" value="${price}" class="size-price">
+      <button type="button" onclick="this.parentElement.remove()">✕</button>
+  `;
+  container.appendChild(div);
+}
+
 window.saveItem = function() {
   const name = document.getElementById('itemName').value.trim();
-  const price = parseInt(document.getElementById('itemPrice').value);
   const cat = document.getElementById('itemCat').value;
   const glyph = document.getElementById('itemGlyph').value.trim() || '🌯';
   const desc = document.getElementById('itemDesc').value.trim();
   
-  if (!name || isNaN(price)) { alert('Заполните название и цену!'); return; }
+  if (!name) { alert('Заполните название!'); return; }
+  
+  const sizeRows = document.querySelectorAll('#itemSizesContainer .size-row');
+  const sizes = [];
+  sizeRows.forEach(row => {
+    const w = row.querySelector('.size-weight').value.trim();
+    const pr = parseInt(row.querySelector('.size-price').value);
+    if (w && !isNaN(pr)) {
+      sizes.push({ weight: w, price: pr });
+    }
+  });
+  
+  if (sizes.length === 0) { alert('Добавьте хотя бы один размер с ценой!'); return; }
+  const basePrice = sizes[0].price;
   
   if (editingItemIndex === -1) {
-    tempProducts.push({ id: Date.now(), cat, name, desc, price, glyph, tag: '' });
+    tempProducts.push({ id: Date.now(), cat, name, desc, price: basePrice, sizes, glyph, tag: '' });
   } else {
     const p = tempProducts[editingItemIndex];
-    p.name = name; p.price = price; p.cat = cat; p.glyph = glyph; p.desc = desc;
+    p.name = name; p.price = basePrice; p.sizes = sizes; p.cat = cat; p.glyph = glyph; p.desc = desc;
   }
   
   document.getElementById('itemForm').classList.remove('active');
@@ -876,7 +962,7 @@ document.getElementById('saveAdmin').onclick = async () => {
     toast('Все изменения сохранены!');
     closeAdminPanel();
   } catch (err) {
-    alert('ОШИБКА БАЗЫ ДАННЫХ:\n' + err.message); // Теперь мы увидим точную причину
+    alert('ОШИБКА БАЗЫ ДАННЫХ:\n' + err.message);
     console.error(err);
   } finally {
     btn.disabled = false;
@@ -1063,12 +1149,35 @@ reviewForm.onsubmit = async (e) => {
    КОРЗИНА И ЗАКАЗЫ
    ============================================================ */
 let cart = JSON.parse(localStorage.getItem('ad_cart') || '[]');
+// Миграция старой корзины, где нет ключа key
+cart = cart.map(i => {
+    if (!i.key) return { key: `${i.id}-0`, id: i.id, sizeIndex: 0, qty: i.qty };
+    return i;
+});
+
 const money = v => (v/100).toFixed(2) + ' BYN';
 const findP = id => products.find(p => p.id === id);
 
 window.toggleAccordion = function(id) {
   const el = document.getElementById(id);
   if (el) el.classList.toggle('open');
+}
+
+window.selectSizeBtn = function(btn, id, index, price) {
+    const parent = btn.parentElement;
+    parent.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    document.getElementById('price-' + id).textContent = money(price);
+    
+    const card = btn.closest('.card');
+    card.dataset.selectedSize = index;
+}
+
+window.addToCartFromCard = function(id) {
+    const card = document.querySelector(`.card[data-pid="${id}"]`);
+    const selectedIndex = parseInt(card.dataset.selectedSize || 0);
+    addToCart(id, selectedIndex);
 }
 
 function renderMenu() {
@@ -1078,7 +1187,31 @@ function renderMenu() {
     if (items.length === 0) return '';
     const cardsHTML = items.map(p => {
       const badgeCls = p.tag==='Хит' ? 'hot' : (p.tag==='Веган' ? 'veg' : '');
-      return `<div class="card"><div class="card-img">${p.tag ? `<span class="badge ${badgeCls}">${p.tag}</span>` : ''}<span class="glyph">${p.glyph}</span></div><div class="card-body"><h3>${p.name}</h3><p class="desc">${p.desc}</p><div class="card-foot"><div class="price">${money(p.price)}</div><button class="add" data-add="${p.id}">В корзину</button></div></div></div>`;
+      
+      const sizes = p.sizes && p.sizes.length > 0 ? p.sizes : [{ weight: '1 шт.', price: p.price }];
+      const initialPrice = sizes[0].price;
+      
+      let sizeUi = '';
+      if (sizes.length > 1) {
+          sizeUi = `<div class="size-selector">
+              ${sizes.map((s, idx) => `<button class="size-btn ${idx===0?'active':''}" onclick="selectSizeBtn(this, ${p.id}, ${idx}, ${s.price})">${s.weight}</button>`).join('')}
+          </div>`;
+      } else {
+          sizeUi = `<div class="single-weight">${sizes[0].weight}</div>`;
+      }
+
+      return `<div class="card" data-pid="${p.id}" data-selectedSize="0">
+          <div class="card-img">${p.tag ? `<span class="badge ${badgeCls}">${p.tag}</span>` : ''}<span class="glyph">${p.glyph}</span></div>
+          <div class="card-body">
+              <h3>${p.name}</h3>
+              <p class="desc">${p.desc}</p>
+              ${sizeUi}
+              <div class="card-foot">
+                  <div class="price" id="price-${p.id}">${money(initialPrice)}</div>
+                  <button class="add" onclick="addToCartFromCard(${p.id})">В корзину</button>
+              </div>
+          </div>
+      </div>`;
     }).join('');
     return `
       <div class="accordion-item" id="cat-${cat.key}">
@@ -1094,27 +1227,36 @@ function renderMenu() {
       </div>
     `;
   }).join('');
-  document.querySelectorAll('[data-add]').forEach(b => { b.onclick = () => addToCart(+b.dataset.add); });
 }
 
 function renderAddresses() {
   document.getElementById('addrGrid').innerHTML = addresses.map(a => `<div class="addr"><strong>${a.name}</strong><span>🕐 ${a.time}</span></div>`).join('');
 }
 function saveCart() { localStorage.setItem('ad_cart', JSON.stringify(cart)); }
-function addToCart(id) {
-  const it = cart.find(i => i.id === id);
-  if (it) it.qty++; else cart.push({ id, qty:1 });
+function addToCart(id, sizeIndex = 0) {
+  const key = `${id}-${sizeIndex}`;
+  const it = cart.find(i => i.key === key);
+  if (it) it.qty++;
+  else cart.push({ key, id, sizeIndex, qty: 1 });
   saveCart(); renderCart(); toast('Добавлено в корзину');
 }
-function changeQty(id, delta) {
-  const it = cart.find(i => i.id === id);
+function changeQty(key, delta) {
+  const it = cart.find(i => i.key === key);
   if (!it) return;
   it.qty += delta;
-  if (it.qty <= 0) cart = cart.filter(i => i.id !== id);
+  if (it.qty <= 0) cart = cart.filter(i => i.key !== key);
   saveCart(); renderCart();
 }
 function cartCount() { return cart.reduce((s,i)=>s+i.qty,0); }
-function cartSum() { return cart.reduce((s,i)=>s + (findP(i.id)?.price||0) * i.qty,0); }
+function cartSum() { 
+    return cart.reduce((s, i) => {
+        const p = findP(i.id);
+        if (!p) return s;
+        const sizes = p.sizes && p.sizes.length > 0 ? p.sizes : [{ weight: '1 шт.', price: p.price }];
+        const size = sizes[i.sizeIndex] || sizes[0];
+        return s + size.price * i.qty;
+    }, 0);
+}
 function renderCart() {
   document.getElementById('cartCount').textContent = cartCount();
   const box = document.getElementById('cartItems');
@@ -1124,10 +1266,22 @@ function renderCart() {
     box.innerHTML = cart.map(i => {
       const p = findP(i.id);
       if(!p) return '';
-      return `<div class="ci"><div class="ci-img">${p.glyph}</div><div class="ci-info"><b>${p.name}</b><small>${money(p.price)}</small></div><div class="qty"><button data-dec="${i.id}">−</button><span>${i.qty}</span><button data-inc="${i.id}">+</button></div><div class="ci-sum">${money(p.price*i.qty)}</div></div>`;
+      const sizes = p.sizes && p.sizes.length > 0 ? p.sizes : [{ weight: '1 шт.', price: p.price }];
+      const size = sizes[i.sizeIndex] || sizes[0];
+      
+      return `<div class="ci">
+          <div class="ci-img">${p.glyph}</div>
+          <div class="ci-info"><b>${p.name}</b><small>${size.weight}</small></div>
+          <div class="qty">
+            <button data-dec="${i.key}">−</button>
+            <span>${i.qty}</span>
+            <button data-inc="${i.key}">+</button>
+          </div>
+          <div class="ci-sum">${money(size.price*i.qty)}</div>
+      </div>`;
     }).join('');
-    box.querySelectorAll('[data-inc]').forEach(b => b.onclick = () => changeQty(+b.dataset.inc, 1));
-    box.querySelectorAll('[data-dec]').forEach(b => b.onclick = () => changeQty(+b.dataset.dec, -1));
+    box.querySelectorAll('[data-inc]').forEach(b => b.onclick = () => changeQty(b.dataset.inc, 1));
+    box.querySelectorAll('[data-dec]').forEach(b => b.onclick = () => changeQty(b.dataset.dec, -1));
   }
   const sum = cartSum();
   const totals = document.getElementById('totals');
@@ -1230,7 +1384,10 @@ checkoutModal.onclick = (e) => { if (e.target === checkoutModal) closeCheckout()
 async function sendOrderToTelegram(order) {
   const itemsText = order.items.map(i => {
     const p = findP(i.id);
-    return `• ${p.name} x${i.qty} = ${money(p.price * i.qty)}`;
+    if (!p) return '';
+    const sizes = p.sizes && p.sizes.length > 0 ? p.sizes : [{ weight: '1 шт.', price: p.price }];
+    const size = sizes[i.sizeIndex] || sizes[0];
+    return `• ${p.name} (${size.weight}) x${i.qty} = ${money(size.price * i.qty)}`;
   }).join('\n');
   const text = `🆕 Новый заказ №${order.no}\n\n${itemsText}\n\n💰 Итого: ${money(order.total)}\n👤 Имя: ${order.name}\n📞 Телефон: ${order.phone}\n💳 Оплата: ${order.pay === 'card' ? 'Картой онлайн' : 'Наличными'}\n${order.comment ? `📝 Комментарий: ${order.comment}\n` : ''}🕐 ${new Date().toLocaleString('ru-RU')}`;
   const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
